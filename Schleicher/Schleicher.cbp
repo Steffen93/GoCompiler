@@ -32,7 +32,9 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="include/expression.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/expression.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

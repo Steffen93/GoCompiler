@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1396272221 source:/home/max/ownCloud/h-da/CB/GoCompiler/Schleicher/main.cpp
+	<iostream>
+	<fstream>
+	<vector>
+

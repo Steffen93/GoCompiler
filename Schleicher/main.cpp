@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include "/home/max/ownCloud/h-da/CB/GoCompiler/Schleicher/include/expression.h"
 
 
 using namespace std;
@@ -33,9 +34,15 @@ void out(vector<string> lines){
 
 int main()
 {
+    /*
     vector<string> zeile;
     readFromTxt(zeile);
     out(zeile);
+    */
+    string test = "1+2*3/4";
+    expression ex(test);
+
+
 
     return 0;
 }

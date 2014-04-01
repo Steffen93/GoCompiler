@@ -1,6 +1,27 @@
 # depslib dependency file v1.0
-1396272221 source:/home/max/ownCloud/h-da/CB/GoCompiler/Schleicher/main.cpp
+1396273564 source:/home/max/ownCloud/h-da/CB/GoCompiler/Schleicher/main.cpp
 	<iostream>
 	<fstream>
 	<vector>
+
+1396277164 
+
+1396277164 source:c:\users\max\owncloud\clientsync\h-da\cb\gocompiler\schleicher\main.cpp
+	<iostream>
+	<fstream>
+	<vector>
+
+1396382765 source:/home/max/ownCloud/h-da/CB/GoCompiler/Schleicher/main.cpp
+	<iostream>
+	<fstream>
+	<vector>
+	"/home/max/ownCloud/h-da/CB/GoCompiler/Schleicher/include/expression.h"
+
+1396382734 source:/home/max/ownCloud/h-da/CB/GoCompiler/Schleicher/src/expression.cpp
+	"../include/expression.h"
+
+1396381150 /home/max/ownCloud/h-da/CB/GoCompiler/Schleicher/include/expression.h
+	<vector>
+	<string>
+	<iostream>
 

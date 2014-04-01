@@ -19,7 +19,8 @@ expression::expression(string ex){
             next = findNextOperator(ex);
         }
         variablen.push_back(ex.substr(0, ex.length()));
-
+        
+        //hier die Test ausgaben ob alles erkannt wurde
         for (int i = 0; i < operat.size(); i++){
             cout << variablen[i] << endl;
             cout << operat[i] << endl;

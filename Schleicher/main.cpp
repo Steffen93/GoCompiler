@@ -33,17 +33,14 @@ void out(vector<string> lines){
 }
 
 
-
-
-
 int main()
 {
-    /*
+
     vector<string> zeile;
     readFromTxt(zeile);
-    out(zeile);
-    */
-    string test = "((1 + 2) * 3) / 2"; // noch fehler bei nur 1 zahl
-    expression ex(test);
+    for(int i = 0; i < zeile.size(); i++){
+        expression ex(zeile[i]);
+        cout << endl;
+    }
     return 0;
 }

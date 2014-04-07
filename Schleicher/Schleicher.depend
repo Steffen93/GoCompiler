@@ -1,17 +1,18 @@
 # depslib dependency file v1.0
-1396273564 source:/home/max/ownCloud/h-da/CB/GoCompiler/Schleicher/main.cpp
-	<iostream>
-	<fstream>
-	<vector>
-
-1396277164 
-
-1396277164 source:c:\users\max\owncloud\clientsync\h-da\cb\gocompiler\schleicher\main.cpp
-	<iostream>
-	<fstream>
-	<vector>
-
 1396382765 source:/home/max/ownCloud/h-da/CB/GoCompiler/Schleicher/main.cpp
+	<iostream>
+	<fstream>
+	<vector>
+	<iostream>
+	<fstream>
+	<vector>
+	"/home/max/ownCloud/h-da/CB/GoCompiler/Schleicher/include/expression.h"
+
+1396386365 /ownCloud/h-da/CB/GoCompiler/Schleicher/include/expression.h"
+
+1396381150 
+
+1396386365 source:c:\users\max\owncloud\clientsync\h-da\cb\gocompiler\schleicher\main.cpp
 	<iostream>
 	<fstream>
 	<vector>
@@ -20,8 +21,26 @@
 1396382734 source:/home/max/ownCloud/h-da/CB/GoCompiler/Schleicher/src/expression.cpp
 	"../include/expression.h"
 
+1396382734 e/expression.h"
+
 1396381150 /home/max/ownCloud/h-da/CB/GoCompiler/Schleicher/include/expression.h
 	<vector>
 	<string>
 	<iostream>
+
+1396891899 source:/home/max/ownCloud/h-da/CB/GoCompiler/Schleicher/main.cpp
+	<iostream>
+	<fstream>
+	<vector>
+	"/home/max/ownCloud/h-da/CB/GoCompiler/Schleicher/include/expression.h"
+
+1396888392 /home/max/ownCloud/h-da/CB/GoCompiler/Schleicher/include/expression.h
+	<vector>
+	<string>
+	<iostream>
+	<sstream>
+	<cmath>
+
+1396891851 source:/home/max/ownCloud/h-da/CB/GoCompiler/Schleicher/src/expression.cpp
+	"../include/expression.h"
 

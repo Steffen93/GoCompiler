@@ -10,11 +10,9 @@ expression::expression()
 }
 
 expression::expression(string ex){
+    ex = ignorSpaces(ex);
     string ohneklammer = trennKlammern(ex);
-    //cout << ohneklammer << endl;
-
-
-
+    //cout << ohneklammer <<  "|" << endl;
     int index;
     if(ohneklammer != ex){
         expression tmp(ohneklammer);
@@ -25,7 +23,7 @@ expression::expression(string ex){
         index = ex.find(ohneklammer) - 1;
         ex.replace(index, ohneklammer.length() + 2, val);
     }
-    ex = ignorSpaces(ex);
+
     cout << ex;
     ini(ex);
 
@@ -36,13 +34,10 @@ double expression::getValue(){
 }
 
 string expression::ignorSpaces(string str){
-    try{
     for(int i = 0; i < str.length(); i++){
-        if(str.find(' ') == i)
+        if(str[i] == ' '){
             str.erase(i, 1);
-    }
-    }catch(exception e){
-
+        }
     }
     return str;
 }
@@ -56,43 +51,12 @@ void expression::ini(string ex){
     int len;
     int next = findNextOperator(ex, len);
 
-    /*
-    if(next == 0){
-        variablen.push_back("0");
-        operat.push_back(ex.substr(next, len));
-        ex = ex.substr(next + len, ex.length());
-        next = findNextOperator(ex, len);
-    }       //herausfiltern wenn die erste Zahl negativ ist
-    */
-    /*
     if(next != -1){
         while(next != -1){
             variablen.push_back(ex.substr(0, next));
             operat.push_back(ex.substr(next, len));
             ex = ex.substr(next + len, ex.length());
             next = findNextOperator(ex, len);
-        }
-        variablen.push_back(ex.substr(0, ex.length()));
-
-    }else{
-        variablen.push_back(ex);
-        cout << endl;
-    }//End if
-    //else bedeutet keine Formel oder nur Variablenzuweisung
-    */
-    if(next != -1){
-        while(next != -1){
-            variablen.push_back(ex.substr(0, next));
-            operat.push_back(ex.substr(next, len));
-            ex = ex.substr(next + len, ex.length());
-            next = findNextOperator(ex, len);
-            /*
-            if(operat[operat.length() -1] == "*" || operat[operat.length() -1] == "/")
-                if(ex[0] != "("){
-                    klammerCounter++;
-                    fillOperanden(variablen);
-                    calculate();
-                }*/
         }
         variablen.push_back(ex.substr(0, ex.length()));
 
@@ -200,30 +164,36 @@ void expression::calculate(){
         switch(operatoren[i]){
             case 0:
                 operanden[i] += operanden[i + 1];
+                operanden.pop_back();
                 break;
             case 1:
                 operanden[i] -= operanden[i + 1];
+                operanden.pop_back();
                 break;
             case 2:
                 operanden[i] *= operanden[i + 1];
+                operanden.pop_back();
                 break;
             case 3:
                 operanden[i] /= operanden[i + 1];
+                operanden.pop_back();
                 break;
             case 4:
                 a = (int)operanden[i];
                 b = (int) operanden[i + 1];
                 operanden[i] = a << b;
+                operanden.pop_back();
                 break;
             case 5:
                 a = (int)operanden[i];
                 b = (int) operanden[i + 1];
+                operanden.pop_back();
                 operanden[i] = a >> b;
         }
     }
     value = operanden[0];
     cout << " = " << value << endl;
-}
+}   //verrechne die Operanden über der Operatoren.
 
 int expression::findNextOperator(string text, int &len){
 

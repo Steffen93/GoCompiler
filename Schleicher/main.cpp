@@ -22,15 +22,19 @@ void readFromTxt(vector<string> &lines){
     } else
         cout << "Datei nicht gefunden!" << endl;
 
-}
+}       //Zeilenweises einlesen der Datei die zu ueberpruefen ist
 
 
 
 void out(vector<string> lines){
-    for(int i = 0; i < lines.size(); i++){
+    for(unsigned int i = 0; i < lines.size(); i++){
         cout << lines[i] << endl;
     }
 }
+
+
+
+
 
 int main()
 {
@@ -39,10 +43,7 @@ int main()
     readFromTxt(zeile);
     out(zeile);
     */
-    string test = "1+2*3/4";
+    string test = "((1 + 2) * 3) / 2"; // noch fehler bei nur 1 zahl
     expression ex(test);
-
-
-
     return 0;
 }

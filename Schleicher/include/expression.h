@@ -38,7 +38,7 @@ class expression
         */
         string trennKlammern(const string ex);
 
-        string ignorSpaces(string str);
+        //string ignorSpaces(string str);
         double stringToDouble(string s);
 
         void ini(string ex);

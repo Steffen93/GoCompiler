@@ -31,17 +31,37 @@ void out(vector<string> lines){
         cout << lines[i] << endl;
     }
 }
+string ignorSpaces(string str){
+    for(int i = 0; i < str.length(); i++){
+        if(str[i] == ' '){
+            str.erase(i, 1);
+        }
+    }
+    return str;
+}
+
+string extractExpression(string text, vector<string> &var){
+    text = ignorSpaces(text);
+    int place = text.find(":=");
+    if(place != -1){
+        var.push_back(text.substr(0, place));
+        text = text.erase(0, place + 2);
+    }
+    return text;
+}
 
 
 int main()
 {
-
+    vector<string> var;
     vector<string> zeile;
     readFromTxt(zeile);
     for(int i = 0; i < zeile.size(); i++){
+        zeile[i] = extractExpression(zeile[i], var);
         expression ex(zeile[i]);
         cout << endl;
     }
+    cout << var[0] << endl;
     /*
     string test = "2+2l";
     expression ex(test);

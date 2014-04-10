@@ -10,7 +10,7 @@ expression::expression()
 }
 
 expression::expression(string ex){
-    ex = ignorSpaces(ex);
+    //ex = ignorSpaces(ex);
     string ohneklammer = trennKlammern(ex);
     int index;
     if(ohneklammer != ex){
@@ -29,6 +29,7 @@ double expression::getValue(){
     return value;
 }
 
+/*
 string expression::ignorSpaces(string str){
     for(int i = 0; i < str.length(); i++){
         if(str[i] == ' '){
@@ -37,6 +38,7 @@ string expression::ignorSpaces(string str){
     }
     return str;
 }
+*/
 
 void expression::ini(string ex){
     vector<string> variablen;

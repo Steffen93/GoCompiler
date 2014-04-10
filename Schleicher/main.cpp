@@ -42,5 +42,9 @@ int main()
         expression ex(zeile[i]);
         cout << endl;
     }
+    /*
+    string test = "2+2l";
+    expression ex(test);
+    */
     return 0;
 }

@@ -51,6 +51,9 @@ class expression
 
         string op;      //operator
 
+        const double PI = 3.141592653;
+        const double e =  2.718281828;
+
 };
 
 #endif // EXPRESSIONH

@@ -12,21 +12,17 @@ expression::expression()
 expression::expression(string ex){
     ex = ignorSpaces(ex);
     string ohneklammer = trennKlammern(ex);
-    //cout << ohneklammer <<  "|" << endl;
     int index;
     if(ohneklammer != ex){
         expression tmp(ohneklammer);
         stringstream sstr;
         sstr << tmp.getValue();
         string val = sstr.str();
-
         index = ex.find(ohneklammer) - 1;
         ex.replace(index, ohneklammer.length() + 2, val);
     }
-
     cout << ex;
     ini(ex);
-
 }
 
 double expression::getValue(){
@@ -45,9 +41,6 @@ string expression::ignorSpaces(string str){
 void expression::ini(string ex){
     vector<string> variablen;
     vector<string> operat;
-    string var, op;
-
-
     int len;
     int next = findNextOperator(ex, len);
 
@@ -64,8 +57,7 @@ void expression::ini(string ex){
         variablen.push_back(ex);
         cout << endl;
     }//End if
-    //else bedeutet keine Formel oder nur Variablenzuweisung
-
+    //else bedeutet keine Formel
 
     for(int i = 0; i < operat.size(); i++){
         operatoren.push_back(operatorenID(operat[i]));
@@ -91,7 +83,6 @@ string expression::trennKlammern(const string ex){
                     return substring;
             }
         }
-
         if(cnt > 0)
             len++;
     }
@@ -119,13 +110,14 @@ void expression::fillOperanden(vector<string> &sOperand){
 double expression::stringToDouble(string s){
     bool strOK = true;
     if(s == "pi"){
-        return 3.14159; //wusste nicht auswendig wie ich PI bekomme
+        return PI;          //const im header
     }else if(s == "e"){
-        return 2.71828; //für e das gleiche
+        return e;           //const im header
     }
     for(int i = 0; i < s.size(); i++){
-        if(s[i] != '0' && s[i] != '1' && s[i] != '2' && s[i] != '3' && s[i] != '4' && s[i] != '5' && s[i] != '6' && s[i] != '7' && s[i] != '8' && s[i] != '9' && s[i] != '.' && s[i] != '\0')
-        strOK = false;
+        if((s[i] < '0' || s[i] > '9') && s[i] != '.'){
+            strOK = false;
+        }
     }
     if(strOK){
         stringstream sstr(s);
@@ -135,7 +127,7 @@ double expression::stringToDouble(string s){
         else
             return value;
     }else{
-        cout << s << " ist keine Zahl" << endl;
+        cout << endl << s << " ist keine Zahl" << endl;
     }
 }
 
@@ -196,8 +188,6 @@ void expression::calculate(){
 }   //verrechne die Operanden über der Operatoren.
 
 int expression::findNextOperator(string text, int &len){
-
-
     int nextOp = 0;
     nextOp = text.find('+');
     len = 1;
@@ -215,6 +205,5 @@ int expression::findNextOperator(string text, int &len){
         nextOp = text.find(">>");
         len = 2;
     }
-
     return nextOp;
 }       //finde den naechsten Operator nach dem getrennt werden soll

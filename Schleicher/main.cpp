@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "/home/max/ownCloud/h-da/CB/GoCompiler/Schleicher/include/expression.h"
+#include "include/expression.h"
 
 
 using namespace std;

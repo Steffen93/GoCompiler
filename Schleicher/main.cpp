@@ -14,7 +14,7 @@ void readFromTxt(vector<string> &lines){
     if (input.is_open()) {
         while (input.good()) {
             getline(input, line);
-            if(line.find("//") != -1)
+            if(line.find("//") != string::npos)
                 line = line.substr(0, line.find("//"));
             lines.push_back(line);
         }
@@ -31,8 +31,8 @@ void out(vector<string> lines){
         cout << lines[i] << endl;
     }
 }
-string ignorSpaces(string str){
-    for(int i = 0; i < str.length(); i++){
+string ignoreSpaces(string str){
+    for(unsigned int i = 0; i < str.length(); i++){
         if(str[i] == ' '){
             str.erase(i, 1);
         }
@@ -41,9 +41,9 @@ string ignorSpaces(string str){
 }
 
 string extractExpression(string text, vector<string> &var){
-    text = ignorSpaces(text);
-    int place = text.find(":=");
-    if(place != -1){
+    text = ignoreSpaces(text);
+    size_t place = text.find(":=");
+    if(place != string::npos){
         var.push_back(text.substr(0, place));
         text = text.erase(0, place + 2);
     }
@@ -56,7 +56,7 @@ int main()
     vector<string> var;
     vector<string> zeile;
     readFromTxt(zeile);
-    for(int i = 0; i < zeile.size(); i++){
+    for(unsigned int i = 0; i < zeile.size(); i++){
         zeile[i] = extractExpression(zeile[i], var);
         expression ex(zeile[i]);
         cout << endl;

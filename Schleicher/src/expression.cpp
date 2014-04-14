@@ -10,9 +10,9 @@ expression::expression()
 }
 
 expression::expression(string ex){
-    //ex = ignorSpaces(ex);
+    //ex = ignoreSpaces(ex);
     string ohneklammer = trennKlammern(ex);
-    int index;
+    size_t index;
     if(ohneklammer != ex){
         expression tmp(ohneklammer);
         stringstream sstr;
@@ -30,8 +30,8 @@ double expression::getValue(){
 }
 
 /*
-string expression::ignorSpaces(string str){
-    for(int i = 0; i < str.length(); i++){
+string expression::ignoreSpaces(string str){
+    for(unsigned int i = 0; i < str.length(); i++){
         if(str[i] == ' '){
             str.erase(i, 1);
         }
@@ -44,15 +44,15 @@ void expression::ini(string ex){
     vector<string> variablen;
     vector<string> operat;
     int len;
-    int next = findNextOperator(ex, len);
+    size_t next = findNextOperator(ex, len);
 
-    if(next != -1){
-        while(next != -1){
+    if(next != string::npos){
+        do {
             variablen.push_back(ex.substr(0, next));
             operat.push_back(ex.substr(next, len));
             ex = ex.substr(next + len, ex.length());
             next = findNextOperator(ex, len);
-        }
+        } while(next != string::npos);
         variablen.push_back(ex.substr(0, ex.length()));
 
     }else{
@@ -61,7 +61,7 @@ void expression::ini(string ex){
     }//End if
     //else bedeutet keine Formel
 
-    for(int i = 0; i < operat.size(); i++){
+    for(unsigned int i = 0; i < operat.size(); i++){
         operatoren.push_back(operatorenID(operat[i]));
     }
     fillOperanden(variablen);
@@ -72,7 +72,7 @@ string expression::trennKlammern(const string ex){
     int cnt = 0;
     int len = 0;
     string substring = ex;
-    for(int i = 0; i < ex.length(); i++){
+    for(unsigned int i = 0; i < ex.length(); i++){
         if(ex[i] == '('){
             cnt++;
         }else if(ex[i] == ')'){
@@ -82,7 +82,7 @@ string expression::trennKlammern(const string ex){
                 substring = ex.substr(ex.find('(') + 1, len - 2);
                 if(cnt != 0)
                     substring = "";
-                    return substring;
+                return substring;
             }
         }
         if(cnt > 0)
@@ -116,7 +116,7 @@ double expression::stringToDouble(string s){
     }else if(s == "e"){
         return e;           //const im header
     }
-    for(int i = 0; i < s.size(); i++){
+    for(unsigned int i = 0; i < s.size(); i++){
         if((s[i] < '0' || s[i] > '9') && s[i] != '.'){
             strOK = false;
         }
@@ -124,13 +124,15 @@ double expression::stringToDouble(string s){
     if(strOK){
         stringstream sstr(s);
         double value;
-        if(!(sstr >> value))
-            strOK == strOK;
-        else
+        if (!(sstr >> value)) {
+            // strOK == strOK;
+        } else {
             return value;
+        }
     }else{
         cout << endl << s << " ist keine Zahl" << endl;
     }
+    return 0.0;
 }
 
 int expression::operatorenID(string op){
@@ -151,10 +153,10 @@ int expression::operatorenID(string op){
 }       //uebersetzung der strings "+", "-", etc in nummaerische IDs zur einfacheren verwendung spaeter (switch geht nur mit int)
 
 void expression::calculate(){
-    int a, b;
+    //int a, b;
     value = operanden[0];
     if(!operatoren.empty() && operanden.size() > 1)
-    for(int i = operatoren.size() - 1; i >= 0; i--){
+    for(unsigned int i = operatoren.size() - 1; i >= 0; i--){
         switch(operatoren[i]){
             case 0:
                 operanden[i] += operanden[i + 1];
@@ -173,37 +175,44 @@ void expression::calculate(){
                 operanden.pop_back();
                 break;
             case 4:
-                a = (int)operanden[i];
+                a = (int) operanden[i];
                 b = (int) operanden[i + 1];
                 operanden[i] = a << b;
                 operanden.pop_back();
                 break;
             case 5:
-                a = (int)operanden[i];
+                a = (int) operanden[i];
                 b = (int) operanden[i + 1];
                 operanden.pop_back();
                 operanden[i] = a >> b;
+                break;
+            default:
+                break;
         }
     }
     value = operanden[0];
     cout << " = " << value << endl;
 }   //verrechne die Operanden über der Operatoren.
 
-int expression::findNextOperator(string text, int &len){
-    int nextOp = 0;
+size_t expression::findNextOperator(string text, int &len){
+    size_t nextOp = 0;
     nextOp = text.find('+');
     len = 1;
-    if (nextOp == -1 || (text.find('-') < nextOp && text.find('-') != -1))
+    if (nextOp == string::npos || (text.find('-') < nextOp && text.find('-') != string::npos))
         nextOp = text.find('-');
-    if (nextOp == -1 || (text.find('*') < nextOp && text.find('*') != -1))
+    if (nextOp == string::npos || (text.find('*') < nextOp && text.find('*') != string::npos))
         nextOp = text.find('*');
-    if (nextOp == -1 || (text.find('/') < nextOp && text.find('/') != -1))
+    if (nextOp == string::npos || (text.find('/') < nextOp && text.find('/') != string::npos))
         nextOp = text.find('/');
-    if (nextOp == -1 || (text.find("<<") < nextOp && text.find("<<") != -1)){
+        /*
+    if (nextOp == string::npos || (text.find('%') < nextOp && text.find('%') != string::npos))
+        nextOp = text.find('%');
+        */
+    if (nextOp == string::npos || (text.find("<<") < nextOp && text.find("<<") != string::npos)){
         nextOp = text.find("<<");
         len = 2;
     }
-    if (nextOp == -1 || (text.find(">>") < nextOp && text.find(">>") != -1)){
+    if (nextOp == string::npos || (text.find(">>") < nextOp && text.find(">>") != string::npos)){
         nextOp = text.find(">>");
         len = 2;
     }

@@ -19,7 +19,7 @@ class expression
         virtual ~expression();
 
 
-        int findNextOperator(string text, int &len);
+        size_t findNextOperator(string text, int &len);
 
         int operatorenID(string op);
 
@@ -38,7 +38,7 @@ class expression
         */
         string trennKlammern(const string ex);
 
-        //string ignorSpaces(string str);
+        //string ignoreSpaces(string str);
         double stringToDouble(string s);
 
         void ini(string ex);
@@ -51,8 +51,8 @@ class expression
 
         string op;      //operator
 
-        const double PI = 3.141592653;
-        const double e =  2.718281828;
+        static const double PI = 3.141592653;
+        static const double e =  2.718281828;
 
 };
 

@@ -94,7 +94,7 @@ string expression::trennKlammern(const string ex){
 void expression::fillOperanden(vector<string> &sOperand){
     int itmp;
     double dtmp;
-    for(unsigned int i; i < sOperand.size(); i++){
+    for(unsigned int i = 0; i < sOperand.size(); i++){
         try{
             dtmp = stringToDouble(sOperand[i]);
             itmp = (int) dtmp;
@@ -153,10 +153,10 @@ int expression::operatorenID(string op){
 }       //uebersetzung der strings "+", "-", etc in nummaerische IDs zur einfacheren verwendung spaeter (switch geht nur mit int)
 
 void expression::calculate(){
-    //int a, b;
+    int a, b;
     value = operanden[0];
     if(!operatoren.empty() && operanden.size() > 1)
-    for(unsigned int i = operatoren.size() - 1; i >= 0; i--){
+    for(int i = operatoren.size() - 1; i >= 0; i--){
         switch(operatoren[i]){
             case 0:
                 operanden[i] += operanden[i + 1];

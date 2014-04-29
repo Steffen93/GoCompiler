@@ -42,8 +42,12 @@ int evaluate(SExpression *e)
             return e->value;
         case eMULTIPLY:
             return evaluate(e->left) * evaluate(e->right);
+        case eDEVIDE:
+            return evaluate(e->left) / evaluate(e->right);
         case ePLUS:
             return evaluate(e->left) + evaluate(e->right);
+        case eMINUS:
+            return evaluate(e->left) - evaluate(e->right);
         default:
             // shouldn't be here
             return 0;
@@ -53,7 +57,7 @@ int evaluate(SExpression *e)
 int main(void)
 {
     SExpression *e = NULL;
-    char test[]=" 4 + 2*10 + 3*( 5 + 1 )";
+    char test[]=" 4 + 2 * 10 + 3 * ( 5 + 1 ) - 28";
     int result = 0;
  
     e = getAST(test);

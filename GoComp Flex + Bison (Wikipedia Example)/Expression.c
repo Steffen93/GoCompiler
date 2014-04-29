@@ -15,16 +15,16 @@
 static SExpression *allocateExpression()
 {
     SExpression *b = (SExpression *)malloc(sizeof *b);
- 
+
     if (b == NULL)
         return NULL;
- 
+
     b->type = eVALUE;
     b->value = 0;
- 
+
     b->left = NULL;
     b->right = NULL;
- 
+
     return b;
 }
  

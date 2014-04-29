@@ -12,7 +12,9 @@ typedef enum tagEOperationType
 {
     eVALUE,
     eMULTIPLY,
-    ePLUS
+    eDEVIDE,
+    ePLUS,
+    eMINUS
 } EOperationType;
  
 /**

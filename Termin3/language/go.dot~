@@ -1,0 +1,21 @@
+digraph GoLang
+{
+	SourceFile -> PackageClause;
+	IDLB [label = "{"];
+	IDRB [label = "}"];
+	IDS [label = ";"];
+	TLLB [label = "{"];
+	TLRB [label = "}"];
+	TLS [label = ";"];
+	SourceFile -> IDLB;
+	SourceFile -> "ImportDecl";
+	SourceFile -> IDS;
+	SourceFile -> IDRB;
+	SourceFile -> TLLB;
+	SourceFile -> "TopLevelDecl";
+	SourceFile -> TLS;
+	SourceFile -> TLRB;
+	PackageClause -> "\"package\"";
+	PackageClause -> PackageName;
+	PackageName -> identifier;
+}

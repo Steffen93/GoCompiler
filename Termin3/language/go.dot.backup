@@ -1,0 +1,36 @@
+digraph GoLang
+{
+	SourceFile -> PackageClause;
+	SF1 [label = ";{"];
+	SourceFile -> SF1;
+	SourceFile -> ImportDecl;
+	SF2 [label = ";} {"];
+	SourceFile -> SF2;
+	SourceFile -> TopLevelDecl;
+	SF3 [label = ";}"];
+	SourceFile -> SF3;
+	PackageClause -> "\"package\"";
+	PackageClause -> PackageName;
+	PCD [label = "."];
+	PackageClause -> PCD;
+	PackageName -> identifier;	
+	PND [label = "."];
+	PackageName -> PND;
+	ImportDecl -> "\"import\" (";
+	ImportDecl -> ImportSpec;
+	ID1 [label = "|"];
+	ImportDecl -> ID1;
+	ID2 [label = " \"(\" {"];
+	ImportDecl -> ID2;
+	IS [label = "ImportSpec"];
+	ImportDecl -> IS;
+	ID3 [label = "\";\" } \")\" ) ."];
+	ImportDecl -> ID3;
+	IS1 [label = "[ \".\" |"];
+	ImportSpec -> IS1;
+	ImportSpec -> PackageName;
+	IS2 [label = "]"];
+	ImportSpec -> IS2;
+	ImportSpec -> ImportPath;
+	IS3 [label = "."];
+}

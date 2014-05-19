@@ -1,0 +1,106 @@
+digraph GoLang
+{
+	Root [label = "SourceFile"];
+	SourceFile [label = "SourceFile = PackageClause \";\" { ImportDecl \";\" } TopLevelDecl \";\" } ."];
+	PackageClause [label = "PackageClause = \"package\" PackageName ."];
+	PackageName [label = "PackageName = identifier ."];
+	Root->SourceFile -> PackageClause -> PackageName;
+
+	ImportDecl[label = "ImportDecl = \"import\" ( ImportSpec | \"(\" { ImportSpec \";\" } \")\" ) ."];
+	ImportSpec[label = "ImportSpec = [ \".\" | PackageName ] ImportPath ."];
+	ImportPath[label = "ImportPath = string_lit ."];
+	string_lit [label = "string_lit = raw_string_lit | interpreted_string_lit ."];
+	raw_string_lit [label = "raw_string_lit = \"`\" { unicode_char | newline } \"`\" ."];
+	interpreted_string_lit [label = "interpreted_string_lit = `\"` { unicode_value | byte_value } `\"` ."];
+	SourceFile -> ImportDecl -> ImportSpec -> ImportPath -> string_lit -> raw_string_lit;
+	string_lit -> interpreted_string_lit;
+	ImportSpec -> PackageName;
+	
+	TopLevelDecl [label = "TopLevelDecl  = Declaration | FunctionDecl | MethodDecl ."];
+	Declaration [label = "Declaration = ConstDecl | TypeDecl | VarDecl ."];
+	ConstDecl [label = "ConstDecl = \"const\" ( ConstSpec | \"(\" { ConstSpec \";\" } \")\" ) ."];
+	ConstSpec [label = "ConstSpec = IdentifierList [ [ Type ] \"=\" ExpressionList ] ."];
+	IdentifierList [label = "IdentifierList = identifier { \",\" identifier } ."];
+	Type [label = "Type = TypeName | TypeLit | \"(\" Type \")\" ."];
+	TypeName [label = "TypeName = identifier | QualifiedIdent ."];
+	QualifiedIdent [label = "QualifiedIdent = PackageName \".\" identifier ."];
+	TypeLit [label = "TypeLit = ArrayType | StructType | PointerType | FunctionType | InterfaceType | SliceType | MapType | ChannelType ."];
+	ExpressionList [label = "ExpressionList = Expression { \",\" Expression } ."];
+	Expression [label = "Expression = UnaryExpr | Expression binary_op UnaryExpr ."];
+	UnaryExpr [label = "UnaryExpr  = PrimaryExpr | unary_op UnaryExpr ."];
+        PrimaryExpr[label = "PrimaryExpr = Operand | Conversion | BuiltinCall | PrimaryExpr Selector | PrimaryExpr Index | PrimaryExpr Slice | PrimaryExpr TypeAssertion | PrimaryExpr Call ."];
+        Selector[label = "Selector = \".\" identifier ."];
+	Index [label = "Index = \"[\" Expression \"]\" ."];
+	Slice [label = "Slice = \"[\" ( [ Expression ] \":\" [ Expression ] ) | ( [ Expression ] \":\" Expression \":\" Expression ) \"]\" ."];
+	TypeAssertion [label = "TypeAssertion  = \".\" \"(\" Type \")\" ."];
+	Call [label = "Call = \"(\" [ ArgumentList [ \",\" ] ] \")\"."];
+	ArgumentList [label = "ArgumentList = ExpressionList [ \"...\" ] ."];
+	binary_op [label = "binary_op  = \"||\" | \"&&\" | rel_op | add_op | mul_op ."];
+	rel_op [label = "rel_op = \"==\" | \"!=\" | \"<\" | \"<=\" | \">\" | \">=\" ."];
+	add_op [label = "add_op = \"+\" | \"-\" | \"|\" | \"^\" ."];
+	mul_op [label = "mul_op = \"*\" | \"/\" | \"%\" | \"<<\" | \">>\" | \"&\" | \"&^\" ."];
+	unary_op [label = "unary_op = \"+\" | \"-\" | \"!\" | \"^\" | \"*\" | \"&\" | \"<-\" ."];
+	Declaration -> ConstDecl -> ConstSpec -> IdentifierList -> identifier;
+	ConstSpec -> Type -> TypeName -> identifier;
+	Type -> TypeLit;
+	Type -> Type;
+	TypeName -> QualifiedIdent -> PackageName;
+	QualifiedIdent -> identifier;
+	ConstSpec -> ExpressionList -> Expression -> UnaryExpr-> PrimaryExpr -> Selector -> identifier;
+	PrimaryExpr -> Index -> Expression;
+	PrimaryExpr -> Slice -> Expression;
+	PrimaryExpr -> TypeAssertion -> Type;
+	PrimaryExpr -> Call -> ArgumentList -> ExpressionList;
+	Expression -> Expression;	
+	Expression -> binary_op -> rel_op;
+	binary_op -> add_op;
+	binary_op -> mul_op;
+	UnaryExpr -> unary_op;
+	UnaryExpr -> UnaryExpr;
+
+	TypeDecl [label = "TypeDecl = \"type\" ( TypeSpec | \"(\" { TypeSpec \";\" } \")\" ) ."];
+	TypeSpec [label = "TypeSpec = identifier Type ."];
+	VarDecl [label = "VarDecl = \"var\" ( VarSpec | \"(\" { VarSpec \";\" } \")\" ) ."];
+	VarSpec [label = "VarSpec = IdentifierList ( Type [ \"=\" ExpressionList ] | \"=\" ExpressionList ) ."];
+	FunctionDecl [label = "FunctionDecl = \"func\" FunctionName ( Function | Signature ) ."];
+	MethodDecl [label = "MethodDecl = \"func\" Receiver MethodName ( Function | Signature ) ."];
+	SourceFile -> TopLevelDecl -> Declaration;
+	Declaration -> TypeDecl -> TypeSpec -> identifier;
+	TypeSpec -> Type;
+	Declaration -> VarDecl -> VarSpec -> IdentifierList;
+	VarSpec -> ExpressionList;
+	VarSpec -> Type;
+	FunctionName [label = "FunctionName = identifier ."];
+	Function [label = "Function = Signature FunctionBody ."];
+	FunctionBody [label = "FunctionBody = Block ."];
+	Signature [label = "Signature = Parameters [ Result ] ."];
+	Result [label = "Result = Parameters | Type ."];
+	Parameters [label = "Parameters = \"(\" [ ParameterList [ \",\" ] ] \")\" ."];
+	ParameterList [label = "ParameterList = ParameterDecl { \",\" ParameterDecl } ."];
+	ParameterDecl [label = "ParameterDecl  = [ IdentifierList ] [ \"...\" ] Type ."];
+	Block [label = "Block = \"{\" StatementList \"}\" ."];
+	StatementList [label = "StatementList = { Statement \";\" } ."];
+	Statement [label = "Statement =	Declaration | LabeledStmt | SimpleStmt | GoStmt | ReturnStmt | BreakStmt | ContinueStmt | GotoStmt | FallthroughStmt | Block | IfStmt | SwitchStmt | SelectStmt | ForStmt | DeferStmt ."];
+	SimpleStmt [label = "SimpleStmt = EmptyStmt | ExpressionStmt | SendStmt | IncDecStmt | Assignment | ShortVarDecl ."];	
+	MethodName [label = "MethodName = identifier ."];
+	Receiver [label = "Receiver = \"(\" [ identifier ] [ \"*\" ] BaseTypeName \")\" ."];
+	BaseTypeName [label = "BaseTypeName = identifier ."];
+
+	TopLevelDecl -> FunctionDecl -> FunctionName -> identifier;
+	FunctionDecl -> Signature -> Parameters -> ParameterList -> ParameterDecl -> IdentifierList;
+	Signature -> Result -> Parameters;
+	Result -> Type;
+	ParameterDecl -> Type;
+	FunctionDecl -> Function -> Signature;
+	Function -> FunctionBody -> Block -> StatementList -> Statement -> Declaration;
+	Statement -> SimpleStmt;	
+	TopLevelDecl -> MethodDecl -> Receiver -> identifier;
+	Receiver -> BaseTypeName -> identifier;
+	MethodDecl -> MethodName -> identifier;
+	MethodDecl -> Function;
+	MethodDecl -> Signature;
+
+	identifier [label = "identifier = letter { letter | unicode_digit } ."];
+	letter [label = "letter = unicode_letter | \"_\" ."];
+	PackageName -> identifier -> letter
+}

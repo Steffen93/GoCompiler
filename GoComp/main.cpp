@@ -1,9 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "include/Expression.h"
-#include "include/Parser.h"
-#include "include/Lexer.h"
+#include "Expression.h"
+#include "Parser.h"
+#include "Lexer.h"
 #include <stdio.h>
 
 using namespace std;

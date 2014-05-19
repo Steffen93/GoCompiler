@@ -5,9 +5,9 @@
  * To generate the parser run: "bison Parser.y"
  */
  
-#include "include/Expression.h"
-#include "include/Parser.h"
-#include "include/Lexer.h"
+#include "Expression.h"
+#include "Parser.h"
+#include "Lexer.h"
  
 int yyerror(SExpression **expression, yyscan_t scanner, const char *msg) {
     // Add error handling routine as needed
@@ -21,7 +21,6 @@ int yyerror(SExpression **expression, yyscan_t scanner, const char *msg) {
 #define YY_TYPEDEF_YY_SCANNER_T
 typedef void* yyscan_t;
 #endif
- 
 }
  
 %output  "Parser.c"

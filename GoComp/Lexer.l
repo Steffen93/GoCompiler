@@ -5,8 +5,8 @@
  * To generate the lexical analyzer run: "flex Lexer.l"
  */
  
-#include "include/Expression.h"
-#include "include/Parser.h"
+#include "Expression.h"
+#include "Parser.h"
  
 #include <stdio.h>
  
@@ -24,8 +24,10 @@ PLUS        "+"
 MINUS       "-"
 MULTIPLY    "*"
 DEVIDE      "/"
- 
-NUMBER      [0-9]+
+
+CONST	    ["e" | "pi" | "PI" | "Pi"]
+DIGIT 	    [0-9]
+NUMBER      {DIGIT}+(\.{DIGIT}+)?(E[+-]?{DIGIT}+)?
 WS          [ \r\n\t]*
  
 %%

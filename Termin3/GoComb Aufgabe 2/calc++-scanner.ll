@@ -62,8 +62,7 @@ blank [ \t]
 {number}     {
   errno = 0;
   float n = strtof (yytext, NULL);
-  //if (! (INT_MIN <= n && n <= INT_MAX && errno != ERANGE))
-    //driver.error (loc, "integer is out of range");
+  
   return yy::calcxx_parser::make_NUMBER(n, loc);
 }
 

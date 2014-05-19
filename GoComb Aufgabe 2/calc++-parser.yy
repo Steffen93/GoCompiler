@@ -81,6 +81,7 @@ exp:
 | exp "-" exp   { $$ = $1 - $3; }
 | exp "*" exp   { $$ = $1 * $3; }
 | exp "/" exp   { $$ = $1 / $3; }
+| "-" exp   	{ $$ = 0 - $2; }
 | "(" exp ")"   { std::swap ($$, $2); }
 | "identifier"  { $$ = driver.variables[$1]; }
 | "number"      { std::swap ($$, $1); };

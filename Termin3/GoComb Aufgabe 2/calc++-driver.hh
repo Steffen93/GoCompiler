@@ -2,6 +2,7 @@
 # define CALCXX_DRIVER_HH
 # include <string>
 # include <map>
+# include <fstream>
 # include "calc++-parser.hh"
 
 // Tell Flex the lexer's prototype ...
@@ -34,9 +35,14 @@ public:
   std::string file;
   // Whether parser traces should be generated.
   bool trace_parsing;
-
+  
+  //Graph erstellen
+  void addGraph(std::string name, float value);
+  
   // Error handling.
   void error (const yy::location& l, const std::string& m);
   void error (const std::string& m);
+private:
+  std::ofstream o;
 };
 #endif // ! CALCXX_DRIVER_HH

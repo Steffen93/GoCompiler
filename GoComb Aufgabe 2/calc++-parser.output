@@ -1,3 +1,6 @@
+Zustand 19 Konflikte: 1 Schiebe/Reduziere
+
+
 Grammatik
 
     0 $accept: unit "end of file"
@@ -13,9 +16,10 @@ Grammatik
     6    | exp "-" exp
     7    | exp "*" exp
     8    | exp "/" exp
-    9    | "(" exp ")"
-   10    | "identifier"
-   11    | "number"
+    9    | "-" exp
+   10    | "(" exp ")"
+   11    | "identifier"
+   12    | "number"
 
 
 Terminale und die Regeln, in denen sie verwendet werden
@@ -23,14 +27,14 @@ Terminale und die Regeln, in denen sie verwendet werden
 "end of file" (0) 0
 error (256)
 ":=" (258) 4
-"-" (259) 6
+"-" (259) 6 9
 "+" (260) 5
 "*" (261) 7
 "/" (262) 8
-"(" (263) 9
-")" (264) 9
-"identifier" (265) 4 10
-"number" (266) 11
+"(" (263) 10
+")" (264) 10
+"identifier" (265) 4 11
+"number" (266) 12
 
 
 Nicht-Terminal und die Regeln, in denen sie verwendet werden
@@ -44,8 +48,8 @@ assignments (14)
 assignment (15)
     auf der linken Seite: 4, auf der rechten Seite: 3
 exp (16)
-    auf der linken Seite: 5 6 7 8 9 10 11, auf der rechten Seite: 1
-    4 5 6 7 8 9
+    auf der linken Seite: 5 6 7 8 9 10 11 12, auf der rechten Seite:
+    1 4 5 6 7 8 9 10
 
 
 Zustand 0
@@ -70,12 +74,13 @@ Zustand 2
     1 unit: assignments . exp
     3 assignments: assignments . assignment
 
-    "("           schiebe und gehe zu Zustand 4 über
-    "identifier"  schiebe und gehe zu Zustand 5 über
-    "number"      schiebe und gehe zu Zustand 6 über
+    "-"           schiebe und gehe zu Zustand 4 über
+    "("           schiebe und gehe zu Zustand 5 über
+    "identifier"  schiebe und gehe zu Zustand 6 über
+    "number"      schiebe und gehe zu Zustand 7 über
 
-    assignment  gehe zu Zustand 7 über
-    exp         gehe zu Zustand 8 über
+    assignment  gehe zu Zustand 8 über
+    exp         gehe zu Zustand 9 über
 
 
 Zustand 3
@@ -87,40 +92,53 @@ Zustand 3
 
 Zustand 4
 
-    9 exp: "(" . exp ")"
+    9 exp: "-" . exp
 
-    "("           schiebe und gehe zu Zustand 4 über
-    "identifier"  schiebe und gehe zu Zustand 9 über
-    "number"      schiebe und gehe zu Zustand 6 über
+    "-"           schiebe und gehe zu Zustand 4 über
+    "("           schiebe und gehe zu Zustand 5 über
+    "identifier"  schiebe und gehe zu Zustand 10 über
+    "number"      schiebe und gehe zu Zustand 7 über
 
-    exp  gehe zu Zustand 10 über
+    exp  gehe zu Zustand 11 über
 
 
 Zustand 5
 
-    4 assignment: "identifier" . ":=" exp
-   10 exp: "identifier" .
+   10 exp: "(" . exp ")"
 
-    ":="  schiebe und gehe zu Zustand 11 über
+    "-"           schiebe und gehe zu Zustand 4 über
+    "("           schiebe und gehe zu Zustand 5 über
+    "identifier"  schiebe und gehe zu Zustand 10 über
+    "number"      schiebe und gehe zu Zustand 7 über
 
-    $default  reduziere mit Regel 10 (exp)
+    exp  gehe zu Zustand 12 über
 
 
 Zustand 6
 
-   11 exp: "number" .
+    4 assignment: "identifier" . ":=" exp
+   11 exp: "identifier" .
+
+    ":="  schiebe und gehe zu Zustand 13 über
 
     $default  reduziere mit Regel 11 (exp)
 
 
 Zustand 7
 
+   12 exp: "number" .
+
+    $default  reduziere mit Regel 12 (exp)
+
+
+Zustand 8
+
     3 assignments: assignments assignment .
 
     $default  reduziere mit Regel 3 (assignments)
 
 
-Zustand 8
+Zustand 9
 
     1 unit: assignments exp .
     5 exp: exp . "+" exp
@@ -128,99 +146,118 @@ Zustand 8
     7    | exp . "*" exp
     8    | exp . "/" exp
 
-    "-"  schiebe und gehe zu Zustand 12 über
-    "+"  schiebe und gehe zu Zustand 13 über
-    "*"  schiebe und gehe zu Zustand 14 über
-    "/"  schiebe und gehe zu Zustand 15 über
+    "-"  schiebe und gehe zu Zustand 14 über
+    "+"  schiebe und gehe zu Zustand 15 über
+    "*"  schiebe und gehe zu Zustand 16 über
+    "/"  schiebe und gehe zu Zustand 17 über
 
     $default  reduziere mit Regel 1 (unit)
 
 
-Zustand 9
-
-   10 exp: "identifier" .
-
-    $default  reduziere mit Regel 10 (exp)
-
-
 Zustand 10
+
+   11 exp: "identifier" .
+
+    $default  reduziere mit Regel 11 (exp)
+
+
+Zustand 11
 
     5 exp: exp . "+" exp
     6    | exp . "-" exp
     7    | exp . "*" exp
     8    | exp . "/" exp
-    9    | "(" exp . ")"
+    9    | "-" exp .
 
-    "-"  schiebe und gehe zu Zustand 12 über
-    "+"  schiebe und gehe zu Zustand 13 über
-    "*"  schiebe und gehe zu Zustand 14 über
-    "/"  schiebe und gehe zu Zustand 15 über
-    ")"  schiebe und gehe zu Zustand 16 über
+    "*"  schiebe und gehe zu Zustand 16 über
+    "/"  schiebe und gehe zu Zustand 17 über
 
-
-Zustand 11
-
-    4 assignment: "identifier" ":=" . exp
-
-    "("           schiebe und gehe zu Zustand 4 über
-    "identifier"  schiebe und gehe zu Zustand 9 über
-    "number"      schiebe und gehe zu Zustand 6 über
-
-    exp  gehe zu Zustand 17 über
+    $default  reduziere mit Regel 9 (exp)
 
 
 Zustand 12
 
-    6 exp: exp "-" . exp
+    5 exp: exp . "+" exp
+    6    | exp . "-" exp
+    7    | exp . "*" exp
+    8    | exp . "/" exp
+   10    | "(" exp . ")"
 
-    "("           schiebe und gehe zu Zustand 4 über
-    "identifier"  schiebe und gehe zu Zustand 9 über
-    "number"      schiebe und gehe zu Zustand 6 über
-
-    exp  gehe zu Zustand 18 über
+    "-"  schiebe und gehe zu Zustand 14 über
+    "+"  schiebe und gehe zu Zustand 15 über
+    "*"  schiebe und gehe zu Zustand 16 über
+    "/"  schiebe und gehe zu Zustand 17 über
+    ")"  schiebe und gehe zu Zustand 18 über
 
 
 Zustand 13
 
-    5 exp: exp "+" . exp
+    4 assignment: "identifier" ":=" . exp
 
-    "("           schiebe und gehe zu Zustand 4 über
-    "identifier"  schiebe und gehe zu Zustand 9 über
-    "number"      schiebe und gehe zu Zustand 6 über
+    "-"           schiebe und gehe zu Zustand 4 über
+    "("           schiebe und gehe zu Zustand 5 über
+    "identifier"  schiebe und gehe zu Zustand 10 über
+    "number"      schiebe und gehe zu Zustand 7 über
 
     exp  gehe zu Zustand 19 über
 
 
 Zustand 14
 
-    7 exp: exp "*" . exp
+    6 exp: exp "-" . exp
 
-    "("           schiebe und gehe zu Zustand 4 über
-    "identifier"  schiebe und gehe zu Zustand 9 über
-    "number"      schiebe und gehe zu Zustand 6 über
+    "-"           schiebe und gehe zu Zustand 4 über
+    "("           schiebe und gehe zu Zustand 5 über
+    "identifier"  schiebe und gehe zu Zustand 10 über
+    "number"      schiebe und gehe zu Zustand 7 über
 
     exp  gehe zu Zustand 20 über
 
 
 Zustand 15
 
-    8 exp: exp "/" . exp
+    5 exp: exp "+" . exp
 
-    "("           schiebe und gehe zu Zustand 4 über
-    "identifier"  schiebe und gehe zu Zustand 9 über
-    "number"      schiebe und gehe zu Zustand 6 über
+    "-"           schiebe und gehe zu Zustand 4 über
+    "("           schiebe und gehe zu Zustand 5 über
+    "identifier"  schiebe und gehe zu Zustand 10 über
+    "number"      schiebe und gehe zu Zustand 7 über
 
     exp  gehe zu Zustand 21 über
 
 
 Zustand 16
 
-    9 exp: "(" exp ")" .
+    7 exp: exp "*" . exp
 
-    $default  reduziere mit Regel 9 (exp)
+    "-"           schiebe und gehe zu Zustand 4 über
+    "("           schiebe und gehe zu Zustand 5 über
+    "identifier"  schiebe und gehe zu Zustand 10 über
+    "number"      schiebe und gehe zu Zustand 7 über
+
+    exp  gehe zu Zustand 22 über
 
 
 Zustand 17
+
+    8 exp: exp "/" . exp
+
+    "-"           schiebe und gehe zu Zustand 4 über
+    "("           schiebe und gehe zu Zustand 5 über
+    "identifier"  schiebe und gehe zu Zustand 10 über
+    "number"      schiebe und gehe zu Zustand 7 über
+
+    exp  gehe zu Zustand 23 über
+
+
+Zustand 18
+
+   10 exp: "(" exp ")" .
+
+    $default  reduziere mit Regel 10 (exp)
+
+
+Zustand 19
 
     4 assignment: "identifier" ":=" exp .
     5 exp: exp . "+" exp
@@ -228,15 +265,16 @@ Zustand 17
     7    | exp . "*" exp
     8    | exp . "/" exp
 
-    "-"  schiebe und gehe zu Zustand 12 über
-    "+"  schiebe und gehe zu Zustand 13 über
-    "*"  schiebe und gehe zu Zustand 14 über
-    "/"  schiebe und gehe zu Zustand 15 über
+    "-"  schiebe und gehe zu Zustand 14 über
+    "+"  schiebe und gehe zu Zustand 15 über
+    "*"  schiebe und gehe zu Zustand 16 über
+    "/"  schiebe und gehe zu Zustand 17 über
 
+    "-"       [reduziere mit Regel 4 (assignment)]
     $default  reduziere mit Regel 4 (assignment)
 
 
-Zustand 18
+Zustand 20
 
     5 exp: exp . "+" exp
     6    | exp . "-" exp
@@ -244,13 +282,13 @@ Zustand 18
     7    | exp . "*" exp
     8    | exp . "/" exp
 
-    "*"  schiebe und gehe zu Zustand 14 über
-    "/"  schiebe und gehe zu Zustand 15 über
+    "*"  schiebe und gehe zu Zustand 16 über
+    "/"  schiebe und gehe zu Zustand 17 über
 
     $default  reduziere mit Regel 6 (exp)
 
 
-Zustand 19
+Zustand 21
 
     5 exp: exp . "+" exp
     5    | exp "+" exp .
@@ -258,13 +296,13 @@ Zustand 19
     7    | exp . "*" exp
     8    | exp . "/" exp
 
-    "*"  schiebe und gehe zu Zustand 14 über
-    "/"  schiebe und gehe zu Zustand 15 über
+    "*"  schiebe und gehe zu Zustand 16 über
+    "/"  schiebe und gehe zu Zustand 17 über
 
     $default  reduziere mit Regel 5 (exp)
 
 
-Zustand 20
+Zustand 22
 
     5 exp: exp . "+" exp
     6    | exp . "-" exp
@@ -275,7 +313,7 @@ Zustand 20
     $default  reduziere mit Regel 7 (exp)
 
 
-Zustand 21
+Zustand 23
 
     5 exp: exp . "+" exp
     6    | exp . "-" exp

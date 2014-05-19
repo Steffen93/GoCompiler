@@ -1,0 +1,6 @@
+digraph gograph{
+help[label="help = 39.6"];
+a[label="a = 32"];
+ko[label="ko = 16.9714"];
+
+}

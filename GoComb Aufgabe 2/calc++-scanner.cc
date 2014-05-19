@@ -550,7 +550,7 @@ int yy_flex_debug = 1;
 static yyconst flex_int16_t yy_rule_linenum[13] =
     {   0,
        51,   52,   53,   54,   55,   56,   57,   58,   59,   62,
-       70,   71
+       68,   69
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -1011,31 +1011,29 @@ YY_RULE_SETUP
 {
   errno = 0;
   float n = strtof (yytext, NULL);
-  //if (! (INT_MIN <= n && n <= INT_MAX && errno != ERANGE))
-    //driver.error (loc, "integer is out of range");
   return yy::calcxx_parser::make_NUMBER(n, loc);
 }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 70 "calc++-scanner.ll"
+#line 68 "calc++-scanner.ll"
 return yy::calcxx_parser::make_IDENTIFIER(yytext, loc);
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 71 "calc++-scanner.ll"
+#line 69 "calc++-scanner.ll"
 driver.error (loc, "invalid character");
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 72 "calc++-scanner.ll"
+#line 70 "calc++-scanner.ll"
 return yy::calcxx_parser::make_END(loc);
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 73 "calc++-scanner.ll"
+#line 71 "calc++-scanner.ll"
 ECHO;
 	YY_BREAK
-#line 1039 "calc++-scanner.cc"
+#line 1037 "calc++-scanner.cc"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2126,7 +2124,7 @@ void yyfree (void * ptr )
 
 /* %ok-for-header */
 
-#line 73 "calc++-scanner.ll"
+#line 71 "calc++-scanner.ll"
 
 
 

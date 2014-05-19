@@ -72,15 +72,15 @@ assignments:
 | assignments assignment {};
 
 assignment:
-  "identifier" ":=" exp { driver.variables[$1] = $3; };
+  "identifier" ":=" exp { driver.variables[$1] = $3; driver.addGraph($1, $3);};
 
 %left "+" "-";
 %left "*" "/";
 exp:
   exp "+" exp   { $$ = $1 + $3; }
-| exp "-" exp   { $$ = $1 - $3; }
-| exp "*" exp   { $$ = $1 * $3; }
-| exp "/" exp   { $$ = $1 / $3; }
+| exp "-" exp   { $$ = $1 - $3; std::cout << $$ << " = " << $1 << " - " << $3 << std::endl;}
+| exp "*" exp   { $$ = $1 * $3; std::cout << $$ << " = " << $1 << " * " << $3 << std::endl;}
+| exp "/" exp   { $$ = $1 / $3; std::cout << $$ << " = " << $1 << " / " << $3 << std::endl;}
 | "(" exp ")"   { std::swap ($$, $2); }
 | "identifier"  { $$ = driver.variables[$1]; }
 | "number"      { std::swap ($$, $1); };

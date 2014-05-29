@@ -1,8 +1,10 @@
 #include "calc++-driver.hh"
 #include "calc++-parser.hh"
 
+int calcxx_driver::nodeCount = 0;
+
 calcxx_driver::calcxx_driver ()
-  : trace_scanning (false), trace_parsing (false)
+  : trace_scanning (false), trace_parsing (false), tmpID("")
 {
   std::ofstream f;
   o.open("dotgraph.dot");
@@ -44,6 +46,35 @@ calcxx_driver::error (const std::string& m)
 }
 
 void calcxx_driver::addGraph(std::string name, float value){
-  o<< name << "[label=\"" << name << " = " << value << "\"];\n";
+  o<< getNewID() << "[label=\"" << name << " = " << value << "\"];\n";
 }
 
+std::string calcxx_driver::addGraph(std::string label){
+  std::string newID = getNewID();
+  o<< newID << "[label=\"" << label << "\"];\n";
+  return newID;
+}
+
+std::string calcxx_driver::addGraph(float label){
+  std::string newID = getNewID();
+  o<< newID << "[label=\"" << std::to_string(label) << "\"];\n";
+  return newID;
+}
+
+void calcxx_driver::connect(std::string n1, std::string n2){
+  o << n1 << " -> " << n2 << ";\n";
+}
+
+std::string calcxx_driver::getNewID(){
+  std::string newID = "node" + std::to_string(nodeCount);
+  nodeCount++;
+  return newID;
+}
+
+std::string calcxx_driver::getTmpID(){
+  return tmpID;
+}
+
+void calcxx_driver::setTmpID(std::string id){
+  tmpID = id;
+}

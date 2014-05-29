@@ -78,9 +78,24 @@ assignment:
 %left "*" "/";
 exp:
   exp "+" exp   { $$ = $1 + $3; }
-| exp "-" exp   { $$ = $1 - $3; std::cout << $$ << " = " << $1 << " - " << $3 << std::endl;}
-| exp "*" exp   { $$ = $1 * $3; std::cout << $$ << " = " << $1 << " * " << $3 << std::endl;}
-| exp "/" exp   { $$ = $1 / $3; std::cout << $$ << " = " << $1 << " / " << $3 << std::endl;}
+| exp "-" exp   { $$ = $1 - $3;
+		  driver.setTmpID(driver.addGraph("-"));
+		  driver.connect(driver.getTmpID(), driver.addGraph($1));
+		  driver.connect(driver.getTmpID(), driver.addGraph($3));
+		  std::cout << $$ << " = " << $1 << " - " << $3 << std::endl;
+		}
+| exp "*" exp   { $$ = $1 * $3; 
+		  driver.setTmpID(driver.addGraph("*"));
+		  driver.connect(driver.getTmpID(), driver.addGraph($1));
+		  driver.connect(driver.getTmpID(), driver.addGraph($3));
+		  std::cout << $$ << " = " << $1 << " * " << $3 << std::endl;
+		}
+| exp "/" exp   { $$ = $1 / $3;
+		  driver.setTmpID(driver.addGraph("/"));
+		  driver.connect(driver.getTmpID(), driver.addGraph($1));
+		  driver.connect(driver.getTmpID(), driver.addGraph($3));
+		  std::cout << $$ << " = " << $1 << " / " << $3 << std::endl;
+		  }
 | "(" exp ")"   { std::swap ($$, $2); }
 | "identifier"  { $$ = driver.variables[$1]; }
 | "number"      { std::swap ($$, $1); };

@@ -37,12 +37,21 @@ public:
   bool trace_parsing;
   
   //Graph erstellen
+  std::string getNewID();
+  void setTmpID (std::string id);
+  std::string getTmpID();
+  void connect(std::string n1, std::string n2);
+  std::string addGraph(std::string label);
+  std::string addGraph(float label);
+
   void addGraph(std::string name, float value);
   
   // Error handling.
   void error (const yy::location& l, const std::string& m);
   void error (const std::string& m);
 private:
+  static int nodeCount;
   std::ofstream o;
+  std::string tmpID;
 };
 #endif // ! CALCXX_DRIVER_HH

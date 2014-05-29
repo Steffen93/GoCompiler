@@ -19,6 +19,7 @@
 ####################################################################
 # Uncomment only one of the next two lines (choose your c++ compiler)
  CC=g++
+ CFLAGS=-std=c++11
 #CC=clang++
 
 LEX=flex
@@ -50,3 +51,6 @@ clean:
 
 tests: test.sh calc++
 	./test.sh
+
+picture: dotgraph.dot
+	dot -Tpng dotgraph.dot > yolo.png

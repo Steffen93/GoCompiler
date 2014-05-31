@@ -77,27 +77,44 @@ assignment:
 %left "+" "-";
 %left "*" "/";
 exp:
-  exp "+" exp   { $$ = $1 + $3; }
-| exp "-" exp   { $$ = $1 - $3;
-		  driver.setTmpID(driver.addGraph("-"));
+  exp "+" exp   { $$ = $1 + $3;
+		  std::string tmp = driver.addGraph(std::to_string($1) + " + " + std::to_string($3));
+		  driver.setTmpID(tmp);
 		  driver.connect(driver.getTmpID(), driver.addGraph($1));
 		  driver.connect(driver.getTmpID(), driver.addGraph($3));
+		  driver.setTmpID(driver.addGraph($$));
+		  driver.connect(driver.getTmpID(), tmp);
+		  std::cout << $$ << " = " << $1 << " + " << $3 << std::endl;
+		  }
+| exp "-" exp   { $$ = $1 - $3;
+		  std::string tmp = driver.addGraph(std::to_string($1) + " - " + std::to_string($3));
+		  driver.setTmpID(tmp);
+		  driver.connect(driver.getTmpID(), driver.addGraph($1));
+		  driver.connect(driver.getTmpID(), driver.addGraph($3));
+		  driver.setTmpID(driver.addGraph($$));
+		  driver.connect(driver.getTmpID(), tmp);
 		  std::cout << $$ << " = " << $1 << " - " << $3 << std::endl;
 		}
 | exp "*" exp   { $$ = $1 * $3; 
-		  driver.setTmpID(driver.addGraph("*"));
+		  std::string tmp = driver.addGraph(std::to_string($1) + " * " + std::to_string($3));
+		  driver.setTmpID(tmp);
 		  driver.connect(driver.getTmpID(), driver.addGraph($1));
 		  driver.connect(driver.getTmpID(), driver.addGraph($3));
+		  driver.setTmpID(driver.addGraph($$));
+		  driver.connect(driver.getTmpID(), tmp);
 		  std::cout << $$ << " = " << $1 << " * " << $3 << std::endl;
 		}
 | exp "/" exp   { $$ = $1 / $3;
-		  driver.setTmpID(driver.addGraph("/"));
+		  std::string tmp = driver.addGraph(std::to_string($1) + " / " + std::to_string($3));
+		  driver.setTmpID(tmp);
 		  driver.connect(driver.getTmpID(), driver.addGraph($1));
 		  driver.connect(driver.getTmpID(), driver.addGraph($3));
+		  driver.setTmpID(driver.addGraph($$));
+		  driver.connect(driver.getTmpID(), tmp);
 		  std::cout << $$ << " = " << $1 << " / " << $3 << std::endl;
 		  }
 | "(" exp ")"   { std::swap ($$, $2); }
-| "identifier"  { $$ = driver.variables[$1]; }
+| "identifier"  { $$ = driver.getVariable($1);}
 | "number"      { std::swap ($$, $1); };
 %%
 

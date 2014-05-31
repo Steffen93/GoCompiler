@@ -9,8 +9,7 @@ calcxx_driver::calcxx_driver ()
   std::ofstream f;
   o.open("dotgraph.dot");
   o << "digraph gograph{\n";
-  
-  
+    
   variables["one"] = 1.0;
   variables["two"] = 2.0;
 }
@@ -46,7 +45,10 @@ calcxx_driver::error (const std::string& m)
 }
 
 void calcxx_driver::addGraph(std::string name, float value){
-  o<< getNewID() << "[label=\"" << name << " = " << value << "\"];\n";
+  std::string tmpID = getNewID();
+  nodes[name] = tmpID;
+  o<< tmpID << "[label=\"" << name << " = " << value << "\"];\n";
+  connect(tmpID, lastID);
 }
 
 std::string calcxx_driver::addGraph(std::string label){
@@ -56,8 +58,31 @@ std::string calcxx_driver::addGraph(std::string label){
 }
 
 std::string calcxx_driver::addGraph(float label){
-  std::string newID = getNewID();
-  o<< newID << "[label=\"" << std::to_string(label) << "\"];\n";
+  static int cnt = 0;
+  static float tmp = 0;
+  static std::string newID = "";
+  if(node1 != "" && val1 == label){
+    newID = node1;
+    node1 = "";
+    tmp = label;
+    cnt++;
+    lastID = newID;
+    return newID;
+  }else if(node2 != "" && val2 == label){
+    newID = node2;
+    node2 = "";
+    tmp = label;
+    cnt++;
+    lastID = newID;
+    return newID;
+  }
+  if(!(cnt % 3 == 0 && tmp == label)){
+    newID = getNewID();
+    o<< newID << "[label=\"" << std::to_string(label) << "\"];\n";
+  }
+  tmp = label;
+  cnt++;
+  lastID = newID;
   return newID;
 }
 
@@ -77,4 +102,16 @@ std::string calcxx_driver::getTmpID(){
 
 void calcxx_driver::setTmpID(std::string id){
   tmpID = id;
+}
+
+float calcxx_driver::getVariable(std::string name){
+  if(node1 == ""){
+    node1 = nodes[name];
+    val1 = variables[name];
+    return val1;
+  }else{
+    node2 = nodes[name];
+    val2 = variables[name];
+    return val2;
+  }
 }

@@ -43,6 +43,7 @@ class calcxx_driver;
 %code
 {
 # include "calc++-driver.hh"
+using namespace std;
 }
 
 %define api.token.prefix {TOK_}
@@ -59,20 +60,24 @@ class calcxx_driver;
 
 %token <std::string> IDENTIFIER "identifier"
 %token <float> NUMBER "number"
+%token <std::string> TEXT "text"
 %type  <float> exp
+%type  <std::string> sexp
 
 %printer { yyoutput << $$; } <*>;
 
 %%
 %start unit;
-unit: assignments exp  { driver.result = $2; };
+unit: assignments exp  { driver.result = $2; }
+| assignments sexp {driver.erg = $2;};
 
 assignments:
   %empty                 {}
 | assignments assignment {};
 
 assignment:
-  "identifier" ":=" exp { driver.variables[$1] = $3; driver.addGraph($1, $3);};
+  "identifier" ":=" exp { driver.variables[$1] = $3; driver.addGraph($1, $3); std::cout << $1 << " = " << $3 << std::endl;}
+  | "identifier" ":=" sexp {driver.svar[$1] = (string) $3; std::cout << $1 << " = " << $3 << std::endl;};
 
 %left "+" "-";
 %left "*" "/";
@@ -114,8 +119,25 @@ exp:
 		  std::cout << $$ << " = " << $1 << " / " << $3 << std::endl;
 		  }
 | "(" exp ")"   { std::swap ($$, $2); }
-| "identifier"  { $$ = driver.getVariable($1);}
+| "identifier"  { $$ = driver.getVariable($1);		    
+		  cout << endl << $1 << " = " << $$ << endl;}
 | "number"      { std::swap ($$, $1); };
+
+sexp:
+  sexp "+" sexp { 
+		  $$ = ((std::string)$1).append($3); 
+		  std::string tmp = driver.addGraph($1 + " + " + $3);
+		  driver.setTmpID(tmp);
+		  driver.connect(driver.getTmpID(), driver.addGraph($1));
+		  driver.connect(driver.getTmpID(), driver.addGraph($3));
+		  driver.setTmpID(driver.addGraph($$));
+		  driver.connect(driver.getTmpID(), tmp);
+		  std::cout << $$  << " = \"" << $1 << "\" + \"" << $3 << "\"" << std::endl;
+		  }
+| "identifier"  { $$ = driver.svar[$1];}
+| "text"	{ $$ = $1;};
+
+
 %%
 
 void

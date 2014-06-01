@@ -34,6 +34,7 @@ static yy::location loc;
 id    [a-zA-Z][a-zA-Z_0-9]*
 int   [0-9]+
 number {int}+(\.{int}+)?
+text "\""[a-zA-Z0-9 !$%&/()=?;:-_]*"\""
 blank [ \t]
 
 %{
@@ -59,15 +60,24 @@ blank [ \t]
 ":="     return yy::calcxx_parser::make_ASSIGN(loc);
 
 
-{number}     {
+{number}	{
   errno = 0;
   float n = strtof (yytext, NULL);
   
   return yy::calcxx_parser::make_NUMBER(n, loc);
 }
 
-{id}       return yy::calcxx_parser::make_IDENTIFIER(yytext, loc);
-.          driver.error (loc, "invalid character");
+{text}		{ 
+  std::string tmp = yytext;
+  tmp = tmp.erase(0,1);
+  tmp = tmp.erase(tmp.length() -1, 1);
+  return yy::calcxx_parser::make_TEXT(tmp, loc);
+  
+}
+
+{id}       {return yy::calcxx_parser::make_IDENTIFIER(yytext, loc);}
+
+          driver.error (loc, "invalid character");
 <<EOF>>    return yy::calcxx_parser::make_END(loc);
 %%
 

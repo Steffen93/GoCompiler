@@ -17,13 +17,16 @@ class calcxx_driver
 public:
   calcxx_driver ();
   virtual ~calcxx_driver ();
-
+  std::map<std::string, std::string> svar;
   std::map<std::string, float> variables;
   std::map<std::string, std::string> nodes;
   std::string node1, node2;
   float val1, val2;
-  float result;
 
+  
+  float result;
+  std::string erg;
+  
   // Handling the scanner.
   void scan_begin ();
   void scan_end ();
@@ -38,7 +41,7 @@ public:
   // Whether parser traces should be generated.
   bool trace_parsing;
   std::string lastID;
-  
+
   //Graph erstellen
   std::string getNewID();
   void setTmpID (std::string id);
@@ -50,6 +53,7 @@ public:
   void addGraph(std::string name, float value);
   
   float getVariable(std::string name);
+  
   
   // Error handling.
   void error (const yy::location& l, const std::string& m);

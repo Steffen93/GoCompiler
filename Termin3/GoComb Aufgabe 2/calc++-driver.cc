@@ -105,6 +105,10 @@ void calcxx_driver::setTmpID(std::string id){
 }
 
 float calcxx_driver::getVariable(std::string name){
+  if(variables.find(name) == variables.end()){
+    error("Float: " + name + " nicht definiert!");
+    exit(1);
+  }
   if(node1 == ""){
     node1 = nodes[name];
     val1 = variables[name];

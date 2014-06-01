@@ -8,9 +8,10 @@ main (int argc, char *argv[])
   int res = 0;
   calcxx_driver driver;
 
-    if (!driver.parse ("language"))
+    if (!driver.parse ("language")){
       std::cout << driver.result << std::endl;
-    else
+      std::cout << driver.erg << std::endl;
+    }else
       res = 1;
   return res;
 }

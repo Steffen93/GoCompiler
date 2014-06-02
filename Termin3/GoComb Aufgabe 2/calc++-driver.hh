@@ -52,8 +52,8 @@ public:
 
   void addGraph(std::string name, float value);
   
-  float getVariable(std::string name);
-  std::string to_string(float); 
+  float getVariable(std::string);
+  std::string to_string(float);
   void print(std::string);
   void printLine(std::string);
   void setTestMode(bool);
@@ -66,6 +66,7 @@ private:
   bool testMode;
   static int nodeCount;
   std::ofstream o;
+  std::ofstream tS;
   std::string tmpID;
 };
 #endif // ! CALCXX_DRIVER_HH

@@ -7,7 +7,7 @@
  * (This comment added by Prof. R. C. Moore, fbi.h-da.de)
  *
  * This is the yacc (bison) file, i.e. grammar file.
- * See also calc++-scanner.ll for the lexical scanner 
+ * See also calc++-scanner.ll for the lexical scanner
  * (flex input).
  *
  ***********************/
@@ -76,8 +76,14 @@ assignments:
 | assignments assignment {};
 
 assignment:
-  "identifier" ":=" exp { driver.variables[$1] = $3; driver.addGraph($1, $3); std::cout << $1 << " = " << $3 << std::endl;}
-  | "identifier" ":=" sexp {driver.svar[$1] = (string) $3; std::cout << $1 << " = " << $3 << std::endl;};
+  "identifier" ":=" exp { driver.variables[$1] = $3; driver.addGraph($1, $3);
+			  driver.printLine($1 + " = "  + driver.to_string($3));
+			  //std::cout << $1 << " = " << $3 << std::endl;
+			}
+  | "identifier" ":=" sexp {
+				driver.svar[$1] = (string) $3;// std::cout << $1 << " = " << $3 << std::endl;
+				driver.printLine($1 + " = "  + $3);
+			   };
 
 %left "+" "-";
 %left "*" "/";
@@ -89,50 +95,57 @@ exp:
 		  driver.connect(driver.getTmpID(), driver.addGraph($3));
 		  driver.setTmpID(driver.addGraph($$));
 		  driver.connect(driver.getTmpID(), tmp);
-		  std::cout << $$ << " = " << $1 << " + " << $3 << std::endl;
+//		  driver.printLine(driver.to_string($$) + " = "  + driver.to_string($1) + " + " + driver.to_string($3));
+//		  std::cout << $$ << " = " << $1 << " + " << $3 << std::endl;
 		  }
 | exp "-" exp   { $$ = $1 - $3;
-		  std::string tmp = driver.addGraph(std::to_string($1) + " - " + std::to_string($3));
+		  std::string tmp = driver.addGraph(driver.to_string($1) + " - " + driver.to_string($3));
 		  driver.setTmpID(tmp);
 		  driver.connect(driver.getTmpID(), driver.addGraph($1));
 		  driver.connect(driver.getTmpID(), driver.addGraph($3));
 		  driver.setTmpID(driver.addGraph($$));
 		  driver.connect(driver.getTmpID(), tmp);
-		  std::cout << $$ << " = " << $1 << " - " << $3 << std::endl;
+//		  driver.printLine(driver.to_string($$) + " = "  + driver.to_string($1) + " - " + driver.to_string($3));
+//		  std::cout << $$ << " = " << $1 << " - " << $3 << std::endl;
 		}
-| exp "*" exp   { $$ = $1 * $3; 
-		  std::string tmp = driver.addGraph(std::to_string($1) + " * " + std::to_string($3));
+| exp "*" exp   { $$ = $1 * $3;
+		  std::string tmp = driver.addGraph(driver.to_string($1) + " * " + driver.to_string($3));
 		  driver.setTmpID(tmp);
 		  driver.connect(driver.getTmpID(), driver.addGraph($1));
 		  driver.connect(driver.getTmpID(), driver.addGraph($3));
 		  driver.setTmpID(driver.addGraph($$));
 		  driver.connect(driver.getTmpID(), tmp);
-		  std::cout << $$ << " = " << $1 << " * " << $3 << std::endl;
+//		  driver.printLine(driver.to_string($$) + " = "  + driver.to_string($1) + " * " + driver.to_string($3));
+//		  std::cout << $$ << " = " << $1 << " * " << $3 << std::endl;
 		}
 | exp "/" exp   { $$ = $1 / $3;
-		  std::string tmp = driver.addGraph(std::to_string($1) + " / " + std::to_string($3));
+		  std::string tmp = driver.addGraph(driver.to_string($1) + " / " + driver.to_string($3));
 		  driver.setTmpID(tmp);
 		  driver.connect(driver.getTmpID(), driver.addGraph($1));
 		  driver.connect(driver.getTmpID(), driver.addGraph($3));
 		  driver.setTmpID(driver.addGraph($$));
 		  driver.connect(driver.getTmpID(), tmp);
-		  std::cout << $$ << " = " << $1 << " / " << $3 << std::endl;
+//		  driver.printLine(driver.to_string($$) + " = "  + driver.to_string($1) + " / " + driver.to_string($3));
+//		  std::cout << $$ << " = " << $1 << " / " << $3 << std::endl;
 		  }
 | "(" exp ")"   { std::swap ($$, $2); }
-| "identifier"  { $$ = driver.getVariable($1);		    
-		  cout << endl << $1 << " = " << $$ << endl;}
+| "identifier"  { $$ = driver.getVariable($1);
+		  //cout << endl << $1 << " = " << $$ << endl;
+                  driver.printLine($1 + " = " + driver.to_string($$));
+                }
 | "number"      { std::swap ($$, $1); };
 
 sexp:
-  sexp "+" sexp { 
-		  $$ = ((std::string)$1).append($3); 
+  sexp "+" sexp {
+		  $$ = ((std::string)$1).append($3);
 		  std::string tmp = driver.addGraph($1 + " + " + $3);
 		  driver.setTmpID(tmp);
 		  driver.connect(driver.getTmpID(), driver.addGraph($1));
 		  driver.connect(driver.getTmpID(), driver.addGraph($3));
 		  driver.setTmpID(driver.addGraph($$));
 		  driver.connect(driver.getTmpID(), tmp);
-		  std::cout << $$  << " = \"" << $1 << "\" + \"" << $3 << "\"" << std::endl;
+		  //driver.printLine($1 + " = "  + $3);
+//		  std::cout << $$  << " = \"" << $1 << "\" + \"" << $3 << "\"" << std::endl;
 		  }
 | "identifier"  { $$ = driver.svar[$1];}
 | "text"	{ $$ = $1;};

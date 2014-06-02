@@ -293,6 +293,8 @@ namespace yy {
       char dummy1[sizeof(float)];
 
       // "identifier"
+      // "text"
+      // sexp
       char dummy2[sizeof(std::string)];
 };
 
@@ -325,7 +327,8 @@ namespace yy {
         TOK_LPAREN = 263,
         TOK_RPAREN = 264,
         TOK_IDENTIFIER = 265,
-        TOK_NUMBER = 266
+        TOK_NUMBER = 266,
+        TOK_TEXT = 267
       };
     };
 
@@ -461,6 +464,10 @@ namespace yy {
     static inline
     symbol_type
     make_NUMBER (const float& v, const location_type& l);
+
+    static inline
+    symbol_type
+    make_TEXT (const std::string& v, const location_type& l);
 
 
     /// Build a parser object.
@@ -662,13 +669,13 @@ namespace yy {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 26,     ///< Last index in yytable_.
-      yynnts_ = 5,  ///< Number of nonterminal symbols.
+      yylast_ = 36,     ///< Last index in yytable_.
+      yynnts_ = 6,  ///< Number of nonterminal symbols.
       yyempty_ = -2,
       yyfinal_ = 3, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = 12  ///< Number of tokens.
+      yyntokens_ = 13  ///< Number of tokens.
     };
 
 
@@ -711,9 +718,9 @@ namespace yy {
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8,     9,    10,    11
+       5,     6,     7,     8,     9,    10,    11,    12
     };
-    const unsigned int user_token_number_max_ = 266;
+    const unsigned int user_token_number_max_ = 267;
     const token_number_type undef_token_ = 2;
 
     if (static_cast<int>(t) <= yyeof_)
@@ -747,11 +754,13 @@ namespace yy {
       switch (other.type_get ())
     {
       case 11: // "number"
-      case 16: // exp
+      case 17: // exp
         value.copy< float > (other.value);
         break;
 
       case 10: // "identifier"
+      case 12: // "text"
+      case 18: // sexp
         value.copy< std::string > (other.value);
         break;
 
@@ -773,11 +782,13 @@ namespace yy {
       switch (this->type_get ())
     {
       case 11: // "number"
-      case 16: // exp
+      case 17: // exp
         value.copy< float > (v);
         break;
 
       case 10: // "identifier"
+      case 12: // "text"
+      case 18: // sexp
         value.copy< std::string > (v);
         break;
 
@@ -827,11 +838,13 @@ namespace yy {
     switch (yytype)
     {
       case 11: // "number"
-      case 16: // exp
+      case 17: // exp
         value.template destroy< float > ();
         break;
 
       case 10: // "identifier"
+      case 12: // "text"
+      case 18: // sexp
         value.template destroy< std::string > ();
         break;
 
@@ -850,11 +863,13 @@ namespace yy {
       switch (this->type_get ())
     {
       case 11: // "number"
-      case 16: // exp
+      case 17: // exp
         value.move< float > (s.value);
         break;
 
       case 10: // "identifier"
+      case 12: // "text"
+      case 18: // sexp
         value.move< std::string > (s.value);
         break;
 
@@ -907,7 +922,7 @@ namespace yy {
     yytoken_number_[] =
     {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
-     265,   266
+     265,   266,   267
     };
     return static_cast<token_type> (yytoken_number_[type]);
   }
@@ -972,10 +987,16 @@ namespace yy {
     return symbol_type (token::TOK_NUMBER, v, l);
   }
 
+  calcxx_parser::symbol_type
+  calcxx_parser::make_TEXT (const std::string& v, const location_type& l)
+  {
+    return symbol_type (token::TOK_TEXT, v, l);
+  }
+
 
 
 } // yy
-#line 979 "calc++-parser.hh" // lalr1.cc:372
+#line 1000 "calc++-parser.hh" // lalr1.cc:372
 
 
 

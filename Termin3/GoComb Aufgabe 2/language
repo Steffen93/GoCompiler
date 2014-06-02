@@ -1,4 +1,7 @@
-help := 2.2 * 18
-a := 2*2*2*2*2
-ko := 12 * help / (a - 4)
-ko
+help := 2.2 * 18 - 6
+a := 2*2*2*2*2 * help
+help := help * 2
+ko := 12 * help / a - 4 
+q := "Das ist " + "ein test"
+bla := ko * ko
+bla

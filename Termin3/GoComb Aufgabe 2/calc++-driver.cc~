@@ -120,6 +120,40 @@ float calcxx_driver::getVariable(std::string name){
   }
 }
 
+void calcxx_driver::addGraph(std::string name, float value){
+  o<< getNewID() << "[label=\"" << name << " = " << value << "\"];\n";
+}
+
+std::string calcxx_driver::addGraph(std::string label){
+  std::string newID = getNewID();
+  o<< newID << "[label=\"" << label << "\"];\n";
+  return newID;
+}
+
+std::string calcxx_driver::addGraph(float label){
+  std::string newID = getNewID();
+  o<< newID << "[label=\"" << std::to_string(label) << "\"];\n";
+  return newID;
+}
+
+void calcxx_driver::connect(std::string n1, std::string n2){
+  o << n1 << " -> " << n2 << ";\n";
+}
+
+std::string calcxx_driver::getNewID(){
+  std::string newID = "node" + std::to_string(nodeCount);
+  nodeCount++;
+  return newID;
+}
+
+std::string calcxx_driver::getTmpID(){
+  return tmpID;
+}
+
+void calcxx_driver::setTmpID(std::string id){
+  tmpID = id;
+}
+
 void calcxx_driver::setTestMode(bool test){
   testMode = test;
 }

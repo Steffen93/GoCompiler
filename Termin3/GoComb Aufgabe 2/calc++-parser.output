@@ -1,57 +1,70 @@
+State 5 conflicts: 2 reduce/reduce
+State 20 conflicts: 5 reduce/reduce
+
+
 Grammar
 
     0 $accept: unit "end of file"
 
     1 unit: assignments exp
+    2     | assignments sexp
 
-    2 assignments: %empty
-    3            | assignments assignment
+    3 assignments: %empty
+    4            | assignments assignment
 
-    4 assignment: "identifier" ":=" exp
+    5 assignment: "identifier" ":=" exp
+    6           | "identifier" ":=" sexp
 
-    5 exp: exp "+" exp
-    6    | exp "-" exp
-    7    | exp "*" exp
-    8    | exp "/" exp
-    9    | "(" exp ")"
-   10    | "identifier"
-   11    | "number"
+    7 exp: exp "+" exp
+    8    | exp "-" exp
+    9    | exp "*" exp
+   10    | exp "/" exp
+   11    | "(" exp ")"
+   12    | "identifier"
+   13    | "number"
+
+   14 sexp: sexp "+" sexp
+   15     | "identifier"
+   16     | "text"
 
 
 Terminals, with rules where they appear
 
 "end of file" (0) 0
 error (256)
-":=" (258) 4
-"-" (259) 6
-"+" (260) 5
-"*" (261) 7
-"/" (262) 8
-"(" (263) 9
-")" (264) 9
-"identifier" (265) 4 10
-"number" (266) 11
+":=" (258) 5 6
+"-" (259) 8
+"+" (260) 7 14
+"*" (261) 9
+"/" (262) 10
+"(" (263) 11
+")" (264) 11
+"identifier" (265) 5 6 12 15
+"number" (266) 13
+"text" (267) 16
 
 
 Nonterminals, with rules where they appear
 
-$accept (12)
+$accept (13)
     on left: 0
-unit (13)
-    on left: 1, on right: 0
-assignments (14)
-    on left: 2 3, on right: 1 3
-assignment (15)
-    on left: 4, on right: 3
-exp (16)
-    on left: 5 6 7 8 9 10 11, on right: 1 4 5 6 7 8 9
+unit (14)
+    on left: 1 2, on right: 0
+assignments (15)
+    on left: 3 4, on right: 1 2 4
+assignment (16)
+    on left: 5 6, on right: 4
+exp (17)
+    on left: 7 8 9 10 11 12 13, on right: 1 5 7 8 9 10 11
+sexp (18)
+    on left: 14 15 16, on right: 2 6 14
 
 
 State 0
 
     0 $accept: . unit "end of file"
 
-    $default  reduce using rule 2 (assignments)
+    $default  reduce using rule 3 (assignments)
 
     unit         go to state 1
     assignments  go to state 2
@@ -67,14 +80,17 @@ State 1
 State 2
 
     1 unit: assignments . exp
-    3 assignments: assignments . assignment
+    2     | assignments . sexp
+    4 assignments: assignments . assignment
 
     "("           shift, and go to state 4
     "identifier"  shift, and go to state 5
     "number"      shift, and go to state 6
+    "text"        shift, and go to state 7
 
-    assignment  go to state 7
-    exp         go to state 8
+    assignment  go to state 8
+    exp         go to state 9
+    sexp        go to state 10
 
 
 State 3
@@ -86,200 +102,279 @@ State 3
 
 State 4
 
-    9 exp: "(" . exp ")"
+   11 exp: "(" . exp ")"
 
     "("           shift, and go to state 4
-    "identifier"  shift, and go to state 9
+    "identifier"  shift, and go to state 11
     "number"      shift, and go to state 6
 
-    exp  go to state 10
+    exp  go to state 12
 
 
 State 5
 
-    4 assignment: "identifier" . ":=" exp
-   10 exp: "identifier" .
+    5 assignment: "identifier" . ":=" exp
+    6           | "identifier" . ":=" sexp
+   12 exp: "identifier" .
+   15 sexp: "identifier" .
 
-    ":="  shift, and go to state 11
+    ":="  shift, and go to state 13
 
-    $default  reduce using rule 10 (exp)
+    "end of file"  reduce using rule 12 (exp)
+    "end of file"  [reduce using rule 15 (sexp)]
+    "+"            reduce using rule 12 (exp)
+    "+"            [reduce using rule 15 (sexp)]
+    $default       reduce using rule 12 (exp)
 
 
 State 6
 
-   11 exp: "number" .
+   13 exp: "number" .
 
-    $default  reduce using rule 11 (exp)
+    $default  reduce using rule 13 (exp)
 
 
 State 7
 
-    3 assignments: assignments assignment .
+   16 sexp: "text" .
 
-    $default  reduce using rule 3 (assignments)
+    $default  reduce using rule 16 (sexp)
 
 
 State 8
 
-    1 unit: assignments exp .
-    5 exp: exp . "+" exp
-    6    | exp . "-" exp
-    7    | exp . "*" exp
-    8    | exp . "/" exp
+    4 assignments: assignments assignment .
 
-    "-"  shift, and go to state 12
-    "+"  shift, and go to state 13
-    "*"  shift, and go to state 14
-    "/"  shift, and go to state 15
-
-    $default  reduce using rule 1 (unit)
+    $default  reduce using rule 4 (assignments)
 
 
 State 9
 
-   10 exp: "identifier" .
+    1 unit: assignments exp .
+    7 exp: exp . "+" exp
+    8    | exp . "-" exp
+    9    | exp . "*" exp
+   10    | exp . "/" exp
 
-    $default  reduce using rule 10 (exp)
+    "-"  shift, and go to state 14
+    "+"  shift, and go to state 15
+    "*"  shift, and go to state 16
+    "/"  shift, and go to state 17
+
+    $default  reduce using rule 1 (unit)
 
 
 State 10
 
-    5 exp: exp . "+" exp
-    6    | exp . "-" exp
-    7    | exp . "*" exp
-    8    | exp . "/" exp
-    9    | "(" exp . ")"
+    2 unit: assignments sexp .
+   14 sexp: sexp . "+" sexp
 
-    "-"  shift, and go to state 12
-    "+"  shift, and go to state 13
-    "*"  shift, and go to state 14
-    "/"  shift, and go to state 15
-    ")"  shift, and go to state 16
+    "+"  shift, and go to state 18
+
+    $default  reduce using rule 2 (unit)
 
 
 State 11
 
-    4 assignment: "identifier" ":=" . exp
+   12 exp: "identifier" .
 
-    "("           shift, and go to state 4
-    "identifier"  shift, and go to state 9
-    "number"      shift, and go to state 6
-
-    exp  go to state 17
+    $default  reduce using rule 12 (exp)
 
 
 State 12
 
-    6 exp: exp "-" . exp
+    7 exp: exp . "+" exp
+    8    | exp . "-" exp
+    9    | exp . "*" exp
+   10    | exp . "/" exp
+   11    | "(" exp . ")"
 
-    "("           shift, and go to state 4
-    "identifier"  shift, and go to state 9
-    "number"      shift, and go to state 6
-
-    exp  go to state 18
+    "-"  shift, and go to state 14
+    "+"  shift, and go to state 15
+    "*"  shift, and go to state 16
+    "/"  shift, and go to state 17
+    ")"  shift, and go to state 19
 
 
 State 13
 
-    5 exp: exp "+" . exp
+    5 assignment: "identifier" ":=" . exp
+    6           | "identifier" ":=" . sexp
 
     "("           shift, and go to state 4
-    "identifier"  shift, and go to state 9
+    "identifier"  shift, and go to state 20
     "number"      shift, and go to state 6
+    "text"        shift, and go to state 7
 
-    exp  go to state 19
+    exp   go to state 21
+    sexp  go to state 22
 
 
 State 14
 
-    7 exp: exp "*" . exp
+    8 exp: exp "-" . exp
 
     "("           shift, and go to state 4
-    "identifier"  shift, and go to state 9
+    "identifier"  shift, and go to state 11
     "number"      shift, and go to state 6
 
-    exp  go to state 20
+    exp  go to state 23
 
 
 State 15
 
-    8 exp: exp "/" . exp
+    7 exp: exp "+" . exp
 
     "("           shift, and go to state 4
-    "identifier"  shift, and go to state 9
+    "identifier"  shift, and go to state 11
     "number"      shift, and go to state 6
 
-    exp  go to state 21
+    exp  go to state 24
 
 
 State 16
 
-    9 exp: "(" exp ")" .
+    9 exp: exp "*" . exp
 
-    $default  reduce using rule 9 (exp)
+    "("           shift, and go to state 4
+    "identifier"  shift, and go to state 11
+    "number"      shift, and go to state 6
+
+    exp  go to state 25
 
 
 State 17
 
-    4 assignment: "identifier" ":=" exp .
-    5 exp: exp . "+" exp
-    6    | exp . "-" exp
-    7    | exp . "*" exp
-    8    | exp . "/" exp
+   10 exp: exp "/" . exp
 
-    "-"  shift, and go to state 12
-    "+"  shift, and go to state 13
-    "*"  shift, and go to state 14
-    "/"  shift, and go to state 15
+    "("           shift, and go to state 4
+    "identifier"  shift, and go to state 11
+    "number"      shift, and go to state 6
 
-    $default  reduce using rule 4 (assignment)
+    exp  go to state 26
 
 
 State 18
 
-    5 exp: exp . "+" exp
-    6    | exp . "-" exp
-    6    | exp "-" exp .
-    7    | exp . "*" exp
-    8    | exp . "/" exp
+   14 sexp: sexp "+" . sexp
 
-    "*"  shift, and go to state 14
-    "/"  shift, and go to state 15
+    "identifier"  shift, and go to state 27
+    "text"        shift, and go to state 7
 
-    $default  reduce using rule 6 (exp)
+    sexp  go to state 28
 
 
 State 19
 
-    5 exp: exp . "+" exp
-    5    | exp "+" exp .
-    6    | exp . "-" exp
-    7    | exp . "*" exp
-    8    | exp . "/" exp
+   11 exp: "(" exp ")" .
 
-    "*"  shift, and go to state 14
-    "/"  shift, and go to state 15
-
-    $default  reduce using rule 5 (exp)
+    $default  reduce using rule 11 (exp)
 
 
 State 20
 
-    5 exp: exp . "+" exp
-    6    | exp . "-" exp
-    7    | exp . "*" exp
-    7    | exp "*" exp .
-    8    | exp . "/" exp
+   12 exp: "identifier" .
+   15 sexp: "identifier" .
 
-    $default  reduce using rule 7 (exp)
+    "+"           reduce using rule 12 (exp)
+    "+"           [reduce using rule 15 (sexp)]
+    "("           reduce using rule 12 (exp)
+    "("           [reduce using rule 15 (sexp)]
+    "identifier"  reduce using rule 12 (exp)
+    "identifier"  [reduce using rule 15 (sexp)]
+    "number"      reduce using rule 12 (exp)
+    "number"      [reduce using rule 15 (sexp)]
+    "text"        reduce using rule 12 (exp)
+    "text"        [reduce using rule 15 (sexp)]
+    $default      reduce using rule 12 (exp)
 
 
 State 21
 
-    5 exp: exp . "+" exp
-    6    | exp . "-" exp
-    7    | exp . "*" exp
-    8    | exp . "/" exp
-    8    | exp "/" exp .
+    5 assignment: "identifier" ":=" exp .
+    7 exp: exp . "+" exp
+    8    | exp . "-" exp
+    9    | exp . "*" exp
+   10    | exp . "/" exp
+
+    "-"  shift, and go to state 14
+    "+"  shift, and go to state 15
+    "*"  shift, and go to state 16
+    "/"  shift, and go to state 17
+
+    $default  reduce using rule 5 (assignment)
+
+
+State 22
+
+    6 assignment: "identifier" ":=" sexp .
+   14 sexp: sexp . "+" sexp
+
+    "+"  shift, and go to state 18
+
+    $default  reduce using rule 6 (assignment)
+
+
+State 23
+
+    7 exp: exp . "+" exp
+    8    | exp . "-" exp
+    8    | exp "-" exp .
+    9    | exp . "*" exp
+   10    | exp . "/" exp
+
+    "*"  shift, and go to state 16
+    "/"  shift, and go to state 17
 
     $default  reduce using rule 8 (exp)
+
+
+State 24
+
+    7 exp: exp . "+" exp
+    7    | exp "+" exp .
+    8    | exp . "-" exp
+    9    | exp . "*" exp
+   10    | exp . "/" exp
+
+    "*"  shift, and go to state 16
+    "/"  shift, and go to state 17
+
+    $default  reduce using rule 7 (exp)
+
+
+State 25
+
+    7 exp: exp . "+" exp
+    8    | exp . "-" exp
+    9    | exp . "*" exp
+    9    | exp "*" exp .
+   10    | exp . "/" exp
+
+    $default  reduce using rule 9 (exp)
+
+
+State 26
+
+    7 exp: exp . "+" exp
+    8    | exp . "-" exp
+    9    | exp . "*" exp
+   10    | exp . "/" exp
+   10    | exp "/" exp .
+
+    $default  reduce using rule 10 (exp)
+
+
+State 27
+
+   15 sexp: "identifier" .
+
+    $default  reduce using rule 15 (sexp)
+
+
+State 28
+
+   14 sexp: sexp . "+" sexp
+   14     | sexp "+" sexp .
+
+    $default  reduce using rule 14 (sexp)

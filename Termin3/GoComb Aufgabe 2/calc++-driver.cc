@@ -79,7 +79,7 @@ std::string calcxx_driver::addGraph(float label){
   }
   if(!(cnt % 3 == 0 && tmp == label)){
     newID = getNewID();
-    o<< newID << "[label=\"" << std::to_string(label) << "\"];\n";
+    o<< newID << "[label=\"" << to_string(label) << "\"];\n";
   }
   tmp = label;
   cnt++;

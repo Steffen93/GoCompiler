@@ -1,0 +1,26 @@
+# http://llvm.org/docs/tutorial/LangImpl5.html
+extern foo();
+extern bar();
+def baz(x) if x then foo() else bar();
+#
+def fib(x)
+  if x < 3 then
+    1
+  else
+    fib(x-1)+fib(x-2);
+#
+fib(1);
+fib(2);
+fib(3);
+fib(4);
+fib(10);
+fib(20);
+#
+extern putchard(char)
+def printstar(n)
+  for i = 1, i < n, 1.0 in
+    putchard(42);  # ascii 42 = '*';
+
+# print 100 '*' characters
+printstar(100);
+

@@ -1,1 +1,7 @@
+help = 33.60
+a = 1075.20
+help = 67.20
+ko = -3.25
+q = Das ist ein test
+bla = 10.56
 

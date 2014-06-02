@@ -12,9 +12,8 @@ main (int argc, char *argv[])
   }
   std::cout << "Test Mode is " << ((driver.getTestMode()) ? "on" : "off") << std::endl;
 
-    if (!driver.parse ("language"))
-      std::cout << driver.result << std::endl;
-    else
+    if (driver.parse ("language")){
       res = 1;
+    }
   return res;
 }

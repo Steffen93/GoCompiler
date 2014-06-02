@@ -131,7 +131,7 @@ exp:
 | "(" exp ")"   { std::swap ($$, $2); }
 | "identifier"  { $$ = driver.getVariable($1);
 		  //cout << endl << $1 << " = " << $$ << endl;
-                  driver.printLine($1 + " = " + driver.to_string($$));
+                  //driver.printLine($1 + " = " + driver.to_string($$));
                 }
 | "number"      { std::swap ($$, $1); };
 

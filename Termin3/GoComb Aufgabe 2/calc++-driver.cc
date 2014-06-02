@@ -13,6 +13,7 @@ calcxx_driver::calcxx_driver ()
 
 calcxx_driver::~calcxx_driver ()
 {
+  result->makeGraph(o);
   o << "\n}";
   tS << std::endl;
   o.close();
@@ -141,11 +142,11 @@ void calcxx_driver::printLine(std::string text){
 	tS << std::endl;
   }
 }
-/*
+
 std::string calcxx_driver::to_string(float num){
-  std::string text = std::to_string(num);
+  stringstream stringvar;
+  stringvar << num;
+  std::string text = stringvar.str();
   unsigned pos = text.find(".");
   return text.substr(0, pos+3);
 }
-
-*/

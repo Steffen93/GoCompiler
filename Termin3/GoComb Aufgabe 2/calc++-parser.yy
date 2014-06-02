@@ -77,7 +77,8 @@ assignments:
 | assignments assignment {};
 
 assignment:
-  "identifier" ":=" exp { driver.variables[$1] = $3; /*driver.addGraph($1, $3);
+  "identifier" ":=" exp { driver.variables[$1] = $3;
+			  /*driver.addGraph($1, $3);
 			  driver.printLine($1 + " = "  + driver.to_string($3));*/
 			}
   | "identifier" ":=" sexp {
@@ -89,70 +90,67 @@ assignment:
 %left "*" "/";
 exp:
   exp "+" exp   { //$$ = $1 + $3;
-  
-		  $$ = new node($1, $3);
-		  /*$$.fval = $1 + $3;/*
-		  std::string tmp = driver.addGraph(driver.to_string($1) + " + " + driver.to_string($3));
-		  driver.setTmpID(tmp);
-		  driver.connect(driver.getTmpID(), driver.addGraph($1));
-		  driver.connect(driver.getTmpID(), driver.addGraph($3));
-		  driver.setTmpID(driver.addGraph($$));
-		  driver.connect(driver.getTmpID(), tmp);*/
+		  node*tmp = new node($1, $3);
+		  tmp->label = "+";
+		  $$ = new node(tmp, (node*)NULL);
+		  $$->fval = $1->fval + $3->fval;
+		  $$->label = driver.to_string($$->fval);
+		  std::cout << $1->fval << " + " << $3->fval << " = " << $$->fval << std::endl;
 		  }
 | exp "-" exp   { //$$ = $1 - $3;
-
-		  $$ = new node($1, $3);
-		  //$$.fval = $1 - $3.fval;
-		  /*
-		  std::string tmp = driver.addGraph(driver.to_string($1) + " - " + driver.to_string($3));
-		  driver.setTmpID(tmp);
-		  driver.connect(driver.getTmpID(), driver.addGraph($1));
-		  driver.connect(driver.getTmpID(), driver.addGraph($3));
-		  driver.setTmpID(driver.addGraph($$));
-		  driver.connect(driver.getTmpID(), tmp);*/
+		  node*tmp = new node($1, $3);
+		  tmp->label = "-";
+		  $$ = new node(tmp, (node*)NULL);
+		  $$->fval = $1->fval - $3->fval;
+		  $$->label = driver.to_string($$->fval);
+		  std::cout << $1->fval << " - " << $3->fval << " = " << $$->fval << std::endl;
 		}
 | exp "*" exp   { //$$ = $1 * $3;
-
-		  $$ = new node($1, $3);
-		  //$$.fval = $1.fval * $3.fval;
-		  /*
-		  std::string tmp = driver.addGraph(driver.to_string($1) + " * " + driver.to_string($3));
-		  driver.setTmpID(tmp);
-		  driver.connect(driver.getTmpID(), driver.addGraph($1));
-		  driver.connect(driver.getTmpID(), driver.addGraph($3));
-		  driver.setTmpID(driver.addGraph($$));
-		  driver.connect(driver.getTmpID(), tmp);*/
+		  node*tmp = new node($1, $3);
+		  tmp->label = "*";
+		  $$ = new node(tmp, (node*)NULL);
+		  $$->fval = $1->fval * $3->fval;
+		  $$->label = driver.to_string($$->fval);
+		  std::cout << $1->fval << " * " << $3->fval << " = " << $$->fval << std::endl;
 		}
 | exp "/" exp   { //$$ = $1 / $3;
-		  $$ = new node($1, $3);
-		  /*$$.fval = $1.fval / $3.fval;/*
-		  std::string tmp = driver.addGraph(driver.to_string($1) + " / " + driver.to_string($3));
-		  driver.setTmpID(tmp);
-		  driver.connect(driver.getTmpID(), driver.addGraph($1));
-		  driver.connect(driver.getTmpID(), driver.addGraph($3));
-		  driver.setTmpID(driver.addGraph($$));
-		  driver.connect(driver.getTmpID(), tmp);*/
+		  node*tmp = new node($1, $3);
+		  tmp->label = "/";
+		  $$ = new node(tmp, (node*)NULL);
+		  $$->fval = $1->fval / $3->fval;
+		  $$->label = driver.to_string($$->fval);
+		  std::cout << $1->fval << " / " << $3->fval << " = " << $$->fval << std::endl;
 		  }
 | "(" exp ")"   { $$ = $2; }
 | "identifier"  { //$$ = driver.getVariable($1)
-		    $$ = new node();
-		    $$->name = $1;
-		  
+		    if(driver.variables.find($1) != driver.variables.end()){
+		      $$ = new node(driver.variables[$1]);
+		    }else
+		      $$ = new node();
+		    $$->label = ((string)$1).append(" = " + driver.to_string(driver.variables[$1]->fval));
                 }
 | "number"      { //std::swap ($$, $1); 
 		  $$ = new node();
 		  $$->fval = $1;
-		};
+		  $$->type = "float";
+		  $$->label = driver.to_string($1);
+		}
+| "text"	{ $$ = new node();
+		  $$->sval = $1;
+		  $$->type = "string";
+		  $$->label = $1;};
 
 sexp:
   sexp "+" sexp {
 		  $$ = ((std::string)$1).append($3);
+		  /*
 		  std::string tmp = driver.addGraph($1 + " + " + $3);
 		  driver.setTmpID(tmp);
 		  driver.connect(driver.getTmpID(), driver.addGraph($1));
 		  driver.connect(driver.getTmpID(), driver.addGraph($3));
 		  driver.setTmpID(driver.addGraph($$));
 		  driver.connect(driver.getTmpID(), tmp);
+		  */
 		  }
 | "identifier"  { $$ = driver.svar[$1];}
 | "text"	{ $$ = $1;};

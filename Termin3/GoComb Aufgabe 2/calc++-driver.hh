@@ -3,6 +3,7 @@
 # include <string>
 # include <map>
 # include <fstream>
+#include <sstream>
 #include "node.h"
 # include "calc++-parser.hh"
 
@@ -63,10 +64,12 @@ public:
   // Error handling.
   void error (const yy::location& l, const std::string& m);
   void error (const std::string& m);
+  
+  std::ofstream o; //not for long!
 private:
   bool testMode;
   static int nodeCount;
-  std::ofstream o;
+  
   std::ofstream tS;
   std::string tmpID;
 };

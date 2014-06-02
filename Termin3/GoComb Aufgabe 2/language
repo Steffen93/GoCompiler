@@ -1,7 +1,7 @@
 help := 2.2 * 18 - 6			//33.60
 a := 2*2*2*2*2 * help			//1075.20
-//help := help * 2			//67.20
+help := help * 2			//67.20
 ko := 12 * help / a - 4 		//-3.25
-q := "Das ist " + "ein test"		//Das ist ein test
+//q := "Das ist " + "ein test"		//Das ist ein test
 bla := ko * ko				//10.56
 bla					//10.56

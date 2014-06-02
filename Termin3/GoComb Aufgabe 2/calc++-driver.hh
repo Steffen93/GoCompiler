@@ -44,12 +44,18 @@ public:
   std::string addGraph(std::string label);
   std::string addGraph(float label);
 
-  void addGraph(std::string name, float value);
-  
+  void addGraph(std::string, float);
+  void setTestMode(bool);
+  std::string to_string(float); 
+  void print(std::string);
+  void printLine(std::string);
+  bool getTestMode();
+
   // Error handling.
   void error (const yy::location& l, const std::string& m);
   void error (const std::string& m);
 private:
+  bool testMode;
   static int nodeCount;
   std::ofstream o;
   std::string tmpID;

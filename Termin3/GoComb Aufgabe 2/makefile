@@ -49,8 +49,8 @@ calc++-parser.cc calc++-parser.hh: calc++-parser.yy
 clean:
 	$(RM) *~ *.o  calc++  calc++-scanner.cc calc++-parser.cc  calc++-scanner.hh calc++-parser.hh calc++-parser.output location.hh stack.hh position.hh
 
-tests: test.sh calc++
-	./test.sh
+tests: test.sh
+	bash test.sh
 
 picture: dotgraph.dot
 	dot -Tpng dotgraph.dot > yolo.png

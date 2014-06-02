@@ -4,10 +4,8 @@
 int calcxx_driver::nodeCount = 0;
 
 calcxx_driver::calcxx_driver ()
-  : trace_scanning (false), trace_parsing (false), tmpID("")
+  : trace_scanning (false), trace_parsing (false), tmpID(""), testMode(false)
 {
-  std::ofstream f;
-  o.open("dotgraph.dot");
   o << "digraph gograph{\n";
   
   
@@ -77,4 +75,27 @@ std::string calcxx_driver::getTmpID(){
 
 void calcxx_driver::setTmpID(std::string id){
   tmpID = id;
+}
+
+void calcxx_driver::setTestMode(bool test){
+  testMode = test;
+}
+
+bool calcxx_driver::getTestMode(){
+  return testMode;
+}
+
+void calcxx_driver::print(std::string text){
+  std::cout << text;
+}
+
+void calcxx_driver::printLine(std::string text){
+  print(text);
+  std::cout << std::endl;
+}
+
+std::string calcxx_driver::to_string(float num){
+  std::string text = std::to_string(num);
+  unsigned pos = text.find(".");
+  return std::string::substr(text);
 }

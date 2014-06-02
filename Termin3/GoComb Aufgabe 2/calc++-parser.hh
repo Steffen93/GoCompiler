@@ -43,8 +43,8 @@
 #line 25 "calc++-parser.yy" // lalr1.cc:372
 
 # include <string>
+#include "node.h"
 class calcxx_driver;
-class node;
 
 #line 50 "calc++-parser.hh" // lalr1.cc:372
 
@@ -293,7 +293,7 @@ namespace yy {
       char dummy1[sizeof(float)];
 
       // exp
-      char dummy2[sizeof(node)];
+      char dummy2[sizeof(node*)];
 
       // "identifier"
       // "text"
@@ -368,7 +368,7 @@ namespace yy {
 
   basic_symbol (typename Base::kind_type t, const float v, const location_type& l);
 
-  basic_symbol (typename Base::kind_type t, const node v, const location_type& l);
+  basic_symbol (typename Base::kind_type t, const node* v, const location_type& l);
 
   basic_symbol (typename Base::kind_type t, const std::string v, const location_type& l);
 
@@ -763,7 +763,7 @@ namespace yy {
         break;
 
       case 17: // exp
-        value.copy< node > (other.value);
+        value.copy< node* > (other.value);
         break;
 
       case 10: // "identifier"
@@ -794,7 +794,7 @@ namespace yy {
         break;
 
       case 17: // exp
-        value.copy< node > (v);
+        value.copy< node* > (v);
         break;
 
       case 10: // "identifier"
@@ -826,7 +826,7 @@ namespace yy {
   {}
 
   template <typename Base>
-  calcxx_parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const node v, const location_type& l)
+  calcxx_parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const node* v, const location_type& l)
     : Base (t)
     , value (v)
     , location (l)
@@ -860,7 +860,7 @@ namespace yy {
         break;
 
       case 17: // exp
-        value.template destroy< node > ();
+        value.template destroy< node* > ();
         break;
 
       case 10: // "identifier"
@@ -888,7 +888,7 @@ namespace yy {
         break;
 
       case 17: // exp
-        value.move< node > (s.value);
+        value.move< node* > (s.value);
         break;
 
       case 10: // "identifier"

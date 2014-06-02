@@ -9,8 +9,6 @@ calcxx_driver::calcxx_driver ()
   o.open("dotgraph.dot");
   o << "digraph gograph{\n";
   tS.open("tests.txt");
-  variables["one"] = 1.0;
-  variables["two"] = 2.0;
 }
 
 calcxx_driver::~calcxx_driver ()
@@ -57,7 +55,7 @@ std::string calcxx_driver::addGraph(std::string label){
   o<< newID << "[label=\"" << label << "\"];\n";
   return newID;
 }
-
+/*
 std::string calcxx_driver::addGraph(float label){
   static int cnt = 0;
   static float tmp = 0;
@@ -86,13 +84,13 @@ std::string calcxx_driver::addGraph(float label){
   lastID = newID;
   return newID;
 }
-
+*/
 void calcxx_driver::connect(std::string n1, std::string n2){
   o << n1 << " -> " << n2 << ";\n";
 }
 
 std::string calcxx_driver::getNewID(){
-  std::string newID = "node" + std::to_string(nodeCount);
+  std::string newID = "node";//std::to_string(nodeCount);
   nodeCount++;
   return newID;
 }
@@ -104,7 +102,7 @@ std::string calcxx_driver::getTmpID(){
 void calcxx_driver::setTmpID(std::string id){
   tmpID = id;
 }
-
+/*
 float calcxx_driver::getVariable(std::string name){
   if(variables.find(name) == variables.end()){
     error("Float: " + name + " nicht definiert!");
@@ -120,7 +118,7 @@ float calcxx_driver::getVariable(std::string name){
     return val2;
   }
 }
-
+*/
 void calcxx_driver::setTestMode(bool test){
   testMode = test;
 }
@@ -143,10 +141,11 @@ void calcxx_driver::printLine(std::string text){
 	tS << std::endl;
   }
 }
-
+/*
 std::string calcxx_driver::to_string(float num){
   std::string text = std::to_string(num);
   unsigned pos = text.find(".");
   return text.substr(0, pos+3);
 }
 
+*/

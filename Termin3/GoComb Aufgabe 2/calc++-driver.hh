@@ -3,6 +3,7 @@
 # include <string>
 # include <map>
 # include <fstream>
+#include "node.h"
 # include "calc++-parser.hh"
 
 // Tell Flex the lexer's prototype ...
@@ -18,13 +19,13 @@ public:
   calcxx_driver ();
   virtual ~calcxx_driver ();
   std::map<std::string, std::string> svar;
-  std::map<std::string, float> variables;
+  std::map<std::string, node*> variables;
   std::map<std::string, std::string> nodes;
   std::string node1, node2;
-  float val1, val2;
+  node* val1, *val2;
 
   
-  float result;
+  node *result;
   std::string erg;
   
   // Handling the scanner.
@@ -48,11 +49,11 @@ public:
   std::string getTmpID();
   void connect(std::string n1, std::string n2);
   std::string addGraph(std::string label);
-  std::string addGraph(float label);
+  //std::string addGraph(float label);
 
   void addGraph(std::string name, float value);
   
-  float getVariable(std::string);
+  //float getVariable(std::string);
   std::string to_string(float);
   void print(std::string);
   void printLine(std::string);

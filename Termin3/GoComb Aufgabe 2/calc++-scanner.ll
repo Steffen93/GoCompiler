@@ -17,7 +17,9 @@
 # include <climits>
 # include <cstdlib>
 # include <string>
+#include "node.h"
 # include "calc++-driver.hh"
+
 # include "calc++-parser.hh"
 
 // Work around an incompatibility in flex (at least versions

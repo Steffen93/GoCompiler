@@ -24,8 +24,8 @@
 %code requires
 {
 # include <string>
+#include "node.h"
 class calcxx_driver;
-class node;
 }
 
 // The parsing context.
@@ -44,7 +44,6 @@ class node;
 %code
 {
 # include "calc++-driver.hh"
-#include "node.h"
 using namespace std;
 }
 
@@ -63,14 +62,14 @@ using namespace std;
 %token <std::string> IDENTIFIER "identifier"
 %token <float> NUMBER "number"
 %token <std::string> TEXT "text"
-%type  <node> exp
+%type  <node*> exp
 %type  <std::string> sexp
 
 %printer { yyoutput << $$; } <*>;
 
 %%
 %start unit;
-unit: assignments exp  { driver.result = $2.fval; }
+unit: assignments exp  { driver.result = $2; }
 | assignments sexp {driver.erg = $2;};
 
 assignments:
@@ -78,7 +77,7 @@ assignments:
 | assignments assignment {};
 
 assignment:
-  "identifier" ":=" exp { driver.variables[$1] = $3.fval; /*driver.addGraph($1, $3);
+  "identifier" ":=" exp { driver.variables[$1] = $3; /*driver.addGraph($1, $3);
 			  driver.printLine($1 + " = "  + driver.to_string($3));*/
 			}
   | "identifier" ":=" sexp {
@@ -92,7 +91,7 @@ exp:
   exp "+" exp   { //$$ = $1 + $3;
   
 		  $$ = new node($1, $3);
-		  $$.fval = $1.fval + $3.fval;/*
+		  /*$$.fval = $1 + $3;/*
 		  std::string tmp = driver.addGraph(driver.to_string($1) + " + " + driver.to_string($3));
 		  driver.setTmpID(tmp);
 		  driver.connect(driver.getTmpID(), driver.addGraph($1));
@@ -103,7 +102,8 @@ exp:
 | exp "-" exp   { //$$ = $1 - $3;
 
 		  $$ = new node($1, $3);
-		  $$.fval = $1.fval - $3.fval;/*
+		  //$$.fval = $1 - $3.fval;
+		  /*
 		  std::string tmp = driver.addGraph(driver.to_string($1) + " - " + driver.to_string($3));
 		  driver.setTmpID(tmp);
 		  driver.connect(driver.getTmpID(), driver.addGraph($1));
@@ -114,7 +114,8 @@ exp:
 | exp "*" exp   { //$$ = $1 * $3;
 
 		  $$ = new node($1, $3);
-		  $$.fval = $1.fval * $3.fval;/*
+		  //$$.fval = $1.fval * $3.fval;
+		  /*
 		  std::string tmp = driver.addGraph(driver.to_string($1) + " * " + driver.to_string($3));
 		  driver.setTmpID(tmp);
 		  driver.connect(driver.getTmpID(), driver.addGraph($1));
@@ -124,7 +125,7 @@ exp:
 		}
 | exp "/" exp   { //$$ = $1 / $3;
 		  $$ = new node($1, $3);
-		  $$.fval = $1.fval / $3.fval;/*
+		  /*$$.fval = $1.fval / $3.fval;/*
 		  std::string tmp = driver.addGraph(driver.to_string($1) + " / " + driver.to_string($3));
 		  driver.setTmpID(tmp);
 		  driver.connect(driver.getTmpID(), driver.addGraph($1));
@@ -133,19 +134,14 @@ exp:
 		  driver.connect(driver.getTmpID(), tmp);*/
 		  }
 | "(" exp ")"   { $$ = $2; }
-| "identifier"  { //$$ = driver.getVariable($1);
-		  if(driver.variables.find($1) == driver.variables.end()){
+| "identifier"  { //$$ = driver.getVariable($1)
 		    $$ = new node();
-		    $$.name = $1;
-		  }else{
-		    $$ = new node();
-		    $$.name = $1;
-		    $$.fval = driver.variables[$1];
-		  }
+		    $$->name = $1;
+		  
                 }
 | "number"      { //std::swap ($$, $1); 
 		  $$ = new node();
-		  $$.fval = $1;
+		  $$->fval = $1;
 		};
 
 sexp:

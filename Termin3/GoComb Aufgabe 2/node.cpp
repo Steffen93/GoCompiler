@@ -35,16 +35,16 @@ node::~node(){
 void node::makeGraph(ofstream &o){
   if(inserted == false){
     if(label != "")
-      o<< "node" << (int)this << "[label=\"" << label << "\"];\n";
+      o<< "node" << (intptr_t)this << "[label=\"" << label << "\"];\n";
     else
       return;
     if(left != NULL){
       left->makeGraph(o);
-      o << "node" << (int)left  << " -> " << "node" << (int)this<< "\n";
+      o << "node" << (intptr_t)left  << " -> " << "node" << (intptr_t)this<< "\n";
     }
     if(right != NULL){
       right->makeGraph(o);
-      o << "node" << (int)right << " -> " << "node" << (int)this << "\n";
+      o << "node" << (intptr_t)right << " -> " << "node" << (intptr_t)this << "\n";
     }
     inserted = true;
   }

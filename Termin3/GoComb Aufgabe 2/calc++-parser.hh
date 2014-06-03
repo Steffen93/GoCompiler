@@ -293,11 +293,11 @@ namespace yy {
       char dummy1[sizeof(float)];
 
       // exp
+      // sexp
       char dummy2[sizeof(node*)];
 
       // "identifier"
       // "text"
-      // sexp
       char dummy3[sizeof(std::string)];
 };
 
@@ -674,7 +674,7 @@ namespace yy {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 36,     ///< Last index in yytable_.
+      yylast_ = 37,     ///< Last index in yytable_.
       yynnts_ = 6,  ///< Number of nonterminal symbols.
       yyempty_ = -2,
       yyfinal_ = 3, ///< Termination state number.
@@ -763,12 +763,12 @@ namespace yy {
         break;
 
       case 17: // exp
+      case 18: // sexp
         value.copy< node* > (other.value);
         break;
 
       case 10: // "identifier"
       case 12: // "text"
-      case 18: // sexp
         value.copy< std::string > (other.value);
         break;
 
@@ -794,12 +794,12 @@ namespace yy {
         break;
 
       case 17: // exp
+      case 18: // sexp
         value.copy< node* > (v);
         break;
 
       case 10: // "identifier"
       case 12: // "text"
-      case 18: // sexp
         value.copy< std::string > (v);
         break;
 
@@ -860,12 +860,12 @@ namespace yy {
         break;
 
       case 17: // exp
+      case 18: // sexp
         value.template destroy< node* > ();
         break;
 
       case 10: // "identifier"
       case 12: // "text"
-      case 18: // sexp
         value.template destroy< std::string > ();
         break;
 
@@ -888,12 +888,12 @@ namespace yy {
         break;
 
       case 17: // exp
+      case 18: // sexp
         value.move< node* > (s.value);
         break;
 
       case 10: // "identifier"
       case 12: // "text"
-      case 18: // sexp
         value.move< std::string > (s.value);
         break;
 

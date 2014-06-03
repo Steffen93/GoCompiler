@@ -18,8 +18,8 @@
 # $^ = The names of all the prerequisites, with spaces between them.
 ####################################################################
 # Uncomment only one of the next two lines (choose your c++ compiler)
- CC=g++
- CFLAGS=-std=c++11
+CC=g++
+CFLAGS=-std=c++11 -fpermissive
 #CC=clang++
 
 LEX=flex
@@ -38,7 +38,7 @@ calc++ : calc++.o calc++-scanner.o calc++-parser.o calc++-driver.o node.o
 calc++.o : calc++.cc calc++-driver.hh calc++-parser.hh
 
 %.o: %.cc %.cpp $(HEADERS)
-	$(CC) $(CFLAGS) -o $@ -c $<
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 calc++-scanner.cc: calc++-scanner.ll
 	$(LEX) $(LFLAGS) -o calc++-scanner.cc calc++-scanner.ll

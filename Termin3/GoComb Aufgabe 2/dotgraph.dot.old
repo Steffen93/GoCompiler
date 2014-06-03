@@ -1,0 +1,78 @@
+digraph gograph{
+node13616544[label="bla = 10.56"];
+node13616224[label="*"];
+node13615872[label="ko = -3.25"];
+node13614768[label="-"];
+node13614608[label="0.75"];
+node13614528[label="/"];
+node13614176[label="806.4"];
+node13614096[label="*"];
+node13613696[label="12"];
+node13613696 -> node13614096
+node13613872[label="help = 67.2"];
+node13613392[label="*"];
+node13613184[label="help = 33.6"];
+node13610304[label="-"];
+node13609392[label="39.6"];
+node13609312[label="*"];
+node13592400[label="2.2"];
+node13592400 -> node13609312
+node13609136[label="18"];
+node13609136 -> node13609312
+node13609312 -> node13609392
+node13609392 -> node13610304
+node13610128[label="6"];
+node13610128 -> node13610304
+node13610304 -> node13613184
+node13613184 -> node13613392
+node13613312[label="2"];
+node13613312 -> node13613392
+node13613392 -> node13613872
+node13613872 -> node13614096
+node13614096 -> node13614176
+node13614176 -> node13614528
+node13614256[label="a = 1075.2"];
+node13612864[label="*"];
+node13612464[label="32"];
+node13612384[label="*"];
+node13612128[label="16"];
+node13611952[label="*"];
+node13611600[label="8"];
+node13611520[label="*"];
+node13611120[label="4"];
+node13611040[label="*"];
+node13610784[label="2"];
+node13610784 -> node13611040
+node13610864[label="2"];
+node13610864 -> node13611040
+node13611040 -> node13611120
+node13611120 -> node13611520
+node13611296[label="2"];
+node13611296 -> node13611520
+node13611520 -> node13611600
+node13611600 -> node13611952
+node13611776[label="2"];
+node13611776 -> node13611952
+node13611952 -> node13612128
+node13612128 -> node13612384
+node13612208[label="2"];
+node13612208 -> node13612384
+node13612384 -> node13612464
+node13612464 -> node13612864
+node13612640[label="help = 33.6"];
+node13610304 -> node13612640
+node13612640 -> node13612864
+node13612864 -> node13614256
+node13614256 -> node13614528
+node13614528 -> node13614608
+node13614608 -> node13614768
+node13614688[label="4"];
+node13614688 -> node13614768
+node13614768 -> node13615872
+node13615872 -> node13616224
+node13616096[label="ko = -3.25"];
+node13614768 -> node13616096
+node13616096 -> node13616224
+node13616224 -> node13616544
+
+}

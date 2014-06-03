@@ -19,7 +19,7 @@ class calcxx_driver
 public:
   calcxx_driver ();
   virtual ~calcxx_driver ();
-  std::map<std::string, std::string> svar;
+  std::map<std::string, node*> svar;
   std::map<std::string, node*> variables;
   std::map<std::string, std::string> nodes;
   std::string node1, node2;
@@ -27,7 +27,7 @@ public:
 
   
   node *result;
-  std::string erg;
+  node *erg;
   
   // Handling the scanner.
   void scan_begin ();

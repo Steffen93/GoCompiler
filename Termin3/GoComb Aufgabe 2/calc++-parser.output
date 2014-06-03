@@ -1,5 +1,6 @@
 Zustand 5 Konflikte: 2 Reduziere/Reduziere
-Zustand 20 Konflikte: 5 Reduziere/Reduziere
+Zustand 7 Konflikte: 6 Reduziere/Reduziere
+Zustand 21 Konflikte: 5 Reduziere/Reduziere
 
 
 Grammatik
@@ -22,10 +23,11 @@ Grammatik
    11    | "(" exp ")"
    12    | "identifier"
    13    | "number"
+   14    | "text"
 
-   14 sexp: sexp "+" sexp
-   15     | "identifier"
-   16     | "text"
+   15 sexp: sexp "+" sexp
+   16     | "identifier"
+   17     | "text"
 
 
 Terminale und die Regeln, in denen sie verwendet werden
@@ -34,14 +36,14 @@ Terminale und die Regeln, in denen sie verwendet werden
 error (256)
 ":=" (258) 5 6
 "-" (259) 8
-"+" (260) 7 14
+"+" (260) 7 15
 "*" (261) 9
 "/" (262) 10
 "(" (263) 11
 ")" (264) 11
-"identifier" (265) 5 6 12 15
+"identifier" (265) 5 6 12 16
 "number" (266) 13
-"text" (267) 16
+"text" (267) 14 17
 
 
 Nicht-Terminal und die Regeln, in denen sie verwendet werden
@@ -55,10 +57,10 @@ assignments (15)
 assignment (16)
     auf der linken Seite: 5 6, auf der rechten Seite: 4
 exp (17)
-    auf der linken Seite: 7 8 9 10 11 12 13, auf der rechten Seite:
+    auf der linken Seite: 7 8 9 10 11 12 13 14, auf der rechten Seite:
     1 5 7 8 9 10 11
 sexp (18)
-    auf der linken Seite: 14 15 16, auf der rechten Seite: 2 6 14
+    auf der linken Seite: 15 16 17, auf der rechten Seite: 2 6 15
 
 
 Zustand 0
@@ -108,8 +110,9 @@ Zustand 4
     "("           schiebe und gehe zu Zustand 4 über
     "identifier"  schiebe und gehe zu Zustand 11 über
     "number"      schiebe und gehe zu Zustand 6 über
+    "text"        schiebe und gehe zu Zustand 12 über
 
-    exp  gehe zu Zustand 12 über
+    exp  gehe zu Zustand 13 über
 
 
 Zustand 5
@@ -117,14 +120,14 @@ Zustand 5
     5 assignment: "identifier" . ":=" exp
     6           | "identifier" . ":=" sexp
    12 exp: "identifier" .
-   15 sexp: "identifier" .
+   16 sexp: "identifier" .
 
-    ":="  schiebe und gehe zu Zustand 13 über
+    ":="  schiebe und gehe zu Zustand 14 über
 
     "end of file"  reduziere mit Regel 12 (exp)
-    "end of file"  [reduziere mit Regel 15 (sexp)]
+    "end of file"  [reduziere mit Regel 16 (sexp)]
     "+"            reduziere mit Regel 12 (exp)
-    "+"            [reduziere mit Regel 15 (sexp)]
+    "+"            [reduziere mit Regel 16 (sexp)]
     $default       reduziere mit Regel 12 (exp)
 
 
@@ -137,9 +140,22 @@ Zustand 6
 
 Zustand 7
 
-   16 sexp: "text" .
+   14 exp: "text" .
+   17 sexp: "text" .
 
-    $default  reduziere mit Regel 16 (sexp)
+    "end of file"  reduziere mit Regel 14 (exp)
+    "end of file"  [reduziere mit Regel 17 (sexp)]
+    "+"            reduziere mit Regel 14 (exp)
+    "+"            [reduziere mit Regel 17 (sexp)]
+    "("            reduziere mit Regel 14 (exp)
+    "("            [reduziere mit Regel 17 (sexp)]
+    "identifier"   reduziere mit Regel 14 (exp)
+    "identifier"   [reduziere mit Regel 17 (sexp)]
+    "number"       reduziere mit Regel 14 (exp)
+    "number"       [reduziere mit Regel 17 (sexp)]
+    "text"         reduziere mit Regel 14 (exp)
+    "text"         [reduziere mit Regel 17 (sexp)]
+    $default       reduziere mit Regel 14 (exp)
 
 
 Zustand 8
@@ -157,10 +173,10 @@ Zustand 9
     9    | exp . "*" exp
    10    | exp . "/" exp
 
-    "-"  schiebe und gehe zu Zustand 14 über
-    "+"  schiebe und gehe zu Zustand 15 über
-    "*"  schiebe und gehe zu Zustand 16 über
-    "/"  schiebe und gehe zu Zustand 17 über
+    "-"  schiebe und gehe zu Zustand 15 über
+    "+"  schiebe und gehe zu Zustand 16 über
+    "*"  schiebe und gehe zu Zustand 17 über
+    "/"  schiebe und gehe zu Zustand 18 über
 
     $default  reduziere mit Regel 1 (unit)
 
@@ -168,9 +184,9 @@ Zustand 9
 Zustand 10
 
     2 unit: assignments sexp .
-   14 sexp: sexp . "+" sexp
+   15 sexp: sexp . "+" sexp
 
-    "+"  schiebe und gehe zu Zustand 18 über
+    "+"  schiebe und gehe zu Zustand 19 über
 
     $default  reduziere mit Regel 2 (unit)
 
@@ -184,113 +200,124 @@ Zustand 11
 
 Zustand 12
 
+   14 exp: "text" .
+
+    $default  reduziere mit Regel 14 (exp)
+
+
+Zustand 13
+
     7 exp: exp . "+" exp
     8    | exp . "-" exp
     9    | exp . "*" exp
    10    | exp . "/" exp
    11    | "(" exp . ")"
 
-    "-"  schiebe und gehe zu Zustand 14 über
-    "+"  schiebe und gehe zu Zustand 15 über
-    "*"  schiebe und gehe zu Zustand 16 über
-    "/"  schiebe und gehe zu Zustand 17 über
-    ")"  schiebe und gehe zu Zustand 19 über
+    "-"  schiebe und gehe zu Zustand 15 über
+    "+"  schiebe und gehe zu Zustand 16 über
+    "*"  schiebe und gehe zu Zustand 17 über
+    "/"  schiebe und gehe zu Zustand 18 über
+    ")"  schiebe und gehe zu Zustand 20 über
 
 
-Zustand 13
+Zustand 14
 
     5 assignment: "identifier" ":=" . exp
     6           | "identifier" ":=" . sexp
 
     "("           schiebe und gehe zu Zustand 4 über
-    "identifier"  schiebe und gehe zu Zustand 20 über
+    "identifier"  schiebe und gehe zu Zustand 21 über
     "number"      schiebe und gehe zu Zustand 6 über
     "text"        schiebe und gehe zu Zustand 7 über
 
-    exp   gehe zu Zustand 21 über
-    sexp  gehe zu Zustand 22 über
+    exp   gehe zu Zustand 22 über
+    sexp  gehe zu Zustand 23 über
 
 
-Zustand 14
+Zustand 15
 
     8 exp: exp "-" . exp
 
     "("           schiebe und gehe zu Zustand 4 über
     "identifier"  schiebe und gehe zu Zustand 11 über
     "number"      schiebe und gehe zu Zustand 6 über
-
-    exp  gehe zu Zustand 23 über
-
-
-Zustand 15
-
-    7 exp: exp "+" . exp
-
-    "("           schiebe und gehe zu Zustand 4 über
-    "identifier"  schiebe und gehe zu Zustand 11 über
-    "number"      schiebe und gehe zu Zustand 6 über
+    "text"        schiebe und gehe zu Zustand 12 über
 
     exp  gehe zu Zustand 24 über
 
 
 Zustand 16
 
-    9 exp: exp "*" . exp
+    7 exp: exp "+" . exp
 
     "("           schiebe und gehe zu Zustand 4 über
     "identifier"  schiebe und gehe zu Zustand 11 über
     "number"      schiebe und gehe zu Zustand 6 über
+    "text"        schiebe und gehe zu Zustand 12 über
 
     exp  gehe zu Zustand 25 über
 
 
 Zustand 17
 
-   10 exp: exp "/" . exp
+    9 exp: exp "*" . exp
 
     "("           schiebe und gehe zu Zustand 4 über
     "identifier"  schiebe und gehe zu Zustand 11 über
     "number"      schiebe und gehe zu Zustand 6 über
+    "text"        schiebe und gehe zu Zustand 12 über
 
     exp  gehe zu Zustand 26 über
 
 
 Zustand 18
 
-   14 sexp: sexp "+" . sexp
+   10 exp: exp "/" . exp
 
-    "identifier"  schiebe und gehe zu Zustand 27 über
-    "text"        schiebe und gehe zu Zustand 7 über
+    "("           schiebe und gehe zu Zustand 4 über
+    "identifier"  schiebe und gehe zu Zustand 11 über
+    "number"      schiebe und gehe zu Zustand 6 über
+    "text"        schiebe und gehe zu Zustand 12 über
 
-    sexp  gehe zu Zustand 28 über
+    exp  gehe zu Zustand 27 über
 
 
 Zustand 19
+
+   15 sexp: sexp "+" . sexp
+
+    "identifier"  schiebe und gehe zu Zustand 28 über
+    "text"        schiebe und gehe zu Zustand 29 über
+
+    sexp  gehe zu Zustand 30 über
+
+
+Zustand 20
 
    11 exp: "(" exp ")" .
 
     $default  reduziere mit Regel 11 (exp)
 
 
-Zustand 20
+Zustand 21
 
    12 exp: "identifier" .
-   15 sexp: "identifier" .
+   16 sexp: "identifier" .
 
     "+"           reduziere mit Regel 12 (exp)
-    "+"           [reduziere mit Regel 15 (sexp)]
+    "+"           [reduziere mit Regel 16 (sexp)]
     "("           reduziere mit Regel 12 (exp)
-    "("           [reduziere mit Regel 15 (sexp)]
+    "("           [reduziere mit Regel 16 (sexp)]
     "identifier"  reduziere mit Regel 12 (exp)
-    "identifier"  [reduziere mit Regel 15 (sexp)]
+    "identifier"  [reduziere mit Regel 16 (sexp)]
     "number"      reduziere mit Regel 12 (exp)
-    "number"      [reduziere mit Regel 15 (sexp)]
+    "number"      [reduziere mit Regel 16 (sexp)]
     "text"        reduziere mit Regel 12 (exp)
-    "text"        [reduziere mit Regel 15 (sexp)]
+    "text"        [reduziere mit Regel 16 (sexp)]
     $default      reduziere mit Regel 12 (exp)
 
 
-Zustand 21
+Zustand 22
 
     5 assignment: "identifier" ":=" exp .
     7 exp: exp . "+" exp
@@ -298,25 +325,25 @@ Zustand 21
     9    | exp . "*" exp
    10    | exp . "/" exp
 
-    "-"  schiebe und gehe zu Zustand 14 über
-    "+"  schiebe und gehe zu Zustand 15 über
-    "*"  schiebe und gehe zu Zustand 16 über
-    "/"  schiebe und gehe zu Zustand 17 über
+    "-"  schiebe und gehe zu Zustand 15 über
+    "+"  schiebe und gehe zu Zustand 16 über
+    "*"  schiebe und gehe zu Zustand 17 über
+    "/"  schiebe und gehe zu Zustand 18 über
 
     $default  reduziere mit Regel 5 (assignment)
 
 
-Zustand 22
+Zustand 23
 
     6 assignment: "identifier" ":=" sexp .
-   14 sexp: sexp . "+" sexp
+   15 sexp: sexp . "+" sexp
 
-    "+"  schiebe und gehe zu Zustand 18 über
+    "+"  schiebe und gehe zu Zustand 19 über
 
     $default  reduziere mit Regel 6 (assignment)
 
 
-Zustand 23
+Zustand 24
 
     7 exp: exp . "+" exp
     8    | exp . "-" exp
@@ -324,13 +351,13 @@ Zustand 23
     9    | exp . "*" exp
    10    | exp . "/" exp
 
-    "*"  schiebe und gehe zu Zustand 16 über
-    "/"  schiebe und gehe zu Zustand 17 über
+    "*"  schiebe und gehe zu Zustand 17 über
+    "/"  schiebe und gehe zu Zustand 18 über
 
     $default  reduziere mit Regel 8 (exp)
 
 
-Zustand 24
+Zustand 25
 
     7 exp: exp . "+" exp
     7    | exp "+" exp .
@@ -338,13 +365,13 @@ Zustand 24
     9    | exp . "*" exp
    10    | exp . "/" exp
 
-    "*"  schiebe und gehe zu Zustand 16 über
-    "/"  schiebe und gehe zu Zustand 17 über
+    "*"  schiebe und gehe zu Zustand 17 über
+    "/"  schiebe und gehe zu Zustand 18 über
 
     $default  reduziere mit Regel 7 (exp)
 
 
-Zustand 25
+Zustand 26
 
     7 exp: exp . "+" exp
     8    | exp . "-" exp
@@ -355,7 +382,7 @@ Zustand 25
     $default  reduziere mit Regel 9 (exp)
 
 
-Zustand 26
+Zustand 27
 
     7 exp: exp . "+" exp
     8    | exp . "-" exp
@@ -366,16 +393,23 @@ Zustand 26
     $default  reduziere mit Regel 10 (exp)
 
 
-Zustand 27
-
-   15 sexp: "identifier" .
-
-    $default  reduziere mit Regel 15 (sexp)
-
-
 Zustand 28
 
-   14 sexp: sexp . "+" sexp
-   14     | sexp "+" sexp .
+   16 sexp: "identifier" .
 
-    $default  reduziere mit Regel 14 (sexp)
+    $default  reduziere mit Regel 16 (sexp)
+
+
+Zustand 29
+
+   17 sexp: "text" .
+
+    $default  reduziere mit Regel 17 (sexp)
+
+
+Zustand 30
+
+   15 sexp: sexp . "+" sexp
+   15     | sexp "+" sexp .
+
+    $default  reduziere mit Regel 15 (sexp)

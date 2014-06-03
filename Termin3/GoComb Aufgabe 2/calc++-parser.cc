@@ -247,12 +247,12 @@ namespace yy {
         break;
 
       case 17: // exp
+      case 18: // sexp
         value.move< node* > (that.value);
         break;
 
       case 10: // "identifier"
       case 12: // "text"
-      case 18: // sexp
         value.move< std::string > (that.value);
         break;
 
@@ -276,12 +276,12 @@ namespace yy {
         break;
 
       case 17: // exp
+      case 18: // sexp
         value.copy< node* > (that.value);
         break;
 
       case 10: // "identifier"
       case 12: // "text"
-      case 18: // sexp
         value.copy< std::string > (that.value);
         break;
 
@@ -348,7 +348,7 @@ namespace yy {
       case 18: // sexp
 
 #line 68 "calc++-parser.yy" // lalr1.cc:617
-        { yyoutput << yysym.value.template as< std::string > (); }
+        { yyoutput << yysym.value.template as< node* > (); }
 #line 353 "calc++-parser.cc" // lalr1.cc:617
         break;
 
@@ -570,12 +570,12 @@ namespace yy {
         break;
 
       case 17: // exp
+      case 18: // sexp
         yylhs.value.build< node* > ();
         break;
 
       case 10: // "identifier"
       case 12: // "text"
-      case 18: // sexp
         yylhs.value.build< std::string > ();
         break;
 
@@ -604,7 +604,7 @@ namespace yy {
 
   case 3:
 #line 73 "calc++-parser.yy" // lalr1.cc:847
-    {driver.erg = yystack_[0].value.as< std::string > ();}
+    {driver.erg = yystack_[0].value.as< node* > ();}
 #line 609 "calc++-parser.cc" // lalr1.cc:847
     break;
 
@@ -622,139 +622,162 @@ namespace yy {
 
   case 6:
 #line 80 "calc++-parser.yy" // lalr1.cc:847
-    { driver.variables[yystack_[2].value.as< std::string > ()] = yystack_[0].value.as< node* > (); /*driver.addGraph($1, $3);
+    { driver.variables[yystack_[2].value.as< std::string > ()] = yystack_[0].value.as< node* > ();
+			  /*driver.addGraph($1, $3);
 			  driver.printLine($1 + " = "  + driver.to_string($3));*/
 			}
-#line 629 "calc++-parser.cc" // lalr1.cc:847
+#line 630 "calc++-parser.cc" // lalr1.cc:847
     break;
 
   case 7:
-#line 83 "calc++-parser.yy" // lalr1.cc:847
+#line 84 "calc++-parser.yy" // lalr1.cc:847
     {
-				driver.svar[yystack_[2].value.as< std::string > ()] = (string) yystack_[0].value.as< std::string > ();
-				driver.printLine(yystack_[2].value.as< std::string > () + " = "  + yystack_[0].value.as< std::string > ());
+				driver.svar[yystack_[2].value.as< std::string > ()] = yystack_[0].value.as< node* > ();
+				//driver.printLine($1 + " = "  + $3);
 			   }
-#line 638 "calc++-parser.cc" // lalr1.cc:847
+#line 639 "calc++-parser.cc" // lalr1.cc:847
     break;
 
   case 8:
-#line 91 "calc++-parser.yy" // lalr1.cc:847
+#line 92 "calc++-parser.yy" // lalr1.cc:847
     { //$$ = $1 + $3;
-  
-		  yylhs.value.as< node* > () = new node(yystack_[2].value.as< node* > (), yystack_[0].value.as< node* > ());
-		  /*$$.fval = $1 + $3;/*
-		  std::string tmp = driver.addGraph(driver.to_string($1) + " + " + driver.to_string($3));
-		  driver.setTmpID(tmp);
-		  driver.connect(driver.getTmpID(), driver.addGraph($1));
-		  driver.connect(driver.getTmpID(), driver.addGraph($3));
-		  driver.setTmpID(driver.addGraph($$));
-		  driver.connect(driver.getTmpID(), tmp);*/
+		  node*tmp = new node(yystack_[2].value.as< node* > (), yystack_[0].value.as< node* > ());
+		  tmp->label = "+";
+		  yylhs.value.as< node* > () = new node(tmp, (node*)NULL);
+		  yylhs.value.as< node* > ()->fval = yystack_[2].value.as< node* > ()->fval + yystack_[0].value.as< node* > ()->fval;
+		  yylhs.value.as< node* > ()->label = driver.to_string(yylhs.value.as< node* > ()->fval);
+		  std::cout << yystack_[2].value.as< node* > ()->fval << " + " << yystack_[0].value.as< node* > ()->fval << " = " << yylhs.value.as< node* > ()->fval << std::endl;
 		  }
-#line 654 "calc++-parser.cc" // lalr1.cc:847
+#line 652 "calc++-parser.cc" // lalr1.cc:847
     break;
 
   case 9:
-#line 102 "calc++-parser.yy" // lalr1.cc:847
+#line 100 "calc++-parser.yy" // lalr1.cc:847
     { //$$ = $1 - $3;
-
-		  yylhs.value.as< node* > () = new node(yystack_[2].value.as< node* > (), yystack_[0].value.as< node* > ());
-		  //$$.fval = $1 - $3.fval;
-		  /*
-		  std::string tmp = driver.addGraph(driver.to_string($1) + " - " + driver.to_string($3));
-		  driver.setTmpID(tmp);
-		  driver.connect(driver.getTmpID(), driver.addGraph($1));
-		  driver.connect(driver.getTmpID(), driver.addGraph($3));
-		  driver.setTmpID(driver.addGraph($$));
-		  driver.connect(driver.getTmpID(), tmp);*/
+		  node*tmp = new node(yystack_[2].value.as< node* > (), yystack_[0].value.as< node* > ());
+		  tmp->label = "-";
+		  yylhs.value.as< node* > () = new node(tmp, (node*)NULL);
+		  yylhs.value.as< node* > ()->fval = yystack_[2].value.as< node* > ()->fval - yystack_[0].value.as< node* > ()->fval;
+		  yylhs.value.as< node* > ()->label = driver.to_string(yylhs.value.as< node* > ()->fval);
+		  std::cout << yystack_[2].value.as< node* > ()->fval << " - " << yystack_[0].value.as< node* > ()->fval << " = " << yylhs.value.as< node* > ()->fval << std::endl;
 		}
-#line 671 "calc++-parser.cc" // lalr1.cc:847
+#line 665 "calc++-parser.cc" // lalr1.cc:847
     break;
 
   case 10:
-#line 114 "calc++-parser.yy" // lalr1.cc:847
+#line 108 "calc++-parser.yy" // lalr1.cc:847
     { //$$ = $1 * $3;
-
-		  yylhs.value.as< node* > () = new node(yystack_[2].value.as< node* > (), yystack_[0].value.as< node* > ());
-		  //$$.fval = $1.fval * $3.fval;
-		  /*
-		  std::string tmp = driver.addGraph(driver.to_string($1) + " * " + driver.to_string($3));
-		  driver.setTmpID(tmp);
-		  driver.connect(driver.getTmpID(), driver.addGraph($1));
-		  driver.connect(driver.getTmpID(), driver.addGraph($3));
-		  driver.setTmpID(driver.addGraph($$));
-		  driver.connect(driver.getTmpID(), tmp);*/
+		  node*tmp = new node(yystack_[2].value.as< node* > (), yystack_[0].value.as< node* > ());
+		  tmp->label = "*";
+		  yylhs.value.as< node* > () = new node(tmp, (node*)NULL);
+		  yylhs.value.as< node* > ()->fval = yystack_[2].value.as< node* > ()->fval * yystack_[0].value.as< node* > ()->fval;
+		  yylhs.value.as< node* > ()->label = driver.to_string(yylhs.value.as< node* > ()->fval);
+		  std::cout << yystack_[2].value.as< node* > ()->fval << " * " << yystack_[0].value.as< node* > ()->fval << " = " << yylhs.value.as< node* > ()->fval << std::endl;
 		}
-#line 688 "calc++-parser.cc" // lalr1.cc:847
+#line 678 "calc++-parser.cc" // lalr1.cc:847
     break;
 
   case 11:
-#line 126 "calc++-parser.yy" // lalr1.cc:847
+#line 116 "calc++-parser.yy" // lalr1.cc:847
     { //$$ = $1 / $3;
-		  yylhs.value.as< node* > () = new node(yystack_[2].value.as< node* > (), yystack_[0].value.as< node* > ());
-		  /*$$.fval = $1.fval / $3.fval;/*
-		  std::string tmp = driver.addGraph(driver.to_string($1) + " / " + driver.to_string($3));
+		  node*tmp = new node(yystack_[2].value.as< node* > (), yystack_[0].value.as< node* > ());
+		  tmp->label = "/";
+		  yylhs.value.as< node* > () = new node(tmp, (node*)NULL);
+		  yylhs.value.as< node* > ()->fval = yystack_[2].value.as< node* > ()->fval / yystack_[0].value.as< node* > ()->fval;
+		  yylhs.value.as< node* > ()->label = driver.to_string(yylhs.value.as< node* > ()->fval);
+		  std::cout << yystack_[2].value.as< node* > ()->fval << " / " << yystack_[0].value.as< node* > ()->fval << " = " << yylhs.value.as< node* > ()->fval << std::endl;
+		  }
+#line 691 "calc++-parser.cc" // lalr1.cc:847
+    break;
+
+  case 12:
+#line 124 "calc++-parser.yy" // lalr1.cc:847
+    { yylhs.value.as< node* > () = yystack_[1].value.as< node* > (); }
+#line 697 "calc++-parser.cc" // lalr1.cc:847
+    break;
+
+  case 13:
+#line 125 "calc++-parser.yy" // lalr1.cc:847
+    { //$$ = driver.getVariable($1)
+		    if(driver.variables.find(yystack_[0].value.as< std::string > ()) != driver.variables.end()){
+		      yylhs.value.as< node* > () = new node(driver.variables[yystack_[0].value.as< std::string > ()]);
+		    }else
+		      yylhs.value.as< node* > () = new node();
+		    yylhs.value.as< node* > ()->label = ((string)yystack_[0].value.as< std::string > ()).append(" = " + driver.to_string(driver.variables[yystack_[0].value.as< std::string > ()]->fval));
+                }
+#line 709 "calc++-parser.cc" // lalr1.cc:847
+    break;
+
+  case 14:
+#line 132 "calc++-parser.yy" // lalr1.cc:847
+    { //std::swap ($$, $1); 
+		  yylhs.value.as< node* > () = new node();
+		  yylhs.value.as< node* > ()->fval = yystack_[0].value.as< float > ();
+		  yylhs.value.as< node* > ()->type = "float";
+		  yylhs.value.as< node* > ()->label = driver.to_string(yystack_[0].value.as< float > ());
+		}
+#line 720 "calc++-parser.cc" // lalr1.cc:847
+    break;
+
+  case 15:
+#line 138 "calc++-parser.yy" // lalr1.cc:847
+    { yylhs.value.as< node* > () = new node();
+		  yylhs.value.as< node* > ()->sval = yystack_[0].value.as< std::string > ();
+		  yylhs.value.as< node* > ()->type = "string";
+		  yylhs.value.as< node* > ()->label = yystack_[0].value.as< std::string > ();}
+#line 729 "calc++-parser.cc" // lalr1.cc:847
+    break;
+
+  case 16:
+#line 144 "calc++-parser.yy" // lalr1.cc:847
+    {
+		  //$$ = ((std::string)$1).append($3);
+		  node* tmp = new node(yystack_[2].value.as< node* > (), yystack_[0].value.as< node* > ());
+		  tmp->label = "+";
+		  yylhs.value.as< node* > () = new node(tmp, (node*)NULL);
+		  yylhs.value.as< node* > ()->type = "string";
+		  yylhs.value.as< node* > ()->sval = yystack_[2].value.as< node* > ()->sval.append(yystack_[0].value.as< node* > ()->sval);
+		  yylhs.value.as< node* > ()->label = yylhs.value.as< node* > ()->sval;
+		  cout << yystack_[2].value.as< node* > ()->sval << " + " << yystack_[0].value.as< node* > ()->sval << " = " << "YEEEAH" << endl;
+		  /*
+		  std::string tmp = driver.addGraph($1 + " + " + $3);
 		  driver.setTmpID(tmp);
 		  driver.connect(driver.getTmpID(), driver.addGraph($1));
 		  driver.connect(driver.getTmpID(), driver.addGraph($3));
 		  driver.setTmpID(driver.addGraph($$));
-		  driver.connect(driver.getTmpID(), tmp);*/
-		  }
-#line 703 "calc++-parser.cc" // lalr1.cc:847
-    break;
-
-  case 12:
-#line 136 "calc++-parser.yy" // lalr1.cc:847
-    { yylhs.value.as< node* > () = yystack_[1].value.as< node* > (); }
-#line 709 "calc++-parser.cc" // lalr1.cc:847
-    break;
-
-  case 13:
-#line 137 "calc++-parser.yy" // lalr1.cc:847
-    { //$$ = driver.getVariable($1)
-		    yylhs.value.as< node* > () = new node();
-		    yylhs.value.as< node* > ()->name = yystack_[0].value.as< std::string > ();
-		  
-                }
-#line 719 "calc++-parser.cc" // lalr1.cc:847
-    break;
-
-  case 14:
-#line 142 "calc++-parser.yy" // lalr1.cc:847
-    { //std::swap ($$, $1); 
-		  yylhs.value.as< node* > () = new node();
-		  yylhs.value.as< node* > ()->fval = yystack_[0].value.as< float > ();
-		}
-#line 728 "calc++-parser.cc" // lalr1.cc:847
-    break;
-
-  case 15:
-#line 148 "calc++-parser.yy" // lalr1.cc:847
-    {
-		  yylhs.value.as< std::string > () = ((std::string)yystack_[2].value.as< std::string > ()).append(yystack_[0].value.as< std::string > ());
-		  std::string tmp = driver.addGraph(yystack_[2].value.as< std::string > () + " + " + yystack_[0].value.as< std::string > ());
-		  driver.setTmpID(tmp);
-		  driver.connect(driver.getTmpID(), driver.addGraph(yystack_[2].value.as< std::string > ()));
-		  driver.connect(driver.getTmpID(), driver.addGraph(yystack_[0].value.as< std::string > ()));
-		  driver.setTmpID(driver.addGraph(yylhs.value.as< std::string > ()));
 		  driver.connect(driver.getTmpID(), tmp);
+		  */
 		  }
-#line 742 "calc++-parser.cc" // lalr1.cc:847
-    break;
-
-  case 16:
-#line 157 "calc++-parser.yy" // lalr1.cc:847
-    { yylhs.value.as< std::string > () = driver.svar[yystack_[0].value.as< std::string > ()];}
-#line 748 "calc++-parser.cc" // lalr1.cc:847
+#line 752 "calc++-parser.cc" // lalr1.cc:847
     break;
 
   case 17:
-#line 158 "calc++-parser.yy" // lalr1.cc:847
-    { yylhs.value.as< std::string > () = yystack_[0].value.as< std::string > ();}
-#line 754 "calc++-parser.cc" // lalr1.cc:847
+#line 162 "calc++-parser.yy" // lalr1.cc:847
+    { 
+//		  $$ = driver.svar[$1];
+		  if(driver.svar.find(yystack_[0].value.as< std::string > ()) != driver.svar.end()){
+		      yylhs.value.as< node* > () = new node(driver.svar[yystack_[0].value.as< std::string > ()]);
+		    }else{
+		      yylhs.value.as< node* > () = new node();
+		    }
+		    yylhs.value.as< node* > ()->label = ((string)yystack_[0].value.as< std::string > ()).append(" = " + driver.variables[yystack_[0].value.as< std::string > ()]->sval);
+		}
+#line 766 "calc++-parser.cc" // lalr1.cc:847
+    break;
+
+  case 18:
+#line 171 "calc++-parser.yy" // lalr1.cc:847
+    { //$$ = $1;
+		  yylhs.value.as< node* > () = new node();
+		  yylhs.value.as< node* > ()->sval = yystack_[0].value.as< std::string > ();
+		  yylhs.value.as< node* > ()->type = "string";
+		  yylhs.value.as< node* > ()->label = yystack_[0].value.as< std::string > ();		
+		}
+#line 777 "calc++-parser.cc" // lalr1.cc:847
     break;
 
 
-#line 758 "calc++-parser.cc" // lalr1.cc:847
+#line 781 "calc++-parser.cc" // lalr1.cc:847
             default:
               break;
             }
@@ -1016,17 +1039,19 @@ namespace yy {
   const signed char
   calcxx_parser::yypact_[] =
   {
-      -6,     8,    10,    -6,    25,    14,    -6,    -6,    -6,    24,
-      19,    -6,    -3,    15,    25,    25,    25,    25,    -5,    -6,
-      -6,    24,    19,     9,     9,    -6,    -6,    -6,    -6
+      -6,    17,    11,    -6,    16,    13,    -6,    -6,    -6,    30,
+      20,    -6,    -6,    -3,    21,    16,    16,    16,    16,    -5,
+      -6,    -6,    30,    20,     2,     2,    -6,    -6,    -6,    -6,
+      -6
   };
 
   const unsigned char
   calcxx_parser::yydefact_[] =
   {
-       4,     0,     0,     1,     0,    13,    14,    17,     5,     2,
-       3,    13,     0,     0,     0,     0,     0,     0,     0,    12,
-      13,     6,     7,     9,     8,    10,    11,    16,    15
+       4,     0,     0,     1,     0,    13,    14,    15,     5,     2,
+       3,    13,    15,     0,     0,     0,     0,     0,     0,     0,
+      12,    13,     6,     7,     9,     8,    10,    11,    17,    18,
+      16
   };
 
   const signed char
@@ -1044,41 +1069,42 @@ namespace yy {
   const unsigned char
   calcxx_parser::yytable_[] =
   {
-      12,    14,    15,    16,    17,    27,    19,     7,     3,    21,
-      23,    24,    25,    26,    22,    16,    17,    13,     4,    28,
-       5,     6,     7,     4,    18,    20,     6,     7,    14,    15,
-      16,    17,     0,     4,     0,    11,     6
+      13,    15,    16,    17,    18,    28,    20,    29,    17,    18,
+      22,    24,    25,    26,    27,    23,    14,     3,     0,     4,
+      30,     5,     6,     7,     4,    19,    11,     6,    12,     4,
+       0,    21,     6,     7,    15,    16,    17,    18
   };
 
   const signed char
   calcxx_parser::yycheck_[] =
   {
-       4,     4,     5,     6,     7,    10,     9,    12,     0,    13,
-      14,    15,    16,    17,    13,     6,     7,     3,     8,    18,
-      10,    11,    12,     8,     5,    10,    11,    12,     4,     5,
-       6,     7,    -1,     8,    -1,    10,    11
+       4,     4,     5,     6,     7,    10,     9,    12,     6,     7,
+      14,    15,    16,    17,    18,    14,     3,     0,    -1,     8,
+      19,    10,    11,    12,     8,     5,    10,    11,    12,     8,
+      -1,    10,    11,    12,     4,     5,     6,     7
   };
 
   const unsigned char
   calcxx_parser::yystos_[] =
   {
        0,    14,    15,     0,     8,    10,    11,    12,    16,    17,
-      18,    10,    17,     3,     4,     5,     6,     7,     5,     9,
-      10,    17,    18,    17,    17,    17,    17,    10,    18
+      18,    10,    12,    17,     3,     4,     5,     6,     7,     5,
+       9,    10,    17,    18,    17,    17,    17,    17,    10,    12,
+      18
   };
 
   const unsigned char
   calcxx_parser::yyr1_[] =
   {
        0,    13,    14,    14,    15,    15,    16,    16,    17,    17,
-      17,    17,    17,    17,    17,    18,    18,    18
+      17,    17,    17,    17,    17,    17,    18,    18,    18
   };
 
   const unsigned char
   calcxx_parser::yyr2_[] =
   {
        0,     2,     2,     2,     0,     2,     3,     3,     3,     3,
-       3,     3,     3,     1,     1,     3,     1,     1
+       3,     3,     3,     1,     1,     1,     3,     1,     1
   };
 
 
@@ -1098,8 +1124,8 @@ namespace yy {
   const unsigned char
   calcxx_parser::yyrline_[] =
   {
-       0,    72,    72,    73,    76,    77,    80,    83,    91,   102,
-     114,   126,   136,   137,   142,   148,   157,   158
+       0,    72,    72,    73,    76,    77,    80,    84,    92,   100,
+     108,   116,   124,   125,   132,   138,   144,   162,   171
   };
 
   // Print the state stack on the debug stream.
@@ -1134,8 +1160,8 @@ namespace yy {
 
 
 } // yy
-#line 1138 "calc++-parser.cc" // lalr1.cc:1155
-#line 161 "calc++-parser.yy" // lalr1.cc:1156
+#line 1164 "calc++-parser.cc" // lalr1.cc:1155
+#line 179 "calc++-parser.yy" // lalr1.cc:1156
 
 
 void

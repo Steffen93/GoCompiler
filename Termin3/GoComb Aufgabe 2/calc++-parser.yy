@@ -59,18 +59,23 @@ using namespace std;
   RPAREN  ")"
 ;
 
-%token <std::string> IDENTIFIER "identifier"
+%token <string> IDENTIFIER "identifier"
 %token <float> NUMBER "number"
-%token <std::string> TEXT "text"
+%token <string> TEXT "text"
 %type  <node*> exp
-%type  <node*> sexp
 
 %printer { yyoutput << $$; } <*>;
 
 %%
 %start unit;
-unit: assignments exp  { driver.result = $2; }
-| assignments sexp {driver.erg = $2;};
+unit: assignments exp  	{ //driver.result = $2;
+			  if($2->sval != ""){
+			    driver.sresult = $2;
+			  }
+			  else{
+			    driver.result = $2;
+			  }	
+			}
 
 assignments:
   %empty                 {}
@@ -79,24 +84,35 @@ assignments:
 assignment:
   "identifier" ":=" exp { 
 			  driver.variables[$1] = $3;
-			  /*driver.addGraph($1, $3);
-			  driver.printLine($1 + " = "  + driver.to_string($3));*/
+			  if($3->sval != ""){
+			    driver.printLine($1 + " := " + $3->sval);
+			  }
+			  else{
+			    driver.printLine($1 + " := " + driver.to_string($3->fval));
+			  }
 			}
-  | "identifier" ":=" sexp {
-				driver.svar[$1] = $3;
-				//driver.printLine($1 + " = "  + $3);
-			   };
 
 %left "+" "-";
 %left "*" "/";
 exp:
   exp "+" exp   { //$$ = $1 + $3;
-		  node*tmp = new node($1, $3);
-		  tmp->label = "+";
-		  $$ = new node(tmp, (node*)NULL);
-		  $$->fval = $1->fval + $3->fval;
-		  $$->label = driver.to_string($$->fval);
-		  std::cout << $1->fval << " + " << $3->fval << " = " << $$->fval << std::endl;
+			node*tmp = new node($1, $3);
+			tmp->label = "+";
+			$$ = new node(tmp, (node*)NULL);
+			if($1->type == "string" && $3->type == "string"){
+				$$->sval = $1->sval;
+				$$->sval = $$->sval.append($3->sval);
+				$$->label = $$->sval;
+				cout << $1->sval << " + " << $3->sval << " = " << $$->sval << endl;
+			}
+			else if($1->type == "float" && $3->type == "float"){
+				$$->fval = $1->fval + $3->fval;
+				$$->label = driver.to_string($$->fval);
+				cout << $1->fval << " + " << $3->fval << " = " << $$->fval << endl;
+			}
+			else{
+				//Type error
+			}
 		  }
 | exp "-" exp   { //$$ = $1 - $3;
 		  node*tmp = new node($1, $3);
@@ -104,7 +120,7 @@ exp:
 		  $$ = new node(tmp, (node*)NULL);
 		  $$->fval = $1->fval - $3->fval;
 		  $$->label = driver.to_string($$->fval);
-		  std::cout << $1->fval << " - " << $3->fval << " = " << $$->fval << std::endl;
+		  cout << $1->fval << " - " << $3->fval << " = " << $$->fval << endl;
 		}
 | exp "*" exp   { //$$ = $1 * $3;
 		  node*tmp = new node($1, $3);
@@ -112,7 +128,7 @@ exp:
 		  $$ = new node(tmp, (node*)NULL);
 		  $$->fval = $1->fval * $3->fval;
 		  $$->label = driver.to_string($$->fval);
-		  std::cout << $1->fval << " * " << $3->fval << " = " << $$->fval << std::endl;
+		  cout << $1->fval << " * " << $3->fval << " = " << $$->fval << endl;
 		}
 | exp "/" exp   { //$$ = $1 / $3;
 		  node*tmp = new node($1, $3);
@@ -120,7 +136,7 @@ exp:
 		  $$ = new node(tmp, (node*)NULL);
 		  $$->fval = $1->fval / $3->fval;
 		  $$->label = driver.to_string($$->fval);
-		  std::cout << $1->fval << " / " << $3->fval << " = " << $$->fval << std::endl;
+		  cout << $1->fval << " / " << $3->fval << " = " << $$->fval << endl;
 		  }
 | "(" exp ")"   { $$ = $2; }
 | "identifier"  { //$$ = driver.getVariable($1)
@@ -130,7 +146,7 @@ exp:
 		      $$ = new node();
 		    $$->label = ((string)$1).append(" = " + driver.to_string(driver.variables[$1]->fval));
                 }
-| "number"      { //std::swap ($$, $1); 
+| "number"      { //swap ($$, $1); 
 		  $$ = new node();
 		  $$->fval = $1;
 		  $$->type = "float";
@@ -141,47 +157,12 @@ exp:
 		  $$->type = "string";
 		  $$->label = $1;};
 
-sexp:
-  sexp "+" sexp {
-		  //$$ = ((std::string)$1).append($3);
-		  node* tmp = new node($1, $3);
-		  tmp->label = "+";
-		  $$ = new node(tmp, (node*)NULL);
-		  $$->type = "string";
-		  $$->sval = $1->sval.append($3->sval);
-		  $$->label = $$->sval;
-		  cout << $1->sval << " + " << $3->sval << " = " << "YEEEAH" << endl;
-		  /*
-		  std::string tmp = driver.addGraph($1 + " + " + $3);
-		  driver.setTmpID(tmp);
-		  driver.connect(driver.getTmpID(), driver.addGraph($1));
-		  driver.connect(driver.getTmpID(), driver.addGraph($3));
-		  driver.setTmpID(driver.addGraph($$));
-		  driver.connect(driver.getTmpID(), tmp);
-		  */
-		  }
-| "identifier"  { 
-//		  $$ = driver.svar[$1];
-		  if(driver.svar.find($1) != driver.svar.end()){
-		      $$ = new node(driver.svar[$1]);
-		    }else{
-		      $$ = new node();
-		    }
-		    $$->label = ((string)$1).append(" = " + driver.variables[$1]->sval);
-		}
-| "text"	{ //$$ = $1;
-		  $$ = new node();
-		  $$->sval = $1;
-		  $$->type = "string";
-		  $$->label = $1;		
-		};
-
 
 %%
 
 void
 yy::calcxx_parser::error (const location_type& l,
-                          const std::string& m)
+                          const string& m)
 {
   driver.error (l, m);
 }

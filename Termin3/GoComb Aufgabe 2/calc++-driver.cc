@@ -13,7 +13,12 @@ calcxx_driver::calcxx_driver ()
 
 calcxx_driver::~calcxx_driver ()
 {
-  result->makeGraph(o);
+  if(result != NULL){
+  	result->makeGraph(o);
+  }
+  if(sresult != NULL){
+//  	sresult->makeGraph(o);
+  }
   o << "\n}";
   tS << std::endl;
   o.close();
@@ -56,36 +61,7 @@ std::string calcxx_driver::addGraph(std::string label){
   o<< newID << "[label=\"" << label << "\"];\n";
   return newID;
 }
-/*
-std::string calcxx_driver::addGraph(float label){
-  static int cnt = 0;
-  static float tmp = 0;
-  static std::string newID = "";
-  if(node1 != "" && val1 == label){
-    newID = node1;
-    node1 = "";
-    tmp = label;
-    cnt++;
-    lastID = newID;
-    return newID;
-  }else if(node2 != "" && val2 == label){
-    newID = node2;
-    node2 = "";
-    tmp = label;
-    cnt++;
-    lastID = newID;
-    return newID;
-  }
-  if(!(cnt % 3 == 0 && tmp == label)){
-    newID = getNewID();
-    o<< newID << "[label=\"" << to_string(label) << "\"];\n";
-  }
-  tmp = label;
-  cnt++;
-  lastID = newID;
-  return newID;
-}
-*/
+
 void calcxx_driver::connect(std::string n1, std::string n2){
   o << n1 << " -> " << n2 << ";\n";
 }

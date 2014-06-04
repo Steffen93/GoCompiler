@@ -27,7 +27,7 @@ public:
 
   
   node *result;
-  node *erg;
+  node *sresult;
   
   // Handling the scanner.
   void scan_begin ();

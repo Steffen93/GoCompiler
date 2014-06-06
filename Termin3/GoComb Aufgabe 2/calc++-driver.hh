@@ -4,6 +4,7 @@
 # include <map>
 # include <fstream>
 #include <sstream>
+#include <vector>
 #include "node.h"
 # include "calc++-parser.hh"
 
@@ -25,9 +26,8 @@ public:
   std::string node1, node2;
   node* val1, *val2;
 
-  
-  node *result;
-  node *sresult;
+//  node* root;
+  std::vector <node*> result;
   
   // Handling the scanner.
   void scan_begin ();

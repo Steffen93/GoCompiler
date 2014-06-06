@@ -68,18 +68,16 @@ using namespace std;
 
 %%
 %start unit;
-unit: assignments exp  	{ //driver.result = $2;
-			  if($2->sval != ""){
-			    driver.sresult = $2;
-			  }
-			  else{
-			    driver.result = $2;
-			  }	
+unit: assignments exp  	{
+				//driver.root = new node($2);
+//				driver.root->label = "ROOT";
 			}
 
 assignments:
   %empty                 {}
-| assignments assignment {};
+| assignments assignment {	
+//				driver.result.push_back();			
+			};
 
 assignment:
   "identifier" ":=" exp { 
@@ -90,6 +88,7 @@ assignment:
 			  else{
 			    driver.printLine($1 + " := " + driver.to_string($3->fval));
 			  }
+			  driver.result.push_back($3);
 			}
 
 %left "+" "-";
@@ -97,12 +96,12 @@ assignment:
 exp:
   exp "+" exp   { //$$ = $1 + $3;
 			node*tmp = new node($1, $3);
-			tmp->label = "+";
+			tmp->label = "Operator: +";
 			$$ = new node(tmp, (node*)NULL);
 			if($1->type == "string" && $3->type == "string"){
 				$$->sval = $1->sval;
 				$$->sval = $$->sval.append($3->sval);
-				$$->label = $$->sval;
+				$$->label = "Value: " + $$->sval;
 				cout << $1->sval << " + " << $3->sval << " = " << $$->sval << endl;
 			}
 			else if($1->type == "float" && $3->type == "float"){
@@ -116,46 +115,47 @@ exp:
 		  }
 | exp "-" exp   { //$$ = $1 - $3;
 		  node*tmp = new node($1, $3);
-		  tmp->label = "-";
+		  tmp->label = "Operator: -";
 		  $$ = new node(tmp, (node*)NULL);
 		  $$->fval = $1->fval - $3->fval;
-		  $$->label = driver.to_string($$->fval);
+		  $$->label = "Value: " + driver.to_string($$->fval);
 		  cout << $1->fval << " - " << $3->fval << " = " << $$->fval << endl;
 		}
 | exp "*" exp   { //$$ = $1 * $3;
 		  node*tmp = new node($1, $3);
-		  tmp->label = "*";
+		  tmp->label = "Operator: *";
 		  $$ = new node(tmp, (node*)NULL);
 		  $$->fval = $1->fval * $3->fval;
-		  $$->label = driver.to_string($$->fval);
+		  $$->label = "Value: " + driver.to_string($$->fval);
 		  cout << $1->fval << " * " << $3->fval << " = " << $$->fval << endl;
 		}
 | exp "/" exp   { //$$ = $1 / $3;
 		  node*tmp = new node($1, $3);
-		  tmp->label = "/";
+		  tmp->label = "Operator: /";
 		  $$ = new node(tmp, (node*)NULL);
 		  $$->fval = $1->fval / $3->fval;
-		  $$->label = driver.to_string($$->fval);
+		  $$->label = "Value: " + driver.to_string($$->fval);
 		  cout << $1->fval << " / " << $3->fval << " = " << $$->fval << endl;
 		  }
 | "(" exp ")"   { $$ = $2; }
 | "identifier"  { //$$ = driver.getVariable($1)
 		    if(driver.variables.find($1) != driver.variables.end()){
 		      $$ = new node(driver.variables[$1]);
-		    }else
+		    }else {
 		      $$ = new node();
-		    $$->label = ((string)$1).append(" = " + driver.to_string(driver.variables[$1]->fval));
+		    }
+		    $$->label = "Identifier: " + $1 + " = " + driver.to_string(driver.variables[$1]->fval);
                 }
 | "number"      { //swap ($$, $1); 
 		  $$ = new node();
 		  $$->fval = $1;
 		  $$->type = "float";
-		  $$->label = driver.to_string($1);
+		  $$->label = "Number: " + driver.to_string($1);
 		}
 | "text"	{ $$ = new node();
 		  $$->sval = $1;
 		  $$->type = "string";
-		  $$->label = $1;};
+		  $$->label = "Text: " + $1;};
 
 
 %%

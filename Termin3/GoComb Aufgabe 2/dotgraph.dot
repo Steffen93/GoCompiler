@@ -1,78 +1,93 @@
 digraph gograph{
-node29419104[label="bla = 10.56"];
-node29418784[label="*"];
-node29418528[label="ko = -3.25"];
-node29417392[label="-"];
-node29417040[label="0.75"];
-node29416960[label="/"];
-node29416528[label="806.4"];
-node29416448[label="*"];
-node29416144[label="12"];
-node29416144 -> node29416448
-node29416224[label="help = 67.2"];
-node29415920[label="*"];
-node29415712[label="help = 33.6"];
-node29412672[label="-"];
-node29411760[label="39.6"];
-node29411680[label="*"];
-node29394768[label="2.2"];
-node29394768 -> node29411680
-node29411504[label="18"];
-node29411504 -> node29411680
-node29411680 -> node29411760
-node29411760 -> node29412672
-node29412496[label="6"];
-node29412496 -> node29412672
-node29412672 -> node29415712
-node29415712 -> node29415920
-node29415840[label="2"];
-node29415840 -> node29415920
-node29415920 -> node29416224
-node29416224 -> node29416448
-node29416448 -> node29416528
-node29416528 -> node29416960
-node29416784[label="a = 1075.2"];
-node29415280[label="*"];
-node29414976[label="32"];
-node29414800[label="*"];
-node29414496[label="16"];
-node29414368[label="*"];
-node29414064[label="8"];
-node29413984[label="*"];
-node29413600[label="4"];
-node29413472[label="*"];
-node29413216[label="2"];
-node29413216 -> node29413472
-node29413344[label="2"];
-node29413344 -> node29413472
-node29413472 -> node29413600
-node29413600 -> node29413984
-node29413760[label="2"];
-node29413760 -> node29413984
-node29413984 -> node29414064
-node29414064 -> node29414368
-node29414192[label="2"];
-node29414192 -> node29414368
-node29414368 -> node29414496
-node29414496 -> node29414800
-node29414672[label="2"];
-node29414672 -> node29414800
-node29414800 -> node29414976
-node29414976 -> node29415280
-node29415104[label="help = 33.6"];
-node29412672 -> node29415104
-node29415104 -> node29415280
-node29415280 -> node29416784
-node29416784 -> node29416960
-node29416960 -> node29417040
-node29417040 -> node29417392
-node29417120[label="4"];
-node29417120 -> node29417392
-node29417392 -> node29418528
-node29418528 -> node29418784
-node29418656[label="ko = -3.25"];
-node29417392 -> node29418656
-node29418656 -> node29418784
-node29418784 -> node29419104
+node24284608[label="Value: 33.6"];
+node24284480[label="Operator: -"];
+node24283568[label="Value: 39.6"];
+node24283488[label="Operator: *"];
+node24266576[label="Number: 2.2"];
+node24266576 -> node24283488
+node24283312[label="Number: 18"];
+node24283312 -> node24283488
+node24283488 -> node24283568
+node24283568 -> node24284480
+node24284304[label="Number: 6"];
+node24284304 -> node24284480
+node24284480 -> node24284608
+node24287248[label="Value: 1075.2"];
+node24287104[label="Operator: *"];
+node24286784[label="Value: 32"];
+node24286608[label="Operator: *"];
+node24286256[label="Value: 16"];
+node24286176[label="Operator: *"];
+node24285824[label="Value: 8"];
+node24285744[label="Operator: *"];
+node24285392[label="Value: 4"];
+node24285312[label="Operator: *"];
+node24285056[label="Number: 2"];
+node24285056 -> node24285312
+node24285184[label="Number: 2"];
+node24285184 -> node24285312
+node24285312 -> node24285392
+node24285392 -> node24285744
+node24285568[label="Number: 2"];
+node24285568 -> node24285744
+node24285744 -> node24285824
+node24285824 -> node24286176
+node24286000[label="Number: 2"];
+node24286000 -> node24286176
+node24286176 -> node24286256
+node24286256 -> node24286608
+node24286432[label="Number: 2"];
+node24286432 -> node24286608
+node24286608 -> node24286784
+node24286784 -> node24287104
+node24286864[label="Identifier: help = 33.6"];
+node24284480 -> node24286864
+node24286864 -> node24287104
+node24287104 -> node24287248
+node24287920[label="Value: 67.2"];
+node24287840[label="Operator: *"];
+node24287552[label="Identifier: help = 33.6"];
+node24284480 -> node24287552
+node24287552 -> node24287840
+node24287696[label="Number: 2"];
+node24287696 -> node24287840
+node24287840 -> node24287920
+node24289424[label="Value: -3.25"];
+node24289296[label="Operator: -"];
+node24289008[label="Value: 0.75"];
+node24288928[label="Operator: /"];
+node24288608[label="Value: 806.4"];
+node24288400[label="Operator: *"];
+node24288144[label="Number: 12"];
+node24288144 -> node24288400
+node24288272[label="Identifier: help = 67.2"];
+node24287840 -> node24288272
+node24288272 -> node24288400
+node24288400 -> node24288608
+node24288608 -> node24288928
+node24288688[label="Identifier: a = 1075.2"];
+node24287104 -> node24288688
+node24288688 -> node24288928
+node24288928 -> node24289008
+node24289008 -> node24289296
+node24289088[label="Number: 4"];
+node24289088 -> node24289296
+node24289296 -> node24289424
+node24290240[label="Value: Das ist ein test"];
+node24290112[label="Operator: +"];
+node24289712[label="Text: Das ist "];
+node24289712 -> node24290112
+node24289840[label="Text: ein test"];
+node24289840 -> node24290112
+node24290112 -> node24290240
+node24291136[label="Value: 10.56"];
+node24291056[label="Operator: *"];
+node24290704[label="Identifier: ko = -3.25"];
+node24289296 -> node24290704
+node24290704 -> node24291056
+node24290848[label="Identifier: ko = -3.25"];
+node24289296 -> node24290848
+node24290848 -> node24291056
+node24291056 -> node24291136
 
 }

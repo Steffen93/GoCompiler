@@ -6,6 +6,7 @@ int calcxx_driver::nodeCount = 0;
 calcxx_driver::calcxx_driver ()
   : trace_scanning (false), trace_parsing (false), tmpID(""), testMode(false)
 {
+  result = vector<node*>();
   o.open("dotgraph.dot");
   o << "digraph gograph{\n";
   tS.open("tests.txt");
@@ -13,11 +14,12 @@ calcxx_driver::calcxx_driver ()
 
 calcxx_driver::~calcxx_driver ()
 {
-  if(result != NULL){
-  	result->makeGraph(o);
-  }
-  if(sresult != NULL){
-//  	sresult->makeGraph(o);
+  std::cout << "Number of results: " << result.size() << std::endl;
+//  root->makeGraph(o);
+  for(int i = 0; i < result.size(); i++){
+	if(result.at(i) != NULL){
+		result.at(i)->makeGraph(o);
+	}
   }
   o << "\n}";
   tS << std::endl;

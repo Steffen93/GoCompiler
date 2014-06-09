@@ -1,93 +1,93 @@
 digraph gograph{
-node24284608[label="Value: 33.6"];
-node24284480[label="Operator: -"];
-node24283568[label="Value: 39.6"];
-node24283488[label="Operator: *"];
-node24266576[label="Number: 2.2"];
-node24266576 -> node24283488
-node24283312[label="Number: 18"];
-node24283312 -> node24283488
-node24283488 -> node24283568
-node24283568 -> node24284480
-node24284304[label="Number: 6"];
-node24284304 -> node24284480
-node24284480 -> node24284608
-node24287248[label="Value: 1075.2"];
-node24287104[label="Operator: *"];
-node24286784[label="Value: 32"];
-node24286608[label="Operator: *"];
-node24286256[label="Value: 16"];
-node24286176[label="Operator: *"];
-node24285824[label="Value: 8"];
-node24285744[label="Operator: *"];
-node24285392[label="Value: 4"];
-node24285312[label="Operator: *"];
-node24285056[label="Number: 2"];
-node24285056 -> node24285312
-node24285184[label="Number: 2"];
-node24285184 -> node24285312
-node24285312 -> node24285392
-node24285392 -> node24285744
-node24285568[label="Number: 2"];
-node24285568 -> node24285744
-node24285744 -> node24285824
-node24285824 -> node24286176
-node24286000[label="Number: 2"];
-node24286000 -> node24286176
-node24286176 -> node24286256
-node24286256 -> node24286608
-node24286432[label="Number: 2"];
-node24286432 -> node24286608
-node24286608 -> node24286784
-node24286784 -> node24287104
-node24286864[label="Identifier: help = 33.6"];
-node24284480 -> node24286864
-node24286864 -> node24287104
-node24287104 -> node24287248
-node24287920[label="Value: 67.2"];
-node24287840[label="Operator: *"];
-node24287552[label="Identifier: help = 33.6"];
-node24284480 -> node24287552
-node24287552 -> node24287840
-node24287696[label="Number: 2"];
-node24287696 -> node24287840
-node24287840 -> node24287920
-node24289424[label="Value: -3.25"];
-node24289296[label="Operator: -"];
-node24289008[label="Value: 0.75"];
-node24288928[label="Operator: /"];
-node24288608[label="Value: 806.4"];
-node24288400[label="Operator: *"];
-node24288144[label="Number: 12"];
-node24288144 -> node24288400
-node24288272[label="Identifier: help = 67.2"];
-node24287840 -> node24288272
-node24288272 -> node24288400
-node24288400 -> node24288608
-node24288608 -> node24288928
-node24288688[label="Identifier: a = 1075.2"];
-node24287104 -> node24288688
-node24288688 -> node24288928
-node24288928 -> node24289008
-node24289008 -> node24289296
-node24289088[label="Number: 4"];
-node24289088 -> node24289296
-node24289296 -> node24289424
-node24290240[label="Value: Das ist ein test"];
-node24290112[label="Operator: +"];
-node24289712[label="Text: Das ist "];
-node24289712 -> node24290112
-node24289840[label="Text: ein test"];
-node24289840 -> node24290112
-node24290112 -> node24290240
-node24291136[label="Value: 10.56"];
-node24291056[label="Operator: *"];
-node24290704[label="Identifier: ko = -3.25"];
-node24289296 -> node24290704
-node24290704 -> node24291056
-node24290848[label="Identifier: ko = -3.25"];
-node24289296 -> node24290848
-node24290848 -> node24291056
-node24291056 -> node24291136
+node141080672[label="Value: 33.6"];
+node141080600[label="Operator: -"];
+node141080432[label="Value: 39.6"];
+node141079984[label="Operator: *"];
+node141063304[label="Number: 2.2"];
+node141063304 -> node141079984
+node141079920[label="Number: 18"];
+node141079920 -> node141079984
+node141079984 -> node141080432
+node141080432 -> node141080600
+node141080504[label="Number: 6"];
+node141080504 -> node141080600
+node141080600 -> node141080672
+node141082088[label="Value: 1075.2"];
+node141081920[label="Operator: *"];
+node141081808[label="Value: 32"];
+node141081736[label="Operator: *"];
+node141081544[label="Value: 16"];
+node141081472[label="Operator: *"];
+node141081304[label="Value: 8"];
+node141081232[label="Operator: *"];
+node141081064[label="Value: 4"];
+node141080968[label="Operator: *"];
+node141080832[label="Number: 2"];
+node141080832 -> node141080968
+node141080904[label="Number: 2"];
+node141080904 -> node141080968
+node141080968 -> node141081064
+node141081064 -> node141081232
+node141081136[label="Number: 2"];
+node141081136 -> node141081232
+node141081232 -> node141081304
+node141081304 -> node141081472
+node141081376[label="Number: 2"];
+node141081376 -> node141081472
+node141081472 -> node141081544
+node141081544 -> node141081736
+node141081664[label="Number: 2"];
+node141081664 -> node141081736
+node141081736 -> node141081808
+node141081808 -> node141081920
+node141081880[label="Identifier: help = 33.6"];
+node141080600 -> node141081880
+node141081880 -> node141081920
+node141081920 -> node141082088
+node141082424[label="Value: 67.2"];
+node141082384[label="Operator: *"];
+node141082208[label="Identifier: help = 33.6"];
+node141080600 -> node141082208
+node141082208 -> node141082384
+node141082248[label="Number: 2"];
+node141082248 -> node141082384
+node141082384 -> node141082424
+node141083240[label="Value: -3.25"];
+node141083168[label="Operator: -"];
+node141083096[label="Value: 0.75"];
+node141083056[label="Operator: /"];
+node141082800[label="Value: 806.4"];
+node141082664[label="Operator: *"];
+node141082528[label="Number: 12"];
+node141082528 -> node141082664
+node141082600[label="Identifier: help = 67.2"];
+node141082384 -> node141082600
+node141082600 -> node141082664
+node141082664 -> node141082800
+node141082800 -> node141083056
+node141082840[label="Identifier: a = 1075.2"];
+node141081920 -> node141082840
+node141082840 -> node141083056
+node141083056 -> node141083096
+node141083096 -> node141083168
+node141082912[label="Number: 4"];
+node141082912 -> node141083168
+node141083168 -> node141083240
+node141083648[label="Value: Das ist ein test"];
+node141083576[label="Operator: +"];
+node141083376[label="Text: Das ist "];
+node141083376 -> node141083576
+node141083480[label="Text: ein test"];
+node141083480 -> node141083576
+node141083576 -> node141083648
+node141084232[label="Value: 10.56"];
+node141084192[label="Operator: *"];
+node141083904[label="Identifier: ko = -3.25"];
+node141083168 -> node141083904
+node141083904 -> node141084192
+node141084064[label="Identifier: ko = -3.25"];
+node141083168 -> node141084064
+node141084064 -> node141084192
+node141084192 -> node141084232
 
 }

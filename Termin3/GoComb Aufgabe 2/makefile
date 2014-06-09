@@ -53,4 +53,4 @@ tests: test.sh
 	bash test.sh
 
 picture: dotgraph.dot
-	dot -Tpng dotgraph.dot > yolo.png
+	dot -Tpng dotgraph.dot > baum.png

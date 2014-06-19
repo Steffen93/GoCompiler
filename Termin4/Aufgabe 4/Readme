@@ -1,0 +1,7 @@
+Programm erstellen über: "make"
+Ausführen: "./calc++"	(Die Defaultdatei ist die "language" Datei)
+  In der Console werden die Ergebnisse zur kontrolle ausgegeben
+
+Bild erstellen (nach dem das Programm gelaufen ist): "make picture"
+
+Das Bild "baum.png" sollte erstellt worden sein.

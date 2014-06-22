@@ -207,9 +207,11 @@ exp:
 | "identifier"  { //$$ = driver.getVariable($1)
 		    if(driver.variables.find($1) != driver.variables.end()){
 		      $$ = new node(driver.variables[$1]);
+			  
 		    }else {
 		      $$ = new node();
 		    }
+			$$->label = "Ident: " + $1;
 		    //$$->label = driver.variables[$1]->type + "Identifier: " + $1 + " = " + driver.variables[$1]->label;
                 }
 | "number"      { //swap ($$, $1); 

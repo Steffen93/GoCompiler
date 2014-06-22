@@ -52,19 +52,37 @@ void node::makeGraph(ofstream &o){
   }
 }
 
-Value *node::Codegen(Module *TheModule, static IRBuilder<> Builder, std::map<std::string, Value*> NamedValues){
-  Value *L = left->Codegen(TheModule, Builder, NamedValues);
-  Value *R = right->Codegen(TheModule, Builder, NamedValues);
-  
+Value *node::Codegen(Module *TheModule, static IRBuilder<> Builder, std::map<std::string, Value*> &NamedValues){
+  bool exists = false;
+  string tmp;
+  if(left != NULL)
+    Value *L = left->Codegen(TheModule, Builder, NamedValues);
+  if(right != NULL)
+	Value *R = right->Codegen(TheModule, Builder, NamedValues);
+  size_t found = label.find("Ident: ");
+  if(found != string::npos){
+	tmp = label.replace(0,"Ident: ".length(), "");
+	if(NamedValues[tmp] != NULL;)
+	  return NamedValues[tmp];
+	else
+	  exists = true;
+  }
+    
   switch(type){
     case "+": return Builder.CreateFAdd(L, R, "add");
     case "-": return Builder.CreateFSub(L, R, "sub");
     case "*": return Builder.CreateFMul(L, R, "mul");
     case "/": return Builder.CreateFDiv(l, R, "div");
     
-    case "float": return ConstantFP::get(getGlobalContext(), APFloat(fval));
-    case "int":	return ConstantInt::get(getGlobalContext(), APInt(ival));
-    case "char": return ConstantInt::get(getGlobalContext(), APInt((int)(cval)); 
+    case "float": if(exists)
+					NamedValues[tmp] = ConstantFP::get(getGlobalContext(), APFloat(fval));
+				  return ConstantFP::get(getGlobalContext(), APFloat(fval));
+    case "int":	if(exists)
+					NamedValues[tmp] = ConstantInt::get(getGlobalContext(), APInt(ival));
+				return ConstantInt::get(getGlobalContext(), APInt(ival));
+    case "char": if(exists)
+					NamedValues[tmp] = ConstantInt::get(getGlobalContext(), APInt((int)(cval)); 
+				 return ConstantInt::get(getGlobalContext(), APInt((int)(cval)); 
     case "string": std::cout << "String" << std::endl;
     default:
       return ErrorV("invalid binary operator");

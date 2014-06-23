@@ -2,10 +2,14 @@
 #include "calc++-parser.hh"
 
 int calcxx_driver::nodeCount = 0;
-
+Module *calcxx_driver::TheModule;
+IRBuilder<> *calcxx_driver::Builder;
+std::map<std::string, Value*> calcxx_driver::NamedValues;
+ 
 calcxx_driver::calcxx_driver ()
   : trace_scanning (false), trace_parsing (false), tmpID(""), testMode(false)
 {
+  Builder = new IRBuilder<>(getGlobalContext());
   result = vector<node*>();
   o.open("dotgraph.dot");
   o << "digraph gograph{\n";
@@ -23,12 +27,13 @@ calcxx_driver::~calcxx_driver ()
   //gehe den baum durch und erzeuge den Zwischcode
   for(int i = 0; i < result.size(); i++){
 	if(result.at(i) != NULL){
-		result.at(i)->Codegen(this->TheModule, this->Builder, this->NamedValues);
+		result.at(i)->Codegen(this->TheModule, *(this->Builder), this->NamedValues);
+		TheModule->dump();
 	}
   }
   
   //Gebe den Zwischencode aus
-  TheModule->dump()
+  
   
   //Immernoch den Graphen erzeugen
   for(int i = 0; i < result.size(); i++){

@@ -1,81 +1,81 @@
 digraph gograph{
-node159770584[label="30"];
-node159770072[label="36"];
-node159753352[label="Number: 2"];
-node159753352 -> node159770072
-node159769968[label="Number: 18"];
-node159769968 -> node159770072
-node159770072 -> node159770584
-node159770512[label="Number: 6"];
-node159770512 -> node159770584
-node159771768[label="96"];
-node159771576[label="32"];
-node159771376[label="16"];
-node159771176[label="8"];
-node159771000[label="4"];
-node159770848[label="Number: 2"];
-node159770848 -> node159771000
-node159770896[label="Number: 2"];
-node159770896 -> node159771000
-node159771000 -> node159771176
-node159771104[label="Number: 2"];
-node159771104 -> node159771176
-node159771176 -> node159771376
-node159771304[label="Number: 2"];
-node159771304 -> node159771376
-node159771376 -> node159771576
-node159771504[label="Number: 2"];
-node159771504 -> node159771576
-node159771576 -> node159771768
-node159771720[label="30"];
-node159770072 -> node159771720
-node159770512 -> node159771720
-node159771720 -> node159771768
-node159772072[label="60"];
-node159771944[label="30"];
-node159770072 -> node159771944
-node159770512 -> node159771944
-node159771944 -> node159772072
-node159771992[label="Number: 2"];
-node159771992 -> node159772072
-node159772640[label="-3.25"];
-node159772472[label="0.75"];
-node159772376[label="72"];
-node159772280[label="Number: 12"];
-node159772280 -> node159772376
-node159772328[label="60"];
-node159771944 -> node159772328
-node159771992 -> node159772328
-node159772328 -> node159772376
-node159772376 -> node159772472
-node159772424[label="96"];
-node159771576 -> node159772424
-node159771720 -> node159772424
-node159772424 -> node159772472
-node159772472 -> node159772640
-node159772568[label="Number: 4"];
-node159772568 -> node159772640
-node159773088[label="Value: Das ist ein test"];
-node159772848[label="Text: Das ist "];
-node159772848 -> node159773088
-node159772984[label="Text: ein test"];
-node159772984 -> node159773088
-node159773432[label="10.56"];
-node159773336[label="-3.25"];
-node159772472 -> node159773336
-node159772568 -> node159773336
-node159773336 -> node159773432
-node159773384[label="-3.25"];
-node159772472 -> node159773384
-node159772568 -> node159773384
-node159773384 -> node159773432
-node159773664[label="Zahl: "];
-node159773544 -> node159773664
-node159773592 -> node159773664
-node159774120[label="œ"];
-node159773848[label="Exception caught: cleaning lookahead and stack"];
-node159773848 -> node159774120
-node159773960[label="g"];
-node159773960 -> node159774120
+node157807816[label="30"];
+node157807304[label="36"];
+node157790584[label="Number: 2"];
+node157790584 -> node157807304
+node157807200[label="Number: 18"];
+node157807200 -> node157807304
+node157807304 -> node157807816
+node157807744[label="Number: 6"];
+node157807744 -> node157807816
+node157808992[label="96"];
+node157808800[label="32"];
+node157808600[label="16"];
+node157808400[label="8"];
+node157808200[label="4"];
+node157808080[label="Number: 2"];
+node157808080 -> node157808200
+node157808128[label="Number: 2"];
+node157808128 -> node157808200
+node157808200 -> node157808400
+node157808328[label="Number: 2"];
+node157808328 -> node157808400
+node157808400 -> node157808600
+node157808528[label="Number: 2"];
+node157808528 -> node157808600
+node157808600 -> node157808800
+node157808728[label="Number: 2"];
+node157808728 -> node157808800
+node157808800 -> node157808992
+node157808944[label="help"];
+node157807304 -> node157808944
+node157807744 -> node157808944
+node157808944 -> node157808992
+node157809352[label="60"];
+node157809224[label="help"];
+node157807304 -> node157809224
+node157807744 -> node157809224
+node157809224 -> node157809352
+node157809272[label="Number: 2"];
+node157809272 -> node157809352
+node157810064[label="-3.25"];
+node157809816[label="0.75"];
+node157809640[label="72"];
+node157809544[label="Number: 12"];
+node157809544 -> node157809640
+node157809592[label="help"];
+node157809224 -> node157809592
+node157809272 -> node157809592
+node157809592 -> node157809640
+node157809640 -> node157809816
+node157809768[label="a"];
+node157808800 -> node157809768
+node157808944 -> node157809768
+node157809768 -> node157809816
+node157809816 -> node157810064
+node157809944[label="Number: 4"];
+node157809944 -> node157810064
+node157810392[label="Value: Das ist ein test"];
+node157810200[label="Text: Das ist "];
+node157810200 -> node157810392
+node157810312[label="Text: ein test"];
+node157810312 -> node157810392
+node157810888[label="10.56"];
+node157810640[label="ko"];
+node157809816 -> node157810640
+node157809944 -> node157810640
+node157810640 -> node157810888
+node157810808[label="ko"];
+node157809816 -> node157810808
+node157809944 -> node157810808
+node157810808 -> node157810888
+node157811168[label="Zahl: "];
+node157811072 -> node157811168
+node157811120 -> node157811168
+node157811576[label="œ"];
+node157811376[label="leaning lookahead and stack"];
+node157811376 -> node157811576
+node157811528[label="ing lookahead"];
+node157811528 -> node157811576
 
 }

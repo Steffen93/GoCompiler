@@ -39,9 +39,9 @@ public:
   node();
   node(node* copy);
   virtual ~node();
-  Value *Codegen(Module *TheModule, static IRBuilder<> Builder, std::map<std::string, Value*> &NamedValues);
+  Value *Codegen(Module *TheModule, IRBuilder<> Builder, std::map<std::string, Value*> &NamedValues);
   
-  void makeGraph(ofstream &o);
+  void makeGraph(std::ofstream &o);
   
   node *left;
   node *right;

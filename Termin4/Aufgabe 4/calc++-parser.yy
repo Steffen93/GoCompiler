@@ -26,6 +26,7 @@
 # include <string>
 #include "node.h"
 class calcxx_driver;
+using namespace std;
 }
 
 // The parsing context.
@@ -73,8 +74,10 @@ using namespace std;
 unit: assignments exp  	{
 				//driver.root = new node($2);
 //				driver.root->label = "ROOT";
+                               // TO DO : Save $2 irgendwo sinnvoll
 			}
 
+//
 assignments:
   %empty                 {}
 | assignments assignment {	

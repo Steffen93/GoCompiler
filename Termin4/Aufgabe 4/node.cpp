@@ -1,5 +1,6 @@
 #include "node.h"
 using namespace llvm;
+using namespace std;
 
 node::node(node *leftnode, node *rightnode){
   this->left = leftnode;
@@ -52,39 +53,41 @@ void node::makeGraph(ofstream &o){
   }
 }
 
-Value *node::Codegen(Module *TheModule, static IRBuilder<> Builder, std::map<std::string, Value*> &NamedValues){
+Value *node::Codegen(Module *TheModule, IRBuilder<> Builder, std::map<std::string, Value*> &NamedValues){
   bool exists = false;
   string tmp;
-  if(left != NULL)
-    Value *L = left->Codegen(TheModule, Builder, NamedValues);
+  Value *L;
+  Value *R;
+  if(left != NULL){
+    L = left->Codegen(TheModule, Builder, NamedValues);
+  }
   if(right != NULL)
-	Value *R = right->Codegen(TheModule, Builder, NamedValues);
+    R = right->Codegen(TheModule, Builder, NamedValues);
   size_t found = label.find("Ident: ");
   if(found != string::npos){
-	tmp = label.replace(0,"Ident: ".length(), "");
-	if(NamedValues[tmp] != NULL;)
+	tmp = label.replace(0,((string)("Ident: ")).length(), "");
+	if(NamedValues[tmp] != NULL)
 	  return NamedValues[tmp];
 	else
 	  exists = true;
   }
+    //std::cout << "Beginne mit den Funktionen" << std::endl;
+    if(type == "+") return Builder.CreateFAdd(L, R, "add");
+    else if(type == "-") return Builder.CreateFSub(L, R, "sub");
+    else if(type == "*") return Builder.CreateFMul(L, R, "mul");
+    else if(type == "/") return Builder.CreateFDiv(L, R, "div");
     
-  switch(type){
-    case "+": return Builder.CreateFAdd(L, R, "add");
-    case "-": return Builder.CreateFSub(L, R, "sub");
-    case "*": return Builder.CreateFMul(L, R, "mul");
-    case "/": return Builder.CreateFDiv(l, R, "div");
-    
-    case "float": if(exists)
+    else if(type == "float"){ if(exists)
 					NamedValues[tmp] = ConstantFP::get(getGlobalContext(), APFloat(fval));
 				  return ConstantFP::get(getGlobalContext(), APFloat(fval));
-    case "int":	if(exists)
-					NamedValues[tmp] = ConstantInt::get(getGlobalContext(), APInt(ival));
-				return ConstantInt::get(getGlobalContext(), APInt(ival));
-    case "char": if(exists)
-					NamedValues[tmp] = ConstantInt::get(getGlobalContext(), APInt((int)(cval)); 
-				 return ConstantInt::get(getGlobalContext(), APInt((int)(cval)); 
-    case "string": std::cout << "String" << std::endl;
-    default:
-      return ErrorV("invalid binary operator");
-  }
+    }else if(type == "int"){	if(exists)
+					NamedValues[tmp] = ConstantInt::get(getGlobalContext(), APInt(32, ival));
+				return ConstantInt::get(getGlobalContext(), APInt(32, ival));
+    }else if(type == "char"){ if(exists)
+					NamedValues[tmp] = ConstantInt::get(getGlobalContext(), APInt(8, (int)(cval))); 
+				 return ConstantInt::get(getGlobalContext(), APInt(8, (int)(cval))); 
+    }else if(type == "string") std::cout << "String" << std::endl;
+    
+      return NULL;
+    
 }

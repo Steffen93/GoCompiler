@@ -1,10 +1,35 @@
 #ifndef CALCXX_DRIVER_HH
 # define CALCXX_DRIVER_HH
+// Use thse Header Files with LLVM 3.2 AND/OR 3.3
+#include "llvm/Config/llvm-config.h"
+#include "llvm/Analysis/Verifier.h"
+
+#if LLVM_VERSION_MAJOR != 3
+#error Only LLVM 3.2 and 3.3 are supported
+
+#elif LLVM_VERSION_MINOR == 2
+// Use these Header Files with LLVM 3.2
+#include "llvm/DerivedTypes.h"
+#include "llvm/IRBuilder.h"
+#include "llvm/LLVMContext.h"
+#include "llvm/Module.h"
+
+#elif   LLVM_VERSION_MINOR == 3
+// Use these Header Files with LLVM 3.3
+#include "llvm/IR/DerivedTypes.h"
+#include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/Module.h"
+
+#else
+#error Only LLVM 3.2 and 3.3 are supported
+#endif
 # include <string>
 # include <map>
 # include <fstream>
 #include <sstream>
 #include <vector>
+#include <iostream>
 #include "node.h"
 # include "calc++-parser.hh"
 
@@ -30,7 +55,7 @@ public:
 
 //llvm Zeug
   static Module *TheModule;
-  static IRBuilder<> Builder(getGlobalContext());
+  static IRBuilder<> *Builder;
   static std::map<std::string, Value*> NamedValues;
   
   // Handling the scanner.

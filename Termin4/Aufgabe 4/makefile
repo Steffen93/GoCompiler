@@ -18,9 +18,11 @@
 # $^ = The names of all the prerequisites, with spaces between them.
 ####################################################################
 # Uncomment only one of the next two lines (choose your c++ compiler)
-CC=g++
-CFLAGS=-std=c++11 -fpermissive
-#CC=clang++
+#CC=g++
+CC=clang++
+#CFLAGS=-std=c++11 -fpermissive
+CFLAGS=-O3 `llvm-config-3.3 --cppflags` -rdynamic
+LINKFLAGS=-O3 `llvm-config-3.3 --cppflags --ldflags --libs all` -rdynamic
 
 LEX=flex
 YACC=bison
@@ -34,12 +36,17 @@ YFLAGS=-v -d
 HEADERS=calc++-parser.hh calc++-scanner.hh node.h
 
 calc++ : calc++.o calc++-scanner.o calc++-parser.o calc++-driver.o node.o
+	$(CC) -o $@ $^ $(LINKFLAGS) 
+
 
 calc++.o : calc++.cc calc++-driver.hh calc++-parser.hh
 
-%.o: %.cc %.cpp $(HEADERS)
+%.o: %.cc
 	$(CC) $(CFLAGS) -c -o $@ $<
 
+%.o: %.cpp
+	$(CC) $(CFLAGS) -c -o $@ $<
+	
 calc++-scanner.cc: calc++-scanner.ll
 	$(LEX) $(LFLAGS) -o calc++-scanner.cc calc++-scanner.ll
 

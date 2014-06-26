@@ -629,26 +629,27 @@ namespace yy {
     {
 				//driver.root = new node($2);
 //				driver.root->label = "ROOT";
+                               // TO DO : Save $2 irgendwo sinnvoll
 			}
-#line 634 "calc++-parser.cc" // lalr1.cc:847
+#line 635 "calc++-parser.cc" // lalr1.cc:847
     break;
 
   case 3:
-#line 80 "calc++-parser.yy" // lalr1.cc:847
+#line 82 "calc++-parser.yy" // lalr1.cc:847
     {}
-#line 640 "calc++-parser.cc" // lalr1.cc:847
+#line 641 "calc++-parser.cc" // lalr1.cc:847
     break;
 
   case 4:
-#line 81 "calc++-parser.yy" // lalr1.cc:847
+#line 83 "calc++-parser.yy" // lalr1.cc:847
     {	
 //				driver.result.push_back();			
 			}
-#line 648 "calc++-parser.cc" // lalr1.cc:847
+#line 649 "calc++-parser.cc" // lalr1.cc:847
     break;
 
   case 5:
-#line 86 "calc++-parser.yy" // lalr1.cc:847
+#line 88 "calc++-parser.yy" // lalr1.cc:847
     { 
 			  driver.variables[yystack_[2].value.as< string > ()] = yystack_[0].value.as< node* > ();
 			  if(yystack_[0].value.as< node* > ()->sval != ""){
@@ -659,11 +660,11 @@ namespace yy {
 			  }
 			  driver.result.push_back(yystack_[0].value.as< node* > ());
 			}
-#line 663 "calc++-parser.cc" // lalr1.cc:847
+#line 664 "calc++-parser.cc" // lalr1.cc:847
     break;
 
   case 6:
-#line 100 "calc++-parser.yy" // lalr1.cc:847
+#line 102 "calc++-parser.yy" // lalr1.cc:847
     { //$$ = $1 + $3;
 			node*tmp = new node(yystack_[2].value.as< node* > (), yystack_[0].value.as< node* > ());
 			tmp->label = "Operator: +";
@@ -696,11 +697,11 @@ namespace yy {
 				cout << yystack_[2].value.as< node* > ()->cval << " + " << yystack_[0].value.as< node* > ()->cval << " = " << yylhs.value.as< node* > ()->cval << endl;
 			}else{cout << "Type mismatch between " << yystack_[2].value.as< node* > ()->type << " and " << yystack_[0].value.as< node* > ()->type << endl; exit(1);}
 		  }
-#line 700 "calc++-parser.cc" // lalr1.cc:847
+#line 701 "calc++-parser.cc" // lalr1.cc:847
     break;
 
   case 7:
-#line 132 "calc++-parser.yy" // lalr1.cc:847
+#line 134 "calc++-parser.yy" // lalr1.cc:847
     { //$$ = $1 - $3;
 		  node*tmp = new node(yystack_[2].value.as< node* > (), yystack_[0].value.as< node* > ());
 		  tmp->type = "-";
@@ -726,11 +727,11 @@ namespace yy {
 				cout << yystack_[2].value.as< node* > ()->cval << " - " << yystack_[0].value.as< node* > ()->cval << " = " << yylhs.value.as< node* > ()->cval << endl;
 			}else{cout << "Type mismatch between " << yystack_[2].value.as< node* > ()->type << " and " << yystack_[0].value.as< node* > ()->type << endl; exit(1);}
 		}
-#line 730 "calc++-parser.cc" // lalr1.cc:847
+#line 731 "calc++-parser.cc" // lalr1.cc:847
     break;
 
   case 8:
-#line 157 "calc++-parser.yy" // lalr1.cc:847
+#line 159 "calc++-parser.yy" // lalr1.cc:847
     { //$$ = $1 * $3;
 		  node*tmp = new node(yystack_[2].value.as< node* > (), yystack_[0].value.as< node* > ());
 		  tmp->type = "*";
@@ -756,11 +757,11 @@ namespace yy {
 				cout << yystack_[2].value.as< node* > ()->cval << " * " << yystack_[0].value.as< node* > ()->cval << " = " << yylhs.value.as< node* > ()->cval << endl;
 			}else{cout << "Type mismatch between " << yystack_[2].value.as< node* > ()->type << " and " << yystack_[0].value.as< node* > ()->type << endl; exit(1);}
 		}
-#line 760 "calc++-parser.cc" // lalr1.cc:847
+#line 761 "calc++-parser.cc" // lalr1.cc:847
     break;
 
   case 9:
-#line 182 "calc++-parser.yy" // lalr1.cc:847
+#line 184 "calc++-parser.yy" // lalr1.cc:847
     { //$$ = $1 / $3;
 		  node*tmp = new node(yystack_[2].value.as< node* > (), yystack_[0].value.as< node* > ());
 		  tmp->type = "/";
@@ -786,17 +787,17 @@ namespace yy {
 				cout << yystack_[2].value.as< node* > ()->cval << " / " << yystack_[0].value.as< node* > ()->cval << " = " << yylhs.value.as< node* > ()->cval << endl;
 			}else{ cout << "Type mismatch between " << yystack_[2].value.as< node* > ()->type << " and " << yystack_[0].value.as< node* > ()->type << endl; exit(1);}
 		  }
-#line 790 "calc++-parser.cc" // lalr1.cc:847
+#line 791 "calc++-parser.cc" // lalr1.cc:847
     break;
 
   case 10:
-#line 207 "calc++-parser.yy" // lalr1.cc:847
+#line 209 "calc++-parser.yy" // lalr1.cc:847
     { yylhs.value.as< node* > () = yystack_[1].value.as< node* > (); }
-#line 796 "calc++-parser.cc" // lalr1.cc:847
+#line 797 "calc++-parser.cc" // lalr1.cc:847
     break;
 
   case 11:
-#line 208 "calc++-parser.yy" // lalr1.cc:847
+#line 210 "calc++-parser.yy" // lalr1.cc:847
     { //$$ = driver.getVariable($1)
 		    if(driver.variables.find(yystack_[0].value.as< string > ()) != driver.variables.end()){
 		      yylhs.value.as< node* > () = new node(driver.variables[yystack_[0].value.as< string > ()]);
@@ -807,53 +808,53 @@ namespace yy {
 			yylhs.value.as< node* > ()->label = "Ident: " + yystack_[0].value.as< string > ();
 		    //$$->label = driver.variables[$1]->type + "Identifier: " + $1 + " = " + driver.variables[$1]->label;
                 }
-#line 811 "calc++-parser.cc" // lalr1.cc:847
+#line 812 "calc++-parser.cc" // lalr1.cc:847
     break;
 
   case 12:
-#line 218 "calc++-parser.yy" // lalr1.cc:847
+#line 220 "calc++-parser.yy" // lalr1.cc:847
     { //swap ($$, $1); 
 		  yylhs.value.as< node* > () = new node();
 		  yylhs.value.as< node* > ()->fval = yystack_[0].value.as< float > ();
 		  yylhs.value.as< node* > ()->type = "float";
 		  yylhs.value.as< node* > ()->label = "Number: " + driver.to_string(yystack_[0].value.as< float > ());
 		}
-#line 822 "calc++-parser.cc" // lalr1.cc:847
+#line 823 "calc++-parser.cc" // lalr1.cc:847
     break;
 
   case 13:
-#line 224 "calc++-parser.yy" // lalr1.cc:847
+#line 226 "calc++-parser.yy" // lalr1.cc:847
     {
 		  yylhs.value.as< node* > () = new node();
 		  yylhs.value.as< node* > ()->ival = yystack_[0].value.as< int > ();
 		  yylhs.value.as< node* > ()->type = "int";
 		  //$$->label = "Zahl: " + std::itoa($1);
 		}
-#line 833 "calc++-parser.cc" // lalr1.cc:847
+#line 834 "calc++-parser.cc" // lalr1.cc:847
     break;
 
   case 14:
-#line 230 "calc++-parser.yy" // lalr1.cc:847
+#line 232 "calc++-parser.yy" // lalr1.cc:847
     {
 		  yylhs.value.as< node* > () = new node();
 		  yylhs.value.as< node* > ()->cval = yystack_[0].value.as< char > ();
 		  yylhs.value.as< node* > ()->type = "char";
 		  yylhs.value.as< node* > ()->label = "Sign: " + (char)(yystack_[0].value.as< char > ());
 		}
-#line 844 "calc++-parser.cc" // lalr1.cc:847
+#line 845 "calc++-parser.cc" // lalr1.cc:847
     break;
 
   case 15:
-#line 236 "calc++-parser.yy" // lalr1.cc:847
+#line 238 "calc++-parser.yy" // lalr1.cc:847
     { yylhs.value.as< node* > () = new node();
 		  yylhs.value.as< node* > ()->sval = yystack_[0].value.as< string > ();
 		  yylhs.value.as< node* > ()->type = "string";
 		  yylhs.value.as< node* > ()->label = "Text: " + yystack_[0].value.as< string > ();}
-#line 853 "calc++-parser.cc" // lalr1.cc:847
+#line 854 "calc++-parser.cc" // lalr1.cc:847
     break;
 
 
-#line 857 "calc++-parser.cc" // lalr1.cc:847
+#line 858 "calc++-parser.cc" // lalr1.cc:847
             default:
               break;
             }
@@ -1197,8 +1198,8 @@ namespace yy {
   const unsigned char
   calcxx_parser::yyrline_[] =
   {
-       0,    74,    74,    80,    81,    86,   100,   132,   157,   182,
-     207,   208,   218,   224,   230,   236
+       0,    74,    74,    82,    83,    88,   102,   134,   159,   184,
+     209,   210,   220,   226,   232,   238
   };
 
   // Print the state stack on the debug stream.
@@ -1233,8 +1234,8 @@ namespace yy {
 
 
 } // yy
-#line 1237 "calc++-parser.cc" // lalr1.cc:1155
-#line 242 "calc++-parser.yy" // lalr1.cc:1156
+#line 1238 "calc++-parser.cc" // lalr1.cc:1155
+#line 244 "calc++-parser.yy" // lalr1.cc:1156
 
 
 void

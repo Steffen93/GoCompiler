@@ -39,10 +39,13 @@ public:
   node();
   node(node* copy);
   virtual ~node();
-  Value *Codegen(Module *TheModule, IRBuilder<> Builder, std::map<std::string, Value*> &NamedValues);
-  
+  Value *Codegen(Module *TheModule, IRBuilder<> *Builder, std::map<std::string, Value*> &NamedValues);
+  //Value *Codegen();
   void makeGraph(std::ofstream &o);
-  
+
+  //static Module* TheModule;
+  //static IRBuilder<> Builder;
+  //static std::map<std::string, Value*> NamedValues;
   node *left;
   node *right;
   bool inserted;
@@ -52,6 +55,6 @@ public:
   float fval;
   int ival;
   char cval;
-  
+
 };
 #endif

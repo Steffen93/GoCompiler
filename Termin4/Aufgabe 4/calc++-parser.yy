@@ -58,9 +58,13 @@ using namespace std;
   SLASH   "/"
   LPAREN  "("
   RPAREN  ")"
+  LBRACK  "{"
+  RBRACK  "}"
+  FUNCTION "func"
 ;
 
 %token <string> IDENTIFIER "identifier"
+%token <string> TYPE "type"
 %token <float> NUMBER "number"
 %token <string> TEXT "text"
 %token <int> ZAHL "zahl"
@@ -71,21 +75,46 @@ using namespace std;
 
 %%
 %start unit;
-unit: assignments exp  	{
+unit: assignments exp 	{
 				//driver.root = new node($2);
 //				driver.root->label = "ROOT";
                                // TO DO : Save $2 irgendwo sinnvoll
-			}
+}
+| function {
+
+};
+
+function:
+"func" "identifier"{
+  driver.print("func " + $2 + "(");
+}
+;
+
+paramList:
+%empty    {}
+|parameter  {}
+| parameter ","  {driver.print(",");}
+;
+
+parameter:
+"identifier" {driver.print($1);}
+;
+
+funcBody:
+%empty {}
+| exp {}
+;
 
 //
 assignments:
   %empty                 {}
-| assignments assignment {	
-//				driver.result.push_back();			
-			};
+| assignments assignment {
+//				driver.result.push_back();
+}
+;
 
 assignment:
-  "identifier" ":=" exp { 
+  "identifier" ":=" exp {
 			  driver.variables[$1] = $3;
 			  if($3->sval != ""){
 			    driver.printLine($1 + " := " + $3->sval);
@@ -210,14 +239,14 @@ exp:
 | "identifier"  { //$$ = driver.getVariable($1)
 		    if(driver.variables.find($1) != driver.variables.end()){
 		      $$ = new node(driver.variables[$1]);
-			  
+
 		    }else {
 		      $$ = new node();
 		    }
 			$$->label = "Ident: " + $1;
 		    //$$->label = driver.variables[$1]->type + "Identifier: " + $1 + " = " + driver.variables[$1]->label;
                 }
-| "number"      { //swap ($$, $1); 
+| "number"      { //swap ($$, $1);
 		  $$ = new node();
 		  $$->fval = $1;
 		  $$->type = "float";
@@ -233,13 +262,15 @@ exp:
 		  $$ = new node();
 		  $$->cval = $1;
 		  $$->type = "char";
-		  $$->label = "Sign: " + (char)($1);
+      char c = (char) $1;
+      string label = "Sign: ";
+      label.insert(label.end(), c);
+		  $$->label = label;
 		}
 | "text"	{ $$ = new node();
 		  $$->sval = $1;
 		  $$->type = "string";
 		  $$->label = "Text: " + $1;};
-
 
 %%
 

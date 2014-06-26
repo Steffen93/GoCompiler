@@ -5,11 +5,10 @@ int calcxx_driver::nodeCount = 0;
 Module *calcxx_driver::TheModule;
 IRBuilder<> *calcxx_driver::Builder;
 std::map<std::string, Value*> calcxx_driver::NamedValues;
- 
+
 calcxx_driver::calcxx_driver ()
   : trace_scanning (false), trace_parsing (false), tmpID(""), testMode(false)
 {
-  Builder = new IRBuilder<>(getGlobalContext());
   result = vector<node*>();
   o.open("dotgraph.dot");
   o << "digraph gograph{\n";
@@ -23,18 +22,26 @@ calcxx_driver::~calcxx_driver ()
   LLVMContext &Context = getGlobalContext();
   // Make the module, which holds all the code.
   TheModule = new Module("GO", Context);
-  
+  Builder = new IRBuilder<>(getGlobalContext());
+//Test stuff
+  vector<Type*> Doubles(0, Type::getDoubleTy(getGlobalContext()));
+  FunctionType* FT = FunctionType::get(Type::getDoubleTy(getGlobalContext()),
+                                       vector<Type*>(), false);
+  Function* F = Function::Create(FT, Function::ExternalLinkage, "test123", TheModule);
+  BasicBlock *BB = BasicBlock::Create(getGlobalContext(), "entry", F);
+  Builder->SetInsertPoint(BB);
+//**Test stuff
   //gehe den baum durch und erzeuge den Zwischcode
   for(int i = 0; i < result.size(); i++){
-	if(result.at(i) != NULL){
-		result.at(i)->Codegen(this->TheModule, *(this->Builder), this->NamedValues);
-		TheModule->dump();
-	}
+  	if(result.at(i) != NULL){
+  		Builder->CreateRet(result.at(i)->Codegen(this->TheModule, this->Builder, this->NamedValues));
+  	}
   }
-  
+
   //Gebe den Zwischencode aus
-  
-  
+  TheModule->dump();
+
+
   //Immernoch den Graphen erzeugen
   for(int i = 0; i < result.size(); i++){
 	if(result.at(i) != NULL){

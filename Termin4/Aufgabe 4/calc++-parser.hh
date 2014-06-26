@@ -303,6 +303,7 @@ namespace yy {
       char dummy4[sizeof(node*)];
 
       // "identifier"
+      // "type"
       // "text"
       char dummy5[sizeof(string)];
 };
@@ -335,11 +336,15 @@ namespace yy {
         TOK_SLASH = 262,
         TOK_LPAREN = 263,
         TOK_RPAREN = 264,
-        TOK_IDENTIFIER = 265,
-        TOK_NUMBER = 266,
-        TOK_TEXT = 267,
-        TOK_ZAHL = 268,
-        TOK_SIGN = 269
+        TOK_LBRACK = 265,
+        TOK_RBRACK = 266,
+        TOK_FUNCTION = 267,
+        TOK_IDENTIFIER = 268,
+        TOK_TYPE = 269,
+        TOK_NUMBER = 270,
+        TOK_TEXT = 271,
+        TOK_ZAHL = 272,
+        TOK_SIGN = 273
       };
     };
 
@@ -476,7 +481,23 @@ namespace yy {
 
     static inline
     symbol_type
+    make_LBRACK (const location_type& l);
+
+    static inline
+    symbol_type
+    make_RBRACK (const location_type& l);
+
+    static inline
+    symbol_type
+    make_FUNCTION (const location_type& l);
+
+    static inline
+    symbol_type
     make_IDENTIFIER (const string& v, const location_type& l);
+
+    static inline
+    symbol_type
+    make_TYPE (const string& v, const location_type& l);
 
     static inline
     symbol_type
@@ -579,7 +600,7 @@ namespace yy {
   // number is the opposite.  If YYTABLE_NINF, syntax error.
   static const unsigned char yytable_[];
 
-  static const signed char yycheck_[];
+  static const unsigned char yycheck_[];
 
   // YYSTOS[STATE-NUM] -- The (internal number of the) accessing
   // symbol of state STATE-NUM.
@@ -600,7 +621,7 @@ namespace yy {
     static const char* const yytname_[];
 #if YYDEBUG
   // YYRLINE[YYN] -- Source line where rule number YYN was defined.
-  static const unsigned char yyrline_[];
+  static const unsigned short int yyrline_[];
     /// Report on the debug stream that the rule \a r is going to be reduced.
     virtual void yy_reduce_print_ (int r);
     /// Print the state stack on the debug stream.
@@ -694,13 +715,13 @@ namespace yy {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 31,     ///< Last index in yytable_.
-      yynnts_ = 5,  ///< Number of nonterminal symbols.
+      yylast_ = 32,     ///< Last index in yytable_.
+      yynnts_ = 6,  ///< Number of nonterminal symbols.
       yyempty_ = -2,
-      yyfinal_ = 3, ///< Termination state number.
+      yyfinal_ = 6, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = 15  ///< Number of tokens.
+      yyntokens_ = 20  ///< Number of tokens.
     };
 
 
@@ -743,9 +764,10 @@ namespace yy {
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8,     9,    10,    11,    12,    13,    14
+       5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
+      15,    16,    17,    18,    19
     };
-    const unsigned int user_token_number_max_ = 269;
+    const unsigned int user_token_number_max_ = 274;
     const token_number_type undef_token_ = 2;
 
     if (static_cast<int>(t) <= yyeof_)
@@ -778,24 +800,25 @@ namespace yy {
   {
       switch (other.type_get ())
     {
-      case 14: // "sign"
+      case 18: // "sign"
         value.copy< char > (other.value);
         break;
 
-      case 11: // "number"
+      case 15: // "number"
         value.copy< float > (other.value);
         break;
 
-      case 13: // "zahl"
+      case 17: // "zahl"
         value.copy< int > (other.value);
         break;
 
-      case 19: // exp
+      case 25: // exp
         value.copy< node* > (other.value);
         break;
 
-      case 10: // "identifier"
-      case 12: // "text"
+      case 13: // "identifier"
+      case 14: // "type"
+      case 16: // "text"
         value.copy< string > (other.value);
         break;
 
@@ -816,24 +839,25 @@ namespace yy {
     (void) v;
       switch (this->type_get ())
     {
-      case 14: // "sign"
+      case 18: // "sign"
         value.copy< char > (v);
         break;
 
-      case 11: // "number"
+      case 15: // "number"
         value.copy< float > (v);
         break;
 
-      case 13: // "zahl"
+      case 17: // "zahl"
         value.copy< int > (v);
         break;
 
-      case 19: // exp
+      case 25: // exp
         value.copy< node* > (v);
         break;
 
-      case 10: // "identifier"
-      case 12: // "text"
+      case 13: // "identifier"
+      case 14: // "type"
+      case 16: // "text"
         value.copy< string > (v);
         break;
 
@@ -903,24 +927,25 @@ namespace yy {
     // Type destructor.
     switch (yytype)
     {
-      case 14: // "sign"
+      case 18: // "sign"
         value.template destroy< char > ();
         break;
 
-      case 11: // "number"
+      case 15: // "number"
         value.template destroy< float > ();
         break;
 
-      case 13: // "zahl"
+      case 17: // "zahl"
         value.template destroy< int > ();
         break;
 
-      case 19: // exp
+      case 25: // exp
         value.template destroy< node* > ();
         break;
 
-      case 10: // "identifier"
-      case 12: // "text"
+      case 13: // "identifier"
+      case 14: // "type"
+      case 16: // "text"
         value.template destroy< string > ();
         break;
 
@@ -938,24 +963,25 @@ namespace yy {
     super_type::move(s);
       switch (this->type_get ())
     {
-      case 14: // "sign"
+      case 18: // "sign"
         value.move< char > (s.value);
         break;
 
-      case 11: // "number"
+      case 15: // "number"
         value.move< float > (s.value);
         break;
 
-      case 13: // "zahl"
+      case 17: // "zahl"
         value.move< int > (s.value);
         break;
 
-      case 19: // exp
+      case 25: // exp
         value.move< node* > (s.value);
         break;
 
-      case 10: // "identifier"
-      case 12: // "text"
+      case 13: // "identifier"
+      case 14: // "type"
+      case 16: // "text"
         value.move< string > (s.value);
         break;
 
@@ -1008,7 +1034,7 @@ namespace yy {
     yytoken_number_[] =
     {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
-     265,   266,   267,   268,   269
+     265,   266,   267,   268,   269,   270,   271,   272,   273,   274
     };
     return static_cast<token_type> (yytoken_number_[type]);
   }
@@ -1062,9 +1088,33 @@ namespace yy {
   }
 
   calcxx_parser::symbol_type
+  calcxx_parser::make_LBRACK (const location_type& l)
+  {
+    return symbol_type (token::TOK_LBRACK, l);
+  }
+
+  calcxx_parser::symbol_type
+  calcxx_parser::make_RBRACK (const location_type& l)
+  {
+    return symbol_type (token::TOK_RBRACK, l);
+  }
+
+  calcxx_parser::symbol_type
+  calcxx_parser::make_FUNCTION (const location_type& l)
+  {
+    return symbol_type (token::TOK_FUNCTION, l);
+  }
+
+  calcxx_parser::symbol_type
   calcxx_parser::make_IDENTIFIER (const string& v, const location_type& l)
   {
     return symbol_type (token::TOK_IDENTIFIER, v, l);
+  }
+
+  calcxx_parser::symbol_type
+  calcxx_parser::make_TYPE (const string& v, const location_type& l)
+  {
+    return symbol_type (token::TOK_TYPE, v, l);
   }
 
   calcxx_parser::symbol_type
@@ -1094,7 +1144,7 @@ namespace yy {
 
 
 } // yy
-#line 1098 "calc++-parser.hh" // lalr1.cc:372
+#line 1148 "calc++-parser.hh" // lalr1.cc:372
 
 
 

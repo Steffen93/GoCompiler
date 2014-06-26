@@ -1,5 +1,5 @@
 /***********************
- * Example of C++ in Bison (yacc) 
+ * Example of C++ in Bison (yacc)
  * Compare Bison Manual, Section 10.1.6 A Complete C++ Example
  * https://www.gnu.org/software/bison/manual/html_node/A-Complete-C_002b_002b-Example.html
  * The Makefile has been simplified radically, but otherwise
@@ -33,13 +33,13 @@
 static yy::location loc;
 %}
 %option noyywrap nounput batch debug noinput
-comment "//".*
-id    	[a-zA-Z][a-zA-Z_0-9]*
-zahl   	[0-9]+
-sign 	"'"[a-zA-Z0-9]"'"
-number 	{zahl}+\.{zahl}*
-text 	"\""[a-zA-Z0-9 !$%&/()=?;:-_]*"\""
-blank 	[ \t]
+comment		"//".*
+id    		[a-zA-Z][a-zA-Z_0-9]*
+zahl   		[0-9]+
+sign 		"'"[a-zA-Z0-9]"'"
+number 		{zahl}+\.{zahl}*
+text 		"\""[a-zA-Z0-9 !$%&/()=?;:-_]*"\""
+blank 		[ \t]
 
 %{
   // Code run each time a pattern is matched.
@@ -61,13 +61,14 @@ blank 	[ \t]
 "/"      return yy::calcxx_parser::make_SLASH(loc);
 "("      return yy::calcxx_parser::make_LPAREN(loc);
 ")"      return yy::calcxx_parser::make_RPAREN(loc);
+"{"      return yy::calcxx_parser::make_LBRACK(loc);
+"}"      return yy::calcxx_parser::make_RBRACK(loc);
 ":="     return yy::calcxx_parser::make_ASSIGN(loc);
-
+"func"   return yy::calcxx_parser::make_FUNCTION(loc);
 
 {number}	{
   errno = 0;
   float n = strtof (yytext, NULL);
-  
   return yy::calcxx_parser::make_NUMBER(n, loc);
 }
 
@@ -82,12 +83,12 @@ blank 	[ \t]
   return yy::calcxx_parser::make_ZAHL(zahl, loc);
 }
 
-{text}		{ 
+{text}		{
   std::string tmp = yytext;
   tmp = tmp.erase(0,1);
   tmp = tmp.erase(tmp.length() -1, 1);
   return yy::calcxx_parser::make_TEXT(tmp, loc);
-  
+
 }
 
 {id}       {return yy::calcxx_parser::make_IDENTIFIER(yytext, loc);}
@@ -116,4 +117,3 @@ calcxx_driver::scan_end ()
 {
   fclose (yyin);
 }
-

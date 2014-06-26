@@ -54,10 +54,10 @@ public:
   std::vector <node*> result;
 
 //llvm Zeug
+
   static Module *TheModule;
   static IRBuilder<> *Builder;
   static std::map<std::string, Value*> NamedValues;
-  
   // Handling the scanner.
   void scan_begin ();
   void scan_end ();
@@ -82,23 +82,23 @@ public:
   //std::string addGraph(float label);
 
   void addGraph(std::string name, float value);
-  
+
   //float getVariable(std::string);
   std::string to_string(float);
   void print(std::string);
   void printLine(std::string);
   void setTestMode(bool);
   bool getTestMode();
-  
+
   // Error handling.
   void error (const yy::location& l, const std::string& m);
   void error (const std::string& m);
-  
+
   std::ofstream o; //not for long!
 private:
   bool testMode;
   static int nodeCount;
-  
+
   std::ofstream tS;
   std::string tmpID;
 };

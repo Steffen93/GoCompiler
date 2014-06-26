@@ -58,6 +58,9 @@ public:
   static Module *TheModule;
   static IRBuilder<> *Builder;
   static std::map<std::string, Value*> NamedValues;
+
+  void makeCode();
+
   // Handling the scanner.
   void scan_begin ();
   void scan_end ();

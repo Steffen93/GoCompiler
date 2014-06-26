@@ -41,7 +41,6 @@ calcxx_driver::~calcxx_driver ()
   //Gebe den Zwischencode aus
   TheModule->dump();
 
-
   //Immernoch den Graphen erzeugen
   for(int i = 0; i < result.size(); i++){
 	if(result.at(i) != NULL){
@@ -52,6 +51,43 @@ calcxx_driver::~calcxx_driver ()
   tS << std::endl;
   o.close();
   tS.close();
+}
+
+void calcxx_driver::makeCode(){
+  LLVMContext &Context = getGlobalContext();
+  // Make the module, which holds all the code.
+  TheModule = new Module("GO", Context);
+
+  //gehe den baum durch und erzeuge den Zwischcode
+  for(int i = 0; i < result.size(); i++){
+	if(result.at(i) != NULL){
+		if(result.at(i)->type == "float"){
+		  std::cout << "\nFloat\n" << std::endl;
+		  FunctionType *FT = FunctionType::get(Type::getDoubleTy(getGlobalContext()), false);
+		  Function *F = Function::Create(FT, Function::ExternalLinkage, "", TheModule);
+
+		  BasicBlock *BB = BasicBlock::Create(getGlobalContext(), "entry", F);
+		  Builder->SetInsertPoint(BB);
+		  Builder->CreateRet(result.at(i)->Codegen(this->TheModule, this->Builder, this->NamedValues));
+		  TheModule->dump();
+
+		}else if(result.at(i)->type == "int"){
+		  std::cout << "\nInteger\n" << std::endl;
+		  FunctionType *FT = FunctionType::get(Type::getFloatTy(getGlobalContext()), false);
+		  Function *F = Function::Create(FT, Function::ExternalLinkage, "", TheModule);
+
+		  BasicBlock *BB = BasicBlock::Create(getGlobalContext(), "entry", F);
+		  Builder->SetInsertPoint(BB);
+		  Builder->CreateRet(result.at(i)->Codegen(this->TheModule, this->Builder, this->NamedValues));
+		  TheModule->dump();
+		}
+
+
+	}
+  }
+
+
+
 }
 
 float

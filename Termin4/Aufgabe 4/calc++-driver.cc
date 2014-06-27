@@ -24,10 +24,13 @@ calcxx_driver::~calcxx_driver ()
   TheModule = new Module("GO", Context);
   Builder = new IRBuilder<>(getGlobalContext());
 //Test stuff
-  vector<Type*> Doubles(0, Type::getDoubleTy(getGlobalContext()));
-  FunctionType* FT = FunctionType::get(Type::getDoubleTy(getGlobalContext()),
+  //vector<Type*> Doubles(0, Type::getDoubleTy(getGlobalContext()));
+  for(map<string, function*>::iterator it = functions.begin(); it!=functions.end(); ++it){
+    it->second->Codegen(this->TheModule, this->Builder, this->NamedValues);
+  }
+  FunctionType* FT = FunctionType::get(Type::getVoidTy(getGlobalContext()),
                                        vector<Type*>(), false);
-  Function* F = Function::Create(FT, Function::ExternalLinkage, "test123", TheModule);
+  Function* F = Function::Create(FT, Function::ExternalLinkage, "assignments", TheModule);
   BasicBlock *BB = BasicBlock::Create(getGlobalContext(), "entry", F);
   Builder->SetInsertPoint(BB);
 //**Test stuff

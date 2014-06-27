@@ -17,7 +17,7 @@
 # include <climits>
 # include <cstdlib>
 # include <string>
-#include "node.h"
+# include "node.h"
 # include "calc++-driver.hh"
 
 # include "calc++-parser.hh"
@@ -33,6 +33,7 @@
 static yy::location loc;
 %}
 %option noyywrap nounput batch debug noinput
+
 comment		"//".*
 id    		[a-zA-Z][a-zA-Z_0-9]*
 zahl   		[0-9]+
@@ -40,6 +41,7 @@ sign 		"'"[a-zA-Z0-9]"'"
 number 		{zahl}+\.{zahl}*
 text 		"\""[a-zA-Z0-9 !$%&/()=?;:-_]*"\""
 blank 		[ \t]
+block     "{"[^\}]*"}"
 
 %{
   // Code run each time a pattern is matched.
@@ -63,6 +65,7 @@ blank 		[ \t]
 ")"      return yy::calcxx_parser::make_RPAREN(loc);
 "{"      return yy::calcxx_parser::make_LBRACK(loc);
 "}"      return yy::calcxx_parser::make_RBRACK(loc);
+","      return yy::calcxx_parser::make_COMMA(loc);
 ":="     return yy::calcxx_parser::make_ASSIGN(loc);
 "func"   return yy::calcxx_parser::make_FUNCTION(loc);
 
@@ -88,7 +91,6 @@ blank 		[ \t]
   tmp = tmp.erase(0,1);
   tmp = tmp.erase(tmp.length() -1, 1);
   return yy::calcxx_parser::make_TEXT(tmp, loc);
-
 }
 
 {id}       {return yy::calcxx_parser::make_IDENTIFIER(yytext, loc);}

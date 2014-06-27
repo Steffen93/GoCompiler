@@ -23,8 +23,9 @@
 
 %code requires
 {
-# include <string>
+#include <string>
 #include "node.h"
+#include "function.h"
 class calcxx_driver;
 using namespace std;
 }
@@ -60,15 +61,23 @@ using namespace std;
   RPAREN  ")"
   LBRACK  "{"
   RBRACK  "}"
+  COMMA   ","
   FUNCTION "func"
 ;
 
 %token <string> IDENTIFIER "identifier"
-%token <string> TYPE "type"
 %token <float> NUMBER "number"
 %token <string> TEXT "text"
 %token <int> ZAHL "zahl"
 %token <char> SIGN "sign"
+%token <string> BLOCK "block"
+
+%type  <string> assignments
+%type  <string> assignment
+%type  <string> funcBody
+%type  <string> type
+%type  <string> parameter
+%type  <string> paramList
 %type  <node*> exp
 
 %printer { yyoutput << $$; } <*>;
@@ -79,39 +88,46 @@ unit: assignments exp 	{
 				//driver.root = new node($2);
 //				driver.root->label = "ROOT";
                                // TO DO : Save $2 irgendwo sinnvoll
-}
-| function {
-
 };
 
 function:
-"func" "identifier"{
-  driver.print("func " + $2 + "(");
+"func" "identifier" "(" paramList ")" type "{" funcBody "}"{
+  driver.functions[$2] = new function($2, $6, $4);
+  driver.printLine("func " + $2 + "(" + $4 +") " + $6 + "{"+ $8 +"}");
 }
 ;
 
 paramList:
 %empty    {}
-|parameter  {}
-| parameter ","  {driver.print(",");}
+| parameter paramList {$$ += $1 + $2;}
+| "," paramList  {$$ += "," + $2;}
 ;
 
 parameter:
-"identifier" {driver.print($1);}
+"identifier" type{
+  $$ = $1 + " " + $2;
+}
 ;
 
+type:
+%empty  {$$ = "";}
+|"identifier"  {$$ = $1;}
+
 funcBody:
-%empty {}
-| exp {}
+assignments funcBody {}
+| %empty {}
 ;
 
 //
 assignments:
   %empty                 {}
-| assignments assignment {
-//				driver.result.push_back();
+| assignments function {
+
 }
-;
+| assignments assignment
+{
+//				driver.result.push_back();
+};
 
 assignment:
   "identifier" ":=" exp {
@@ -123,7 +139,7 @@ assignment:
 			    driver.printLine($1 + " := " + driver.to_string($3->fval));
 			  }
 			  driver.result.push_back($3);
-			}
+			};
 
 %left "+" "-";
 %left "*" "/";

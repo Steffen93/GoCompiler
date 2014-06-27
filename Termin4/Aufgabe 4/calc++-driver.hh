@@ -48,6 +48,7 @@ public:
   std::map<std::string, node*> svar;
   std::map<std::string, node*> variables;
   std::map<std::string, std::string> nodes;
+  std::map<std::string, function*> functions;
   std::string node1, node2;
   node* val1, *val2;
 

@@ -74,26 +74,25 @@ Value *node::Codegen(Module *TheModule, IRBuilder<> *Builder, std::map<std::stri
 	else
 	  exists = true;
   }
-  
+
     //std::cout << "Beginne mit den Funktionen" << std::endl;
     if(type == "+") return Builder->CreateFAdd(L, R, "add");
     else if(type == "-") return Builder->CreateFSub(L, R, "sub");
     else if(type == "*") return Builder->CreateFMul(L, R, "mul");
     else if(type == "/") return Builder->CreateFDiv(L, R, "div");
 
-    else if(type == "float"){ if(exists)
+    else if(type == "float" ^ type == "double"){ if(exists)
 					NamedValues[tmp] = ConstantFP::get(getGlobalContext(), APFloat(fval));
-				  return ConstantFP::get(getGlobalContext(), APFloat(fval));
+				 return ConstantFP::get(getGlobalContext(), APFloat(fval));
     }else if(type == "int"){	if(exists)
 					NamedValues[tmp] = ConstantInt::get(getGlobalContext(), APInt(32, ival));
-				return ConstantInt::get(getGlobalContext(), APInt(32, ival));
+				 return ConstantInt::get(getGlobalContext(), APInt(32, ival));
     }else if(type == "char"){ if(exists)
 					NamedValues[tmp] = ConstantInt::get(getGlobalContext(), APInt(8, (int)(cval)));
 				 return ConstantInt::get(getGlobalContext(), APInt(8, (int)(cval)));
-    }else if(type == "string") {
-	if(exists)
-		NamedValues[tmp] = ConstantDataArray::getString(getGlobalContext(), StringRef(sval), true);
-		return ConstantDataArray::getString(getGlobalContext(), StringRef(sval), true);
+    }else if(type == "string") { if(exists)
+		      NamedValues[tmp] = ConstantDataArray::getString(getGlobalContext(), StringRef(sval), true);
+		     return ConstantDataArray::getString(getGlobalContext(), StringRef(sval), true);
 	std::cout << "String" << std::endl;
     }
       return NULL;

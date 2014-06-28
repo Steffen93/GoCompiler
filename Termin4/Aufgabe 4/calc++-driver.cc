@@ -41,9 +41,12 @@ calcxx_driver::~calcxx_driver ()
   Builder->SetInsertPoint(BB);
 //**Test stuff
   //gehe den baum durch und erzeuge den Zwischcode
+	
   for(int i = 0; i < result.size(); i++){
   	if(result.at(i) != NULL){
+		//std::cout<< "Erebnis: " << i + 1 << " von " << result.size() << std::endl;
   		Builder->CreateRet(result.at(i)->Codegen(this->TheModule, this->Builder, this->NamedValues));
+		
   	}
   }
 
@@ -199,4 +202,18 @@ std::string calcxx_driver::to_string(float num){
   std::string text = stringvar.str();
   unsigned pos = text.find(".");
   return text.substr(0, pos+3);
+}
+
+node* calcxx_driver::filterFunc(std::string name){
+  int first = name.find("(");
+  string funcname = name.substr(0, first);
+  string param = name.substr(first +1, name.size()-1);
+  if(functions.find(funcname) != functions.end()){
+     node* ret = new node();
+     ret->type = "function";
+     ret->label = funcname;
+     ret->sval = param;
+     return ret;
+  }else 
+     return NULL;
 }

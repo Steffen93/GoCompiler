@@ -54,6 +54,8 @@ public:
 
   std::vector <node*> result;
   function* tmpfunction;
+
+  node* filterFunc(std::string name);
 //llvm Zeug
 
   static Module *TheModule;

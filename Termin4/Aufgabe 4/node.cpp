@@ -95,9 +95,24 @@ Value *node::Codegen(Module *TheModule, IRBuilder<> *Builder, std::map<std::stri
 		     return ConstantDataArray::getString(getGlobalContext(), StringRef(sval), true);
 	//std::cout << "String" << std::endl;
     }else if(type == "function"){
-		      std::cout << "Function Value" << std::endl;
-		      return Builder->CreateCall(TheModule->getFunction(label), "test");
+		      //std::cout << "Function Value" << std::endl;
+		    	std::vector<Value*> param = split(sval);
+			if(param.size() != 0)
+				return Builder->CreateCall(TheModule->getFunction(label), param, label);
+		      return Builder->CreateCall(TheModule->getFunction(label), label);
     }
       return NULL;
 
+}
+
+std::vector<Value*> node::split(string arr){
+	std::vector<Value*> ret;	
+	stringstream sstr;
+	arr.erase(arr.find_last_not_of(" )")+1);
+	/*
+	* TO DO: erzeuge eine vector<Value*> aus den übergabeparametern beim funktionscall
+	* entweder kann man diese direkt in den NamedValues suchen
+	* oder muss die konstanten werte in Value* erzeugen
+	*/
+	return ret;
 }

@@ -41,6 +41,7 @@ sign 		"'"[a-zA-Z0-9]"'"
 number 		{zahl}+\.{zahl}*
 text 		"\""[a-zA-Z0-9 !$%&/()=?;:-_]*"\""
 blank 		[ \t]
+funccall	{id}"("{id}*[","{id}]*")"
 block     "{"[^\}]*"}"
 
 %{
@@ -92,6 +93,8 @@ block     "{"[^\}]*"}"
   tmp = tmp.erase(tmp.length() -1, 1);
   return yy::calcxx_parser::make_TEXT(tmp, loc);
 }
+
+{funccall} {return yy::calcxx_parser::make_FUNCCALL(yytext, loc);}
 
 {id}       {return yy::calcxx_parser::make_IDENTIFIER(yytext, loc);}
 

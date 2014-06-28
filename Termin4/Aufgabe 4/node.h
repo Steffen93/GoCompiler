@@ -27,6 +27,7 @@
 
 #include <string>
 #include <fstream>
+#include <sstream>
 #include <iostream>
 #include <stdint.h>
 
@@ -55,6 +56,6 @@ public:
   float fval;
   int ival;
   char cval;
-
+  std::vector<Value*> split(std::string arr);
 };
 #endif

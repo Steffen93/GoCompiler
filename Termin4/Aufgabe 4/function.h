@@ -41,6 +41,7 @@ public:
   void Codegen(Module *TheModule, IRBuilder<> *Builder, std::map<std::string, Value*> &NamedValues);
   string name;
   string returnType;
+  string returnValue;
   map<string, string> parameters;
   vector<node*> nodes;
 private:

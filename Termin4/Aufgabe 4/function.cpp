@@ -36,6 +36,8 @@ void function::splitTypeFromName(string &name, string &type){
 }
 
 void function::Codegen(Module *TheModule, IRBuilder<> *Builder, std::map<std::string, Value*> &NamedValues){
+  std::map<std::string, Value*> Values;		//Neue Map Damit die Nodes innerhalb der Funktion nicht in die NamedValues kommen
+  Values.insert(NamedValues.begin(), NamedValues.end());
   vector<Type*> params = vector<Type*>();
   //for(map<string,string>::iterator it = parameters.begin(); it != parameters.end(); ++it){
   for(int i = 0; i < nodes.size(); i++){
@@ -46,9 +48,11 @@ void function::Codegen(Module *TheModule, IRBuilder<> *Builder, std::map<std::st
   Function* F = Function::Create(FT, Function::ExternalLinkage, name, TheModule);
   BasicBlock *BB = BasicBlock::Create(getGlobalContext(), "entry", F);
   Builder->SetInsertPoint(BB);
+ 
   for(int i = 0; i < nodes.size(); i++){
-    Builder->CreateRet(nodes.at(i)->Codegen(TheModule, Builder, NamedValues));
+    Builder->CreateRet(nodes.at(i)->Codegen(TheModule, Builder, Values));	//übergabe der kopierten Map
   }
+  F->dump();
 }
 
 Type* function::getTypeFor(string typeName){

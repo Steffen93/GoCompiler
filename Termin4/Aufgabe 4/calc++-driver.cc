@@ -9,25 +9,31 @@ std::map<std::string, Value*> calcxx_driver::NamedValues;
 calcxx_driver::calcxx_driver ()
   : trace_scanning (false), trace_parsing (false), tmpID(""), testMode(false)
 {
+  this->tmpfunction = new function("", "", "");
   result = vector<node*>();
   o.open("dotgraph.dot");
   o << "digraph gograph{\n";
   tS.open("tests.txt");
+  
+  //LLVM ist die ganze Zeit vorhanden
+  LLVMContext &Context = getGlobalContext();
+  // Make the module, which holds all the code.
+  TheModule = new Module("GO", Context);
+  Builder = new IRBuilder<>(getGlobalContext());
+  
 }
 
 calcxx_driver::~calcxx_driver ()
 {
   std::cout << "Number of results: " << result.size() << std::endl;
 //  root->makeGraph(o);
-  LLVMContext &Context = getGlobalContext();
-  // Make the module, which holds all the code.
-  TheModule = new Module("GO", Context);
-  Builder = new IRBuilder<>(getGlobalContext());
+
 //Test stuff
   //vector<Type*> Doubles(0, Type::getDoubleTy(getGlobalContext()));
-  for(map<string, function*>::iterator it = functions.begin(); it!=functions.end(); ++it){
+  /*for(map<string, function*>::iterator it = functions.begin(); it!=functions.end(); ++it){
     it->second->Codegen(this->TheModule, this->Builder, this->NamedValues);
-  }
+  }*/
+  
   FunctionType* FT = FunctionType::get(Type::getVoidTy(getGlobalContext()),
                                        vector<Type*>(), false);
   Function* F = Function::Create(FT, Function::ExternalLinkage, "assignments", TheModule);

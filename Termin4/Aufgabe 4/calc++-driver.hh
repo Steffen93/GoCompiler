@@ -53,7 +53,7 @@ public:
   node* val1, *val2;
 
   std::vector <node*> result;
-
+  function* tmpfunction;
 //llvm Zeug
 
   static Module *TheModule;

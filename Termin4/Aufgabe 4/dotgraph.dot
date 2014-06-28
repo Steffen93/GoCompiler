@@ -1,102 +1,86 @@
 digraph gograph{
-node27169696[label="30"];
-node27168704[label="36"];
-node27151792[label="Number: 2"];
-node27151792 -> node27168704
-node27168528[label="Number: 18"];
-node27168528 -> node27168704
-node27168704 -> node27169696
-node27169568[label="Number: 6"];
-node27169568 -> node27169696
-node27171712[label="96"];
-node27171408[label="32"];
-node27171056[label="16"];
-node27170752[label="8"];
-node27170400[label="4"];
-node27170240[label="Number: 2"];
-node27170240 -> node27170400
-node27170320[label="Number: 2"];
-node27170320 -> node27170400
-node27170400 -> node27170752
-node27170624[label="Number: 2"];
-node27170624 -> node27170752
-node27170752 -> node27171056
-node27170928[label="Number: 2"];
-node27170928 -> node27171056
-node27171056 -> node27171408
-node27171280[label="Number: 2"];
-node27171280 -> node27171408
-node27171408 -> node27171712
-node27171632[label="help"];
-node27168704 -> node27171632
-node27169568 -> node27171632
-node27171632 -> node27171712
-node27172336[label="60"];
-node27172128[label="help"];
-node27168704 -> node27172128
-node27169568 -> node27172128
-node27172128 -> node27172336
-node27172208[label="Number: 2"];
-node27172208 -> node27172336
-node27174544[label="62"];
-node27169024[label="12"];
-node27169440[label="25"];
-node27172976[label="Number: 5"];
-node27172976 -> node27169440
-node27173056[label="Number: 5"];
-node27173056 -> node27169440
-node27169440 -> node27169024
-node27172848[label="Number: 5"];
-node27172848 -> node27169024
-node27169024 -> node27174544
-node27169248[label="Number: 5"];
-node27169248 -> node27174544
-node27175024[label="20"];
-node27174816[label="newvar"];
-node27169024 -> node27174816
-node27169248 -> node27174816
-node27174816 -> node27175024
-node27174896[label="Number: 3.2"];
-node27174896 -> node27175024
-node27177296[label="-3.25"];
-node27176624[label="0.75"];
-node27176944[label="72"];
-node27176352[label="Number: 12"];
-node27176352 -> node27176944
-node27176544[label="help"];
-node27172128 -> node27176544
-node27172208 -> node27176544
-node27176544 -> node27176944
-node27176944 -> node27176624
-node27176432[label="a"];
-node27171408 -> node27176432
-node27171632 -> node27176432
-node27176432 -> node27176624
-node27176624 -> node27177296
-node27177168[label="Number: 4"];
-node27177168 -> node27177296
-node27177952[label="Value: Das ist ein test"];
-node27177600[label="Text: Das ist "];
-node27177600 -> node27177952
-node27177728[label="Text: ein test"];
-node27177728 -> node27177952
-node27178768[label="10.56"];
-node27178512[label="ko"];
-node27176624 -> node27178512
-node27177168 -> node27178512
-node27178512 -> node27178768
-node27178640[label="ko"];
-node27176624 -> node27178640
-node27177168 -> node27178640
-node27178640 -> node27178768
-node27179104[label="Zahl: "];
-node27178944 -> node27179104
-node27179024 -> node27179104
-node27180016[label="œ"];
-node27175456[label="Sign: g"];
-node27175456 -> node27180016
-node27179840[label="Sign: 5"];
-node27179840 -> node27180016
-node27180240[label="Sign: c"];
+node142845448[label="30"];
+node142844936[label="36"];
+node142828216[label="Number: 2"];
+node142828216 -> node142844936
+node142844832[label="Number: 18"];
+node142844832 -> node142844936
+node142844936 -> node142845448
+node142845376[label="Number: 6"];
+node142845376 -> node142845448
+node142846624[label="96"];
+node142846432[label="32"];
+node142846232[label="16"];
+node142846032[label="8"];
+node142845832[label="4"];
+node142845712[label="Number: 2"];
+node142845712 -> node142845832
+node142845760[label="Number: 2"];
+node142845760 -> node142845832
+node142845832 -> node142846032
+node142845960[label="Number: 2"];
+node142845960 -> node142846032
+node142846032 -> node142846232
+node142846160[label="Number: 2"];
+node142846160 -> node142846232
+node142846232 -> node142846432
+node142846360[label="Number: 2"];
+node142846360 -> node142846432
+node142846432 -> node142846624
+node142846576[label="help"];
+node142844936 -> node142846576
+node142845376 -> node142846576
+node142846576 -> node142846624
+node142846984[label="60"];
+node142846856[label="help"];
+node142844936 -> node142846856
+node142845376 -> node142846856
+node142846856 -> node142846984
+node142846904[label="Number: 2"];
+node142846904 -> node142846984
+node142858488[label="-3.25"];
+node142858288[label="0.75"];
+node142858136[label="72"];
+node142858056[label="Number: 12"];
+node142858056 -> node142858136
+node142858008[label="help"];
+node142846856 -> node142858008
+node142846904 -> node142858008
+node142858008 -> node142858136
+node142858136 -> node142858288
+node142858240[label="a"];
+node142846432 -> node142858240
+node142846576 -> node142858240
+node142858240 -> node142858288
+node142858288 -> node142858488
+node142858416[label="Number: 4"];
+node142858416 -> node142858488
+node142858944[label="Value: Das ist ein test"];
+node142858720[label="Text: Das ist "];
+node142858720 -> node142858944
+node142858864[label="Text: ein test"];
+node142858864 -> node142858944
+node142859504[label="Operator: +"];
+node142859352[label="10.56"];
+node142859192[label="ko"];
+node142858288 -> node142859192
+node142858416 -> node142859192
+node142859192 -> node142859352
+node142859272[label="ko"];
+node142858288 -> node142859272
+node142858416 -> node142859272
+node142859272 -> node142859352
+node142859352 -> node142859504
+node142859432[label="test"];
+node142859432 -> node142859504
+node142859840[label="Zahl: "];
+node142859744 -> node142859840
+node142859792 -> node142859840
+node142860168[label="œ"];
+node142860024[label="Sign: g"];
+node142860024 -> node142860168
+node142860072[label="Sign: 5"];
+node142860072 -> node142860168
+node142860344[label="Sign: c"];
 
 }

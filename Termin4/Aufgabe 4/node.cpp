@@ -93,7 +93,10 @@ Value *node::Codegen(Module *TheModule, IRBuilder<> *Builder, std::map<std::stri
     }else if(type == "string") { if(exists)
 		      NamedValues[tmp] = ConstantDataArray::getString(getGlobalContext(), StringRef(sval), true);
 		     return ConstantDataArray::getString(getGlobalContext(), StringRef(sval), true);
-	std::cout << "String" << std::endl;
+	//std::cout << "String" << std::endl;
+    }else if(type == "function"){
+		      std::cout << "Function Value" << std::endl;
+		      return Builder->CreateCall(TheModule->getFunction(label), "test");
     }
       return NULL;
 

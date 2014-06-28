@@ -1,0 +1,590 @@
+Terminale, die in Grammatik unbenutzt sind
+
+   "block"
+
+
+Zustand 30 Konflikte: 1 Schiebe/Reduziere
+Zustand 39 Konflikte: 1 Schiebe/Reduziere
+Zustand 41 Konflikte: 2 Schiebe/Reduziere
+Zustand 44 Konflikte: 1 Schiebe/Reduziere, 2 Reduziere/Reduziere
+
+
+Grammatik
+
+    0 $accept: unit "end of file"
+
+    1 unit: assignments exp
+
+    2 function: "func" "identifier" "(" paramList ")" type "{" funcBody "}"
+
+    3 paramList: %empty
+    4          | parameter paramList
+    5          | "," paramList
+
+    6 parameter: "identifier" type
+
+    7 type: %empty
+    8     | "identifier"
+
+    9 funcBody: "identifier" ":=" exp
+   10         | funcBody funcBody
+   11         | %empty
+
+   12 assignments: %empty
+   13            | assignments function
+   14            | assignments assignment
+
+   15 assignment: "identifier" ":=" exp
+
+   16 exp: exp "+" exp
+   17    | exp "-" exp
+   18    | exp "*" exp
+   19    | exp "/" exp
+   20    | "(" exp ")"
+   21    | "identifier"
+   22    | "number"
+   23    | "zahl"
+   24    | "sign"
+   25    | "text"
+
+
+Terminale und die Regeln, in denen sie verwendet werden
+
+"end of file" (0) 0
+error (256)
+":=" (258) 9 15
+"-" (259) 17
+"+" (260) 16
+"*" (261) 18
+"/" (262) 19
+"(" (263) 2 20
+")" (264) 2 20
+"{" (265) 2
+"}" (266) 2
+"," (267) 5
+"func" (268) 2
+"identifier" (269) 2 6 8 9 15 21
+"number" (270) 22
+"text" (271) 25
+"zahl" (272) 23
+"sign" (273) 24
+"block" (274)
+
+
+Nicht-Terminal und die Regeln, in denen sie verwendet werden
+
+$accept (20)
+    auf der linken Seite: 0
+unit (21)
+    auf der linken Seite: 1, auf der rechten Seite: 0
+function (22)
+    auf der linken Seite: 2, auf der rechten Seite: 13
+paramList (23)
+    auf der linken Seite: 3 4 5, auf der rechten Seite: 2 4 5
+parameter (24)
+    auf der linken Seite: 6, auf der rechten Seite: 4
+type (25)
+    auf der linken Seite: 7 8, auf der rechten Seite: 2 6
+funcBody (26)
+    auf der linken Seite: 9 10 11, auf der rechten Seite: 2 10
+assignments (27)
+    auf der linken Seite: 12 13 14, auf der rechten Seite: 1 13 14
+assignment (28)
+    auf der linken Seite: 15, auf der rechten Seite: 14
+exp (29)
+    auf der linken Seite: 16 17 18 19 20 21 22 23 24 25, auf der rechten Seite:
+    1 9 15 16 17 18 19 20
+
+
+Zustand 0
+
+    0 $accept: . unit "end of file"
+
+    $default  reduziere mit Regel 12 (assignments)
+
+    unit         gehe zu Zustand 1 über
+    assignments  gehe zu Zustand 2 über
+
+
+Zustand 1
+
+    0 $accept: unit . "end of file"
+
+    "end of file"  schiebe und gehe zu Zustand 3 über
+
+
+Zustand 2
+
+    1 unit: assignments . exp
+   13 assignments: assignments . function
+   14            | assignments . assignment
+
+    "("           schiebe und gehe zu Zustand 4 über
+    "func"        schiebe und gehe zu Zustand 5 über
+    "identifier"  schiebe und gehe zu Zustand 6 über
+    "number"      schiebe und gehe zu Zustand 7 über
+    "text"        schiebe und gehe zu Zustand 8 über
+    "zahl"        schiebe und gehe zu Zustand 9 über
+    "sign"        schiebe und gehe zu Zustand 10 über
+
+    function    gehe zu Zustand 11 über
+    assignment  gehe zu Zustand 12 über
+    exp         gehe zu Zustand 13 über
+
+
+Zustand 3
+
+    0 $accept: unit "end of file" .
+
+    $default  annehmen
+
+
+Zustand 4
+
+   20 exp: "(" . exp ")"
+
+    "("           schiebe und gehe zu Zustand 4 über
+    "identifier"  schiebe und gehe zu Zustand 14 über
+    "number"      schiebe und gehe zu Zustand 7 über
+    "text"        schiebe und gehe zu Zustand 8 über
+    "zahl"        schiebe und gehe zu Zustand 9 über
+    "sign"        schiebe und gehe zu Zustand 10 über
+
+    exp  gehe zu Zustand 15 über
+
+
+Zustand 5
+
+    2 function: "func" . "identifier" "(" paramList ")" type "{" funcBody "}"
+
+    "identifier"  schiebe und gehe zu Zustand 16 über
+
+
+Zustand 6
+
+   15 assignment: "identifier" . ":=" exp
+   21 exp: "identifier" .
+
+    ":="  schiebe und gehe zu Zustand 17 über
+
+    $default  reduziere mit Regel 21 (exp)
+
+
+Zustand 7
+
+   22 exp: "number" .
+
+    $default  reduziere mit Regel 22 (exp)
+
+
+Zustand 8
+
+   25 exp: "text" .
+
+    $default  reduziere mit Regel 25 (exp)
+
+
+Zustand 9
+
+   23 exp: "zahl" .
+
+    $default  reduziere mit Regel 23 (exp)
+
+
+Zustand 10
+
+   24 exp: "sign" .
+
+    $default  reduziere mit Regel 24 (exp)
+
+
+Zustand 11
+
+   13 assignments: assignments function .
+
+    $default  reduziere mit Regel 13 (assignments)
+
+
+Zustand 12
+
+   14 assignments: assignments assignment .
+
+    $default  reduziere mit Regel 14 (assignments)
+
+
+Zustand 13
+
+    1 unit: assignments exp .
+   16 exp: exp . "+" exp
+   17    | exp . "-" exp
+   18    | exp . "*" exp
+   19    | exp . "/" exp
+
+    "-"  schiebe und gehe zu Zustand 18 über
+    "+"  schiebe und gehe zu Zustand 19 über
+    "*"  schiebe und gehe zu Zustand 20 über
+    "/"  schiebe und gehe zu Zustand 21 über
+
+    $default  reduziere mit Regel 1 (unit)
+
+
+Zustand 14
+
+   21 exp: "identifier" .
+
+    $default  reduziere mit Regel 21 (exp)
+
+
+Zustand 15
+
+   16 exp: exp . "+" exp
+   17    | exp . "-" exp
+   18    | exp . "*" exp
+   19    | exp . "/" exp
+   20    | "(" exp . ")"
+
+    "-"  schiebe und gehe zu Zustand 18 über
+    "+"  schiebe und gehe zu Zustand 19 über
+    "*"  schiebe und gehe zu Zustand 20 über
+    "/"  schiebe und gehe zu Zustand 21 über
+    ")"  schiebe und gehe zu Zustand 22 über
+
+
+Zustand 16
+
+    2 function: "func" "identifier" . "(" paramList ")" type "{" funcBody "}"
+
+    "("  schiebe und gehe zu Zustand 23 über
+
+
+Zustand 17
+
+   15 assignment: "identifier" ":=" . exp
+
+    "("           schiebe und gehe zu Zustand 4 über
+    "identifier"  schiebe und gehe zu Zustand 14 über
+    "number"      schiebe und gehe zu Zustand 7 über
+    "text"        schiebe und gehe zu Zustand 8 über
+    "zahl"        schiebe und gehe zu Zustand 9 über
+    "sign"        schiebe und gehe zu Zustand 10 über
+
+    exp  gehe zu Zustand 24 über
+
+
+Zustand 18
+
+   17 exp: exp "-" . exp
+
+    "("           schiebe und gehe zu Zustand 4 über
+    "identifier"  schiebe und gehe zu Zustand 14 über
+    "number"      schiebe und gehe zu Zustand 7 über
+    "text"        schiebe und gehe zu Zustand 8 über
+    "zahl"        schiebe und gehe zu Zustand 9 über
+    "sign"        schiebe und gehe zu Zustand 10 über
+
+    exp  gehe zu Zustand 25 über
+
+
+Zustand 19
+
+   16 exp: exp "+" . exp
+
+    "("           schiebe und gehe zu Zustand 4 über
+    "identifier"  schiebe und gehe zu Zustand 14 über
+    "number"      schiebe und gehe zu Zustand 7 über
+    "text"        schiebe und gehe zu Zustand 8 über
+    "zahl"        schiebe und gehe zu Zustand 9 über
+    "sign"        schiebe und gehe zu Zustand 10 über
+
+    exp  gehe zu Zustand 26 über
+
+
+Zustand 20
+
+   18 exp: exp "*" . exp
+
+    "("           schiebe und gehe zu Zustand 4 über
+    "identifier"  schiebe und gehe zu Zustand 14 über
+    "number"      schiebe und gehe zu Zustand 7 über
+    "text"        schiebe und gehe zu Zustand 8 über
+    "zahl"        schiebe und gehe zu Zustand 9 über
+    "sign"        schiebe und gehe zu Zustand 10 über
+
+    exp  gehe zu Zustand 27 über
+
+
+Zustand 21
+
+   19 exp: exp "/" . exp
+
+    "("           schiebe und gehe zu Zustand 4 über
+    "identifier"  schiebe und gehe zu Zustand 14 über
+    "number"      schiebe und gehe zu Zustand 7 über
+    "text"        schiebe und gehe zu Zustand 8 über
+    "zahl"        schiebe und gehe zu Zustand 9 über
+    "sign"        schiebe und gehe zu Zustand 10 über
+
+    exp  gehe zu Zustand 28 über
+
+
+Zustand 22
+
+   20 exp: "(" exp ")" .
+
+    $default  reduziere mit Regel 20 (exp)
+
+
+Zustand 23
+
+    2 function: "func" "identifier" "(" . paramList ")" type "{" funcBody "}"
+
+    ","           schiebe und gehe zu Zustand 29 über
+    "identifier"  schiebe und gehe zu Zustand 30 über
+
+    $default  reduziere mit Regel 3 (paramList)
+
+    paramList  gehe zu Zustand 31 über
+    parameter  gehe zu Zustand 32 über
+
+
+Zustand 24
+
+   15 assignment: "identifier" ":=" exp .
+   16 exp: exp . "+" exp
+   17    | exp . "-" exp
+   18    | exp . "*" exp
+   19    | exp . "/" exp
+
+    "-"  schiebe und gehe zu Zustand 18 über
+    "+"  schiebe und gehe zu Zustand 19 über
+    "*"  schiebe und gehe zu Zustand 20 über
+    "/"  schiebe und gehe zu Zustand 21 über
+
+    $default  reduziere mit Regel 15 (assignment)
+
+
+Zustand 25
+
+   16 exp: exp . "+" exp
+   17    | exp . "-" exp
+   17    | exp "-" exp .
+   18    | exp . "*" exp
+   19    | exp . "/" exp
+
+    "*"  schiebe und gehe zu Zustand 20 über
+    "/"  schiebe und gehe zu Zustand 21 über
+
+    $default  reduziere mit Regel 17 (exp)
+
+
+Zustand 26
+
+   16 exp: exp . "+" exp
+   16    | exp "+" exp .
+   17    | exp . "-" exp
+   18    | exp . "*" exp
+   19    | exp . "/" exp
+
+    "*"  schiebe und gehe zu Zustand 20 über
+    "/"  schiebe und gehe zu Zustand 21 über
+
+    $default  reduziere mit Regel 16 (exp)
+
+
+Zustand 27
+
+   16 exp: exp . "+" exp
+   17    | exp . "-" exp
+   18    | exp . "*" exp
+   18    | exp "*" exp .
+   19    | exp . "/" exp
+
+    $default  reduziere mit Regel 18 (exp)
+
+
+Zustand 28
+
+   16 exp: exp . "+" exp
+   17    | exp . "-" exp
+   18    | exp . "*" exp
+   19    | exp . "/" exp
+   19    | exp "/" exp .
+
+    $default  reduziere mit Regel 19 (exp)
+
+
+Zustand 29
+
+    5 paramList: "," . paramList
+
+    ","           schiebe und gehe zu Zustand 29 über
+    "identifier"  schiebe und gehe zu Zustand 30 über
+
+    $default  reduziere mit Regel 3 (paramList)
+
+    paramList  gehe zu Zustand 33 über
+    parameter  gehe zu Zustand 32 über
+
+
+Zustand 30
+
+    6 parameter: "identifier" . type
+
+    "identifier"  schiebe und gehe zu Zustand 34 über
+
+    "identifier"  [reduziere mit Regel 7 (type)]
+    $default      reduziere mit Regel 7 (type)
+
+    type  gehe zu Zustand 35 über
+
+
+Zustand 31
+
+    2 function: "func" "identifier" "(" paramList . ")" type "{" funcBody "}"
+
+    ")"  schiebe und gehe zu Zustand 36 über
+
+
+Zustand 32
+
+    4 paramList: parameter . paramList
+
+    ","           schiebe und gehe zu Zustand 29 über
+    "identifier"  schiebe und gehe zu Zustand 30 über
+
+    $default  reduziere mit Regel 3 (paramList)
+
+    paramList  gehe zu Zustand 37 über
+    parameter  gehe zu Zustand 32 über
+
+
+Zustand 33
+
+    5 paramList: "," paramList .
+
+    $default  reduziere mit Regel 5 (paramList)
+
+
+Zustand 34
+
+    8 type: "identifier" .
+
+    $default  reduziere mit Regel 8 (type)
+
+
+Zustand 35
+
+    6 parameter: "identifier" type .
+
+    $default  reduziere mit Regel 6 (parameter)
+
+
+Zustand 36
+
+    2 function: "func" "identifier" "(" paramList ")" . type "{" funcBody "}"
+
+    "identifier"  schiebe und gehe zu Zustand 34 über
+
+    $default  reduziere mit Regel 7 (type)
+
+    type  gehe zu Zustand 38 über
+
+
+Zustand 37
+
+    4 paramList: parameter paramList .
+
+    $default  reduziere mit Regel 4 (paramList)
+
+
+Zustand 38
+
+    2 function: "func" "identifier" "(" paramList ")" type . "{" funcBody "}"
+
+    "{"  schiebe und gehe zu Zustand 39 über
+
+
+Zustand 39
+
+    2 function: "func" "identifier" "(" paramList ")" type "{" . funcBody "}"
+
+    "identifier"  schiebe und gehe zu Zustand 40 über
+
+    "identifier"  [reduziere mit Regel 11 (funcBody)]
+    $default      reduziere mit Regel 11 (funcBody)
+
+    funcBody  gehe zu Zustand 41 über
+
+
+Zustand 40
+
+    9 funcBody: "identifier" . ":=" exp
+
+    ":="  schiebe und gehe zu Zustand 42 über
+
+
+Zustand 41
+
+    2 function: "func" "identifier" "(" paramList ")" type "{" funcBody . "}"
+   10 funcBody: funcBody . funcBody
+
+    "}"           schiebe und gehe zu Zustand 43 über
+    "identifier"  schiebe und gehe zu Zustand 40 über
+
+    "}"           [reduziere mit Regel 11 (funcBody)]
+    "identifier"  [reduziere mit Regel 11 (funcBody)]
+
+    funcBody  gehe zu Zustand 44 über
+
+
+Zustand 42
+
+    9 funcBody: "identifier" ":=" . exp
+
+    "("           schiebe und gehe zu Zustand 4 über
+    "identifier"  schiebe und gehe zu Zustand 14 über
+    "number"      schiebe und gehe zu Zustand 7 über
+    "text"        schiebe und gehe zu Zustand 8 über
+    "zahl"        schiebe und gehe zu Zustand 9 über
+    "sign"        schiebe und gehe zu Zustand 10 über
+
+    exp  gehe zu Zustand 45 über
+
+
+Zustand 43
+
+    2 function: "func" "identifier" "(" paramList ")" type "{" funcBody "}" .
+
+    $default  reduziere mit Regel 2 (function)
+
+
+Zustand 44
+
+   10 funcBody: funcBody . funcBody
+   10         | funcBody funcBody .
+
+    "identifier"  schiebe und gehe zu Zustand 40 über
+
+    "}"           reduziere mit Regel 10 (funcBody)
+    "}"           [reduziere mit Regel 11 (funcBody)]
+    "identifier"  [reduziere mit Regel 10 (funcBody)]
+    "identifier"  [reduziere mit Regel 11 (funcBody)]
+    $default      reduziere mit Regel 10 (funcBody)
+
+    funcBody  gehe zu Zustand 44 über
+
+
+Zustand 45
+
+    9 funcBody: "identifier" ":=" exp .
+   16 exp: exp . "+" exp
+   17    | exp . "-" exp
+   18    | exp . "*" exp
+   19    | exp . "/" exp
+
+    "-"  schiebe und gehe zu Zustand 18 über
+    "+"  schiebe und gehe zu Zustand 19 über
+    "*"  schiebe und gehe zu Zustand 20 über
+    "/"  schiebe und gehe zu Zustand 21 über
+
+    $default  reduziere mit Regel 9 (funcBody)

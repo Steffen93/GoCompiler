@@ -93,6 +93,12 @@ unit: assignments exp 	{
 function:
 "func" "identifier" "(" paramList ")" type "{" funcBody "}"{
   driver.functions[$2] = new function($2, $6, $4);
+  for(int i = 0; i < driver.tmpfunction->nodes.size(); i++){
+    driver.functions[$2]->nodes.push_back(driver.tmpfunction->nodes[i]);
+  }
+  driver.functions[$2]->Codegen(driver.TheModule, driver.Builder, driver.NamedValues);
+  driver.tmpfunction = NULL;
+  driver.tmpfunction = new function();
   driver.printLine("func " + $2 + "(" + $4 +") " + $6 + "{"+ $8 +"}");
 }
 ;
@@ -114,11 +120,15 @@ type:
 |"identifier"  {$$ = $1;}
 
 funcBody:
-assignments funcBody {}
+"identifier" ":=" exp {
+    $3->label = "Ident: " + $1;
+    driver.tmpfunction->nodes.push_back($3);
+    $$ = $1;
+}
+|funcBody funcBody{	$$ = $1 + " " + $2;}
 | %empty {}
 ;
 
-//
 assignments:
   %empty                 {}
 | assignments function {
@@ -174,7 +184,7 @@ exp:
 				$$->cval = $1->cval + $3->cval;
 				$$->label = (char)$$->cval;
 				cout << $1->cval << " + " << $3->cval << " = " << $$->cval << endl;
-			}else{cout << "Type mismatch between " << $1->type << " and " << $3->type << endl; exit(1);}
+			}else{cout << "Type mismatch between " << $1->type << " and " << $3->type << endl; /*exit(1);*/}
 		  }
 | exp "-" exp   { //$$ = $1 - $3;
 		  node*tmp = new node($1, $3);
@@ -199,7 +209,7 @@ exp:
 				$$->cval = $1->cval - $3->cval;
 				$$->label = (char)$$->cval;
 				cout << $1->cval << " - " << $3->cval << " = " << $$->cval << endl;
-			}else{cout << "Type mismatch between " << $1->type << " and " << $3->type << endl; exit(1);}
+			}else{cout << "Type mismatch between " << $1->type << " and " << $3->type << endl; /*exit(1);*/}
 		}
 | exp "*" exp   { //$$ = $1 * $3;
 		  node*tmp = new node($1, $3);
@@ -224,7 +234,7 @@ exp:
 				$$->cval = $1->cval * $3->cval;
 				$$->label = (char)$$->cval;
 				cout << $1->cval << " * " << $3->cval << " = " << $$->cval << endl;
-			}else{cout << "Type mismatch between " << $1->type << " and " << $3->type << endl; exit(1);}
+			}else{cout << "Type mismatch between " << $1->type << " and " << $3->type << endl;/* exit(1);*/}
 		}
 | exp "/" exp   { //$$ = $1 / $3;
 		  node*tmp = new node($1, $3);
@@ -249,17 +259,26 @@ exp:
 				$$->cval = $1->cval / $3->cval;
 				$$->label = (char)$$->cval;
 				cout << $1->cval << " / " << $3->cval << " = " << $$->cval << endl;
-			}else{ cout << "Type mismatch between " << $1->type << " and " << $3->type << endl; exit(1);}
+			}else{ cout << "Type mismatch between " << $1->type << " and " << $3->type << endl; /*exit(1);*/}
 		  }
 | "(" exp ")"   { $$ = $2; }
 | "identifier"  { //$$ = driver.getVariable($1)
 		    if(driver.variables.find($1) != driver.variables.end()){
 		      $$ = new node(driver.variables[$1]);
-
-		    }else {
+		      $$->label = "Ident: " + $1;
+		    }else if(driver.functions.find($1) != driver.functions.end()){
 		      $$ = new node();
+		      $$->type = "function";
+		      $$->label = $1;
+		    }else {
+		      for(int i = 0; i < driver.tmpfunction->nodes.size(); i++){
+			if(driver.tmpfunction->nodes[i]->label == "Ident: " + $1)
+			  $$ = new node(driver.tmpfunction->nodes[i]);
+		      }
+		      $$ = new node();
+		      $$->label = "Ident: " + $1;
 		    }
-			$$->label = "Ident: " + $1;
+			
 		    //$$->label = driver.variables[$1]->type + "Identifier: " + $1 + " = " + driver.variables[$1]->label;
                 }
 | "number"      { //swap ($$, $1);
@@ -278,9 +297,9 @@ exp:
 		  $$ = new node();
 		  $$->cval = $1;
 		  $$->type = "char";
-      char c = (char) $1;
-      string label = "Sign: ";
-      label.insert(label.end(), c);
+		  char c = (char) $1;
+		  string label = "Sign: ";
+		  label.insert(label.end(), c);
 		  $$->label = label;
 		}
 | "text"	{ $$ = new node();

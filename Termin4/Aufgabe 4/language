@@ -1,17 +1,20 @@
 help := 2. * 18. - 6. 			//33.60
 a := 2.*2.*2.*2.*2. * help		//1075.20
 help := help * 2.			//67.20
-func main () double {
-  newvar := 5.*5.*5.*5.
-  new2 := newvar * 3.2
-}
-func test () float{
-  dk := 2.// main() + main()
+//func main (a float) double {
+//  newvar := 5.*5.*5.*5.
+//  new2 := newvar * 3.2
+//  return new2
+//}
+func test (b float) float{
+  dk := 2.
+  dk := 2. * b
+  return dk
 }
 ko := 12. * help / a - 4. 		//-3.25
 q := "Das ist " + "ein test"		//Das ist ein test
-bla := ko * ko + test(dhvc)				//10.56
-i := 2+2
+bla := ko * ko + test(23.)				//10.56
+i := 2 + 2
 a := 'g' + '5'
 b := 'c'
 (q + "test")

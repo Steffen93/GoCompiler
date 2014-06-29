@@ -6,6 +6,7 @@ node::node(node *leftnode, node *rightnode){
   this->left = leftnode;
   this->right = rightnode;
   inserted = false;
+  type = "void";
 }
 
 node::node(){
@@ -14,6 +15,7 @@ node::node(){
   label = sval = type = "";
   fval = 0.0;
   inserted = false;
+  type = "void";
 }
 
 node::node(node* copy){
@@ -99,20 +101,39 @@ Value *node::Codegen(Module *TheModule, IRBuilder<> *Builder, std::map<std::stri
 		    	std::vector<Value*> param = split(sval);
 			if(param.size() != 0)
 				return Builder->CreateCall(TheModule->getFunction(label), param, label);
-		      return Builder->CreateCall(TheModule->getFunction(label), label);
+		  return Builder->CreateCall(TheModule->getFunction(label), label);
     }
       return NULL;
 
 }
 
 std::vector<Value*> node::split(string arr){
-	std::vector<Value*> ret;	
+	std::vector<Value*> ret;
 	stringstream sstr;
 	arr.erase(arr.find_last_not_of(" )")+1);
+  int pos = arr.find(",");
+  while(pos != string::npos){
+    //ret.push_back(getValueFor(arr.substr(0, pos)));
+    arr = arr.substr(pos+1);
+    pos = arr.find(",");
+  }
+  //ret.push_back(getValueFor(arr));
+  cout << "ARR: " << arr << endl;
 	/*
 	* TO DO: erzeuge eine vector<Value*> aus den übergabeparametern beim funktionscall
 	* entweder kann man diese direkt in den NamedValues suchen
 	* oder muss die konstanten werte in Value* erzeugen
 	*/
 	return ret;
+}
+
+
+Value* node::getValueFor(string val){
+  if(val.find("\"") != string::npos){
+    return NULL;
+  }
+  else if(val.find("'") != string::npos){
+    return NULL;
+  }
+  return NULL;
 }

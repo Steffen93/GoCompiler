@@ -9,18 +9,18 @@ std::map<std::string, Value*> calcxx_driver::NamedValues;
 calcxx_driver::calcxx_driver ()
   : trace_scanning (false), trace_parsing (false), tmpID(""), testMode(false)
 {
-  this->tmpfunction = new function("", "", "");
+  this->tmpfunction = new function("", "");
   result = vector<node*>();
   o.open("dotgraph.dot");
   o << "digraph gograph{\n";
   tS.open("tests.txt");
-  
+
   //LLVM ist die ganze Zeit vorhanden
   LLVMContext &Context = getGlobalContext();
   // Make the module, which holds all the code.
   TheModule = new Module("GO", Context);
   Builder = new IRBuilder<>(getGlobalContext());
-  
+
 }
 
 calcxx_driver::~calcxx_driver ()
@@ -33,7 +33,7 @@ calcxx_driver::~calcxx_driver ()
   /*for(map<string, function*>::iterator it = functions.begin(); it!=functions.end(); ++it){
     it->second->Codegen(this->TheModule, this->Builder, this->NamedValues);
   }*/
-  
+
   FunctionType* FT = FunctionType::get(Type::getVoidTy(getGlobalContext()),
                                        vector<Type*>(), false);
   Function* F = Function::Create(FT, Function::ExternalLinkage, "assignments", TheModule);
@@ -41,12 +41,12 @@ calcxx_driver::~calcxx_driver ()
   Builder->SetInsertPoint(BB);
 //**Test stuff
   //gehe den baum durch und erzeuge den Zwischcode
-	
+
   for(int i = 0; i < result.size(); i++){
   	if(result.at(i) != NULL){
 		//std::cout<< "Erebnis: " << i + 1 << " von " << result.size() << std::endl;
   		Builder->CreateRet(result.at(i)->Codegen(this->TheModule, this->Builder, this->NamedValues));
-		
+
   	}
   }
 
@@ -72,34 +72,29 @@ void calcxx_driver::makeCode(){
 
   //gehe den baum durch und erzeuge den Zwischcode
   for(int i = 0; i < result.size(); i++){
-	if(result.at(i) != NULL){
-		if(result.at(i)->type == "float"){
-		  std::cout << "\nFloat\n" << std::endl;
-		  FunctionType *FT = FunctionType::get(Type::getDoubleTy(getGlobalContext()), false);
-		  Function *F = Function::Create(FT, Function::ExternalLinkage, "", TheModule);
+  	if(result.at(i) != NULL){
+  		if(result.at(i)->type == "float"){
+  		  std::cout << "\nFloat\n" << std::endl;
+  		  FunctionType *FT = FunctionType::get(Type::getDoubleTy(getGlobalContext()), false);
+  		  Function *F = Function::Create(FT, Function::ExternalLinkage, "", TheModule);
 
-		  BasicBlock *BB = BasicBlock::Create(getGlobalContext(), "entry", F);
-		  Builder->SetInsertPoint(BB);
-		  Builder->CreateRet(result.at(i)->Codegen(this->TheModule, this->Builder, this->NamedValues));
-		  TheModule->dump();
+  		  BasicBlock *BB = BasicBlock::Create(getGlobalContext(), "entry", F);
+  		  Builder->SetInsertPoint(BB);
+  		  Builder->CreateRet(result.at(i)->Codegen(this->TheModule, this->Builder, this->NamedValues));
+  		  TheModule->dump();
 
-		}else if(result.at(i)->type == "int"){
-		  std::cout << "\nInteger\n" << std::endl;
-		  FunctionType *FT = FunctionType::get(Type::getFloatTy(getGlobalContext()), false);
-		  Function *F = Function::Create(FT, Function::ExternalLinkage, "", TheModule);
+  		}else if(result.at(i)->type == "int"){
+  		  std::cout << "\nInteger\n" << std::endl;
+  		  FunctionType *FT = FunctionType::get(Type::getFloatTy(getGlobalContext()), false);
+  		  Function *F = Function::Create(FT, Function::ExternalLinkage, "", TheModule);
 
-		  BasicBlock *BB = BasicBlock::Create(getGlobalContext(), "entry", F);
-		  Builder->SetInsertPoint(BB);
-		  Builder->CreateRet(result.at(i)->Codegen(this->TheModule, this->Builder, this->NamedValues));
-		  TheModule->dump();
-		}
-
-
-	}
+  		  BasicBlock *BB = BasicBlock::Create(getGlobalContext(), "entry", F);
+  		  Builder->SetInsertPoint(BB);
+  		  Builder->CreateRet(result.at(i)->Codegen(this->TheModule, this->Builder, this->NamedValues));
+  		  TheModule->dump();
+  		}
+  	}
   }
-
-
-
 }
 
 float
@@ -214,6 +209,6 @@ node* calcxx_driver::filterFunc(std::string name){
      ret->label = funcname;
      ret->sval = param;
      return ret;
-  }else 
+  }else
      return NULL;
 }

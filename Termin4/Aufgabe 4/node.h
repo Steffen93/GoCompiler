@@ -32,6 +32,7 @@
 #include <stdint.h>
 
 using namespace llvm;
+using namespace std;
 
 class node{
 public:
@@ -43,6 +44,7 @@ public:
   Value *Codegen(Module *TheModule, IRBuilder<> *Builder, std::map<std::string, Value*> &NamedValues);
   //Value *Codegen();
   void makeGraph(std::ofstream &o);
+  Value* getValueFor(string);
 
   //static Module* TheModule;
   //static IRBuilder<> Builder;

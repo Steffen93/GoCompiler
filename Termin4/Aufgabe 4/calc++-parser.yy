@@ -63,6 +63,7 @@ using namespace std;
   RBRACK  "}"
   COMMA   ","
   FUNCTION "func"
+  RETURN  "return"
 ;
 
 %token <string> IDENTIFIER "identifier"
@@ -93,26 +94,33 @@ unit: assignments exp 	{
 
 function:
 "func" "identifier" "(" paramList ")" type "{" funcBody "}"{
-  driver.functions[$2] = new function($2, $6, $4);
-  for(int i = 0; i < driver.tmpfunction->nodes.size(); i++){
-    driver.functions[$2]->nodes.push_back(driver.tmpfunction->nodes[i]);
-  }
+  driver.printLine("func " + $2 + "(" + $4 +") " + $6 + "{"+ $8 +"}");
+  driver.functions[$2] = new function($2, $6);
+  driver.functions[$2]->nodes = driver.tmpfunction->nodes;
+  driver.functions[$2]->parameters = driver.tmpfunction->parameters;
   driver.functions[$2]->Codegen(driver.TheModule, driver.Builder, driver.NamedValues);
+  driver.functions[$2]->returnExp = driver.tmpfunction->returnExp;
   driver.tmpfunction = NULL;
   driver.tmpfunction = new function();
-  driver.printLine("func " + $2 + "(" + $4 +") " + $6 + "{"+ $8 +"}");
 }
 ;
 
 paramList:
 %empty    {}
-| parameter paramList {$$ += $1 + $2;}
+| parameter paramList {
+  $$ += $1 + $2;
+}
 | "," paramList  {$$ += "," + $2;}
 ;
 
 parameter:
 "identifier" type{
   $$ = $1 + " " + $2;
+  node* curr = new node();
+  curr->type = $2;
+  curr->label = $1;
+  driver.tmpfunction->nodes.push_back(curr);
+  driver.tmpfunction->parameters[$1] = $2;
 }
 ;
 
@@ -121,13 +129,16 @@ type:
 |"identifier"  {$$ = $1;}
 
 funcBody:
-"identifier" ":=" exp {
+"identifier" ":=" exp funcBody {
     $3->label = "Ident: " + $1;
+    driver.tmpfunction->nodes.push_back($3);
     driver.tmpfunction->nodes.push_back($3);
     $$ = $1;
 }
-|funcBody funcBody{	$$ = $1 + " " + $2;}
-| %empty {}
+| "return" exp { driver.tmpfunction->returnExp = driver.tmpfunction->getNode($2->label);
+
+}
+|  %empty {}
 ;
 
 assignments:
@@ -161,6 +172,12 @@ exp:
 			tmp->type = "+";
 			$$ = tmp;
 			  //$$ = new node(tmp, (node*)NULL);
+      if($1->type == "function"){
+        $1 = driver.functions[$1->label]->returnExp;
+      }
+      if($3->type == "function"){
+        $3 = driver.functions[$3->label]->returnExp;
+      }
 			if($1->type == "string" && $3->type == "string"){
 				$$->sval = $1->sval;
 				$$->sval = $$->sval.append($3->sval);
@@ -185,7 +202,9 @@ exp:
 				$$->cval = $1->cval + $3->cval;
 				$$->label = (char)$$->cval;
 				cout << $1->cval << " + " << $3->cval << " = " << $$->cval << endl;
-			}else{cout << "Type mismatch between " << $1->type << " and " << $3->type << endl; /*exit(1);*/}
+			}else{cout << "Type mismatch between " << $1->type << " and " << $3->type << endl;
+        cout << "$1: " << $1->label << "$3: " << $3->label << endl;
+        /*exit(1);*/}
 		  }
 | exp "-" exp   { //$$ = $1 - $3;
 		  node*tmp = new node($1, $3);
@@ -193,7 +212,14 @@ exp:
 		  tmp->label = "Operator: -";
 		  $$ = tmp;
 			//$$ = new node(tmp, (node*)NULL);
-		  if($1->type == "float" && $3->type == "float"){
+
+      if($1->type == "function"){
+        $1 = driver.functions[$1->label]->returnExp;
+      }
+      if($3->type == "function"){
+        $3 = driver.functions[$3->label]->returnExp;
+      }
+      if($1->type == "float" && $3->type == "float"){
 				$$->type = "float";
 				$$->fval = $1->fval - $3->fval;
 				$$->label = driver.to_string($$->fval);
@@ -218,7 +244,14 @@ exp:
 		  tmp->label = "Operator: *";
 		  $$ = tmp;
 			//$$ = new node(tmp, (node*)NULL);
-		  if($1->type == "float" && $3->type == "float"){
+
+      if($1->type == "function"){
+        $1 = driver.functions[$1->label]->returnExp;
+      }
+      if($3->type == "function"){
+        $3 = driver.functions[$3->label]->returnExp;
+      }
+      if($1->type == "float" && $3->type == "float"){
 				$$->type = "float";
 				$$->fval = $1->fval * $3->fval;
 				$$->label = driver.to_string($$->fval);
@@ -235,7 +268,11 @@ exp:
 				$$->cval = $1->cval * $3->cval;
 				$$->label = (char)$$->cval;
 				cout << $1->cval << " * " << $3->cval << " = " << $$->cval << endl;
-			}else{cout << "Type mismatch between " << $1->type << " and " << $3->type << endl;/* exit(1);*/}
+			}else{
+      cout << "Type mismatch between " << $1->type << " and " << $3->type << endl;
+      cout << "$1: " << $1->label << " Type: " << $1->type << endl;
+      cout << "$3: " << $3->label << " Type: " << $3->type << endl;
+      /* exit(1);*/}
 		}
 | exp "/" exp   { //$$ = $1 / $3;
 		  node*tmp = new node($1, $3);
@@ -243,7 +280,14 @@ exp:
 		  tmp->label = "Operator: /";
 		  $$ = tmp;
 			//$$ = new node(tmp, (node*)NULL);
-		  if($1->type == "float" && $3->type == "float"){
+
+      if($1->type == "function"){
+        $1 = driver.functions[$1->label]->returnExp;
+      }
+      if($3->type == "function"){
+        $3 = driver.functions[$3->label]->returnExp;
+      }
+      if($1->type == "float" && $3->type == "float"){
 				$$->type = "float";
 				$$->fval = $1->fval / $3->fval;
 				$$->label = driver.to_string($$->fval);
@@ -272,7 +316,7 @@ exp:
 			  $$ = new node(driver.tmpfunction->nodes[i]);
 		      }
 		      $$ = new node();
-		      
+
 		    }
 		    $$->label = "Ident: " + $1;
 		    //$$->label = driver.variables[$1]->type + "Identifier: " + $1 + " = " + driver.variables[$1]->label;
@@ -300,8 +344,8 @@ exp:
 		}
 | "funccall"	{  $$ = driver.filterFunc($1);
 		   if($$ == NULL){
-			std::cout << "Funktion \"" << $1 << "\" entweder nicht gefunden oder falsche Parameter!" << std::endl;
-			exit(0);
+			   std::cout << "Funktion \"" << $1 << "\" entweder nicht gefunden oder falsche Parameter!" << std::endl;
+			   exit(0);
 		   }
 		}
 | "text"	{ $$ = new node();

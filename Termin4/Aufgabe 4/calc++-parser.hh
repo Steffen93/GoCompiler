@@ -306,6 +306,7 @@ namespace yy {
       // "identifier"
       // "text"
       // "block"
+      // "funccall"
       // paramList
       // parameter
       // type
@@ -347,12 +348,14 @@ namespace yy {
         TOK_RBRACK = 266,
         TOK_COMMA = 267,
         TOK_FUNCTION = 268,
-        TOK_IDENTIFIER = 269,
-        TOK_NUMBER = 270,
-        TOK_TEXT = 271,
-        TOK_ZAHL = 272,
-        TOK_SIGN = 273,
-        TOK_BLOCK = 274
+        TOK_RETURN = 269,
+        TOK_IDENTIFIER = 270,
+        TOK_NUMBER = 271,
+        TOK_TEXT = 272,
+        TOK_ZAHL = 273,
+        TOK_SIGN = 274,
+        TOK_BLOCK = 275,
+        TOK_FUNCCALL = 276
       };
     };
 
@@ -505,6 +508,10 @@ namespace yy {
 
     static inline
     symbol_type
+    make_RETURN (const location_type& l);
+
+    static inline
+    symbol_type
     make_IDENTIFIER (const string& v, const location_type& l);
 
     static inline
@@ -526,6 +533,10 @@ namespace yy {
     static inline
     symbol_type
     make_BLOCK (const string& v, const location_type& l);
+
+    static inline
+    symbol_type
+    make_FUNCCALL (const string& v, const location_type& l);
 
 
     /// Build a parser object.
@@ -612,7 +623,7 @@ namespace yy {
   // number is the opposite.  If YYTABLE_NINF, syntax error.
   static const unsigned char yytable_[];
 
-  static const unsigned char yycheck_[];
+  static const signed char yycheck_[];
 
   // YYSTOS[STATE-NUM] -- The (internal number of the) accessing
   // symbol of state STATE-NUM.
@@ -727,13 +738,13 @@ namespace yy {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 47,     ///< Last index in yytable_.
+      yylast_ = 57,     ///< Last index in yytable_.
       yynnts_ = 10,  ///< Number of nonterminal symbols.
       yyempty_ = -2,
       yyfinal_ = 3, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = 20  ///< Number of tokens.
+      yyntokens_ = 22  ///< Number of tokens.
     };
 
 
@@ -777,9 +788,9 @@ namespace yy {
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15,    16,    17,    18,    19
+      15,    16,    17,    18,    19,    20,    21
     };
-    const unsigned int user_token_number_max_ = 274;
+    const unsigned int user_token_number_max_ = 276;
     const token_number_type undef_token_ = 2;
 
     if (static_cast<int>(t) <= yyeof_)
@@ -812,31 +823,32 @@ namespace yy {
   {
       switch (other.type_get ())
     {
-      case 18: // "sign"
+      case 19: // "sign"
         value.copy< char > (other.value);
         break;
 
-      case 15: // "number"
+      case 16: // "number"
         value.copy< float > (other.value);
         break;
 
-      case 17: // "zahl"
+      case 18: // "zahl"
         value.copy< int > (other.value);
         break;
 
-      case 29: // exp
+      case 31: // exp
         value.copy< node* > (other.value);
         break;
 
-      case 14: // "identifier"
-      case 16: // "text"
-      case 19: // "block"
-      case 23: // paramList
-      case 24: // parameter
-      case 25: // type
-      case 26: // funcBody
-      case 27: // assignments
-      case 28: // assignment
+      case 15: // "identifier"
+      case 17: // "text"
+      case 20: // "block"
+      case 21: // "funccall"
+      case 25: // paramList
+      case 26: // parameter
+      case 27: // type
+      case 28: // funcBody
+      case 29: // assignments
+      case 30: // assignment
         value.copy< string > (other.value);
         break;
 
@@ -857,31 +869,32 @@ namespace yy {
     (void) v;
       switch (this->type_get ())
     {
-      case 18: // "sign"
+      case 19: // "sign"
         value.copy< char > (v);
         break;
 
-      case 15: // "number"
+      case 16: // "number"
         value.copy< float > (v);
         break;
 
-      case 17: // "zahl"
+      case 18: // "zahl"
         value.copy< int > (v);
         break;
 
-      case 29: // exp
+      case 31: // exp
         value.copy< node* > (v);
         break;
 
-      case 14: // "identifier"
-      case 16: // "text"
-      case 19: // "block"
-      case 23: // paramList
-      case 24: // parameter
-      case 25: // type
-      case 26: // funcBody
-      case 27: // assignments
-      case 28: // assignment
+      case 15: // "identifier"
+      case 17: // "text"
+      case 20: // "block"
+      case 21: // "funccall"
+      case 25: // paramList
+      case 26: // parameter
+      case 27: // type
+      case 28: // funcBody
+      case 29: // assignments
+      case 30: // assignment
         value.copy< string > (v);
         break;
 
@@ -951,31 +964,32 @@ namespace yy {
     // Type destructor.
     switch (yytype)
     {
-      case 18: // "sign"
+      case 19: // "sign"
         value.template destroy< char > ();
         break;
 
-      case 15: // "number"
+      case 16: // "number"
         value.template destroy< float > ();
         break;
 
-      case 17: // "zahl"
+      case 18: // "zahl"
         value.template destroy< int > ();
         break;
 
-      case 29: // exp
+      case 31: // exp
         value.template destroy< node* > ();
         break;
 
-      case 14: // "identifier"
-      case 16: // "text"
-      case 19: // "block"
-      case 23: // paramList
-      case 24: // parameter
-      case 25: // type
-      case 26: // funcBody
-      case 27: // assignments
-      case 28: // assignment
+      case 15: // "identifier"
+      case 17: // "text"
+      case 20: // "block"
+      case 21: // "funccall"
+      case 25: // paramList
+      case 26: // parameter
+      case 27: // type
+      case 28: // funcBody
+      case 29: // assignments
+      case 30: // assignment
         value.template destroy< string > ();
         break;
 
@@ -993,31 +1007,32 @@ namespace yy {
     super_type::move(s);
       switch (this->type_get ())
     {
-      case 18: // "sign"
+      case 19: // "sign"
         value.move< char > (s.value);
         break;
 
-      case 15: // "number"
+      case 16: // "number"
         value.move< float > (s.value);
         break;
 
-      case 17: // "zahl"
+      case 18: // "zahl"
         value.move< int > (s.value);
         break;
 
-      case 29: // exp
+      case 31: // exp
         value.move< node* > (s.value);
         break;
 
-      case 14: // "identifier"
-      case 16: // "text"
-      case 19: // "block"
-      case 23: // paramList
-      case 24: // parameter
-      case 25: // type
-      case 26: // funcBody
-      case 27: // assignments
-      case 28: // assignment
+      case 15: // "identifier"
+      case 17: // "text"
+      case 20: // "block"
+      case 21: // "funccall"
+      case 25: // paramList
+      case 26: // parameter
+      case 27: // type
+      case 28: // funcBody
+      case 29: // assignments
+      case 30: // assignment
         value.move< string > (s.value);
         break;
 
@@ -1070,7 +1085,8 @@ namespace yy {
     yytoken_number_[] =
     {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
-     265,   266,   267,   268,   269,   270,   271,   272,   273,   274
+     265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
+     275,   276
     };
     return static_cast<token_type> (yytoken_number_[type]);
   }
@@ -1148,6 +1164,12 @@ namespace yy {
   }
 
   calcxx_parser::symbol_type
+  calcxx_parser::make_RETURN (const location_type& l)
+  {
+    return symbol_type (token::TOK_RETURN, l);
+  }
+
+  calcxx_parser::symbol_type
   calcxx_parser::make_IDENTIFIER (const string& v, const location_type& l)
   {
     return symbol_type (token::TOK_IDENTIFIER, v, l);
@@ -1183,10 +1205,16 @@ namespace yy {
     return symbol_type (token::TOK_BLOCK, v, l);
   }
 
+  calcxx_parser::symbol_type
+  calcxx_parser::make_FUNCCALL (const string& v, const location_type& l)
+  {
+    return symbol_type (token::TOK_FUNCCALL, v, l);
+  }
+
 
 
 } // yy
-#line 1190 "calc++-parser.hh" // lalr1.cc:372
+#line 1218 "calc++-parser.hh" // lalr1.cc:372
 
 
 

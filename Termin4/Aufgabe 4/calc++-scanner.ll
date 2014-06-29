@@ -41,10 +41,11 @@ sign 		"'"[a-zA-Z0-9]"'"
 number 		{zahl}+\.{zahl}*
 text 		"\""[a-zA-Z0-9 !$%&/()=?;:-_]*"\""
 blank 		[ \t]
-funccall	{id}"("{id}*[","{id}]*")"
+funccall	{id}"("(({id}|{text}|{sign}|{zahl}|{number})+[","{id}|{text}|{sign}|{zahl}|{number}]*|^a)")"
 block     "{"[^\}]*"}"
 
 %{
+  // funccall	{id}"("(({id}|{text}|{sign}|{zahl}|{number})+[","{id}|{text}|{sign}|{zahl}|{number}]*|^a)")"
   // Code run each time a pattern is matched.
   # define YY_USER_ACTION  loc.columns (yyleng);
 %}
@@ -69,6 +70,7 @@ block     "{"[^\}]*"}"
 ","      return yy::calcxx_parser::make_COMMA(loc);
 ":="     return yy::calcxx_parser::make_ASSIGN(loc);
 "func"   return yy::calcxx_parser::make_FUNCTION(loc);
+"return" return yy::calcxx_parser::make_RETURN(loc);
 
 {number}	{
   errno = 0;

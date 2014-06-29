@@ -37,15 +37,23 @@ using namespace llvm;
 class function{
 public:
   function();
-  function(string, string, string);
+  function(string, string);
   void Codegen(Module *TheModule, IRBuilder<> *Builder, std::map<std::string, Value*> &NamedValues);
   string name;
   string returnType;
-  string returnValue;
+  node* returnExp;
   map<string, string> parameters;
   vector<node*> nodes;
+  node* getNode(string);
+  static Type* getTypeFor(string typeName){
+    if(typeName == "float")return Type::getFloatTy(getGlobalContext());
+    if(typeName == "double")return Type::getDoubleTy(getGlobalContext());
+    if(typeName == "int") return Type::getInt32Ty(getGlobalContext());
+    if(typeName == "char") return Type::getInt8Ty(getGlobalContext());
+    if(typeName == "void") return Type::getVoidTy(getGlobalContext());
+    return Type::getVoidTy(getGlobalContext());
+  }
 private:
-  Type* getTypeFor(string);
   void splitTypeFromName(string &, string &);
 };
 

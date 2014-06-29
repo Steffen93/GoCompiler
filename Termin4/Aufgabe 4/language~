@@ -6,7 +6,7 @@ func test (b float) float{
   //dk := dk + 1.0
   return dk
 }
-ko := 12. * help / a - 4.		//-3.25
+ko := 12. * help / a - 4. test		//-3.25
 q := "Das ist " + "ein test"		//Das ist ein test
 bla := ko * ko + test(8.)				//10.56
 i := 2 + 2

@@ -94,9 +94,9 @@ unit: assignments exp 	{
 
 function:
 "func" "identifier" "(" paramList ")" type "{" funcBody "}"{
-  driver.printLine("func " + $2 + "(" + $4 +") " + $6 + "{"+ $8 +"}");
+  driver.printLine("func " + $2 + "(" + $4 +") " + $6 + "{\n"+ $8 +"}");
   driver.functions[$2] = new function($2, $6);
-  driver.functions[$2]->nodes = driver.tmpfunction->nodes;
+  driver.functions[$2]->variables = driver.tmpfunction->variables;
   driver.functions[$2]->parameters = driver.tmpfunction->parameters;
   driver.functions[$2]->Codegen(driver.TheModule, driver.Builder, driver.NamedValues);
   driver.functions[$2]->returnExp = driver.tmpfunction->returnExp;
@@ -118,7 +118,8 @@ parameter:
   $$ = $1 + " " + $2;
   node* curr = new node();
   curr->type = $2;
-  curr->label = $1;
+  curr->label = "Ident: " + $1;
+  driver.tmpfunction->variables[$1] = curr;
   driver.tmpfunction->nodes.push_back(curr);
   driver.tmpfunction->parameters[$1] = $2;
 }
@@ -126,17 +127,39 @@ parameter:
 
 type:
 %empty  {$$ = "";}
-|"identifier"  {$$ = $1;}
+|"identifier"  {
+  $$ = $1;
+}
 
 funcBody:
 "identifier" ":=" exp funcBody {
     $3->label = "Ident: " + $1;
-    driver.tmpfunction->nodes.push_back($3);
-    driver.tmpfunction->nodes.push_back($3);
-    $$ = $1;
+    if(driver.tmpfunction->variables.find($1) != driver.tmpfunction->variables.end()){
+      node* var = driver.tmpfunction->variables[$1];
+      var->type = $3->type;
+      var->fval = $3->fval;
+      var->sval = $3->fval;
+      var->ival = $3->ival;
+      var->cval = $3->ival;
+      if(driver.tmpfunction->variables[$1]->label == driver.tmpfunction->returnExp->label){
+        driver.tmpfunction->returnExp = var;
+      }
+    }
+    else{
+      driver.tmpfunction->variables[$1] = $3;
+    }
+    $$ += $1 + " := " + driver.to_string($3->fval) + "\n";
 }
-| "return" exp { driver.tmpfunction->returnExp = driver.tmpfunction->getNode($2->label);
-
+| "return" exp {
+  $$ += "return " + $2->label + "\n";
+  driver.tmpfunction->returnExp = driver.tmpfunction->getNode($2->label);
+  if(driver.tmpfunction->returnExp == NULL && driver.tmpfunction->returnType != "void"){
+    driver.tmpfunction->returnExp = new node($2);
+    string prefix = "Ident: ";
+    string name = $2->label.substr($2->label.find("prefix")+prefix.length()+1);
+    driver.tmpfunction->variables[name] = $2;
+  }
+  //cout << "Trying to return " << $2 << " with label " << $2->label << " ,type " << $2->type << " and value " << $2->fval << endl;
 }
 |  %empty {}
 ;
@@ -177,6 +200,7 @@ exp:
       }
       if($3->type == "function"){
         $3 = driver.functions[$3->label]->returnExp;
+        cout << "Teilerfolg! " << $3 << endl;
       }
 			if($1->type == "string" && $3->type == "string"){
 				$$->sval = $1->sval;
@@ -203,7 +227,8 @@ exp:
 				$$->label = (char)$$->cval;
 				cout << $1->cval << " + " << $3->cval << " = " << $$->cval << endl;
 			}else{cout << "Type mismatch between " << $1->type << " and " << $3->type << endl;
-        cout << "$1: " << $1->label << "$3: " << $3->label << endl;
+        cout << "$1: " << $1->label << ", " << $1->fval << endl;
+        cout << "$3: " << $3->label << ", " << $3->fval << endl;
         /*exit(1);*/}
 		  }
 | exp "-" exp   { //$$ = $1 - $3;
@@ -310,15 +335,14 @@ exp:
 | "identifier"  { //$$ = driver.getVariable($1)
 		    if(driver.variables.find($1) != driver.variables.end()){
 		      $$ = new node(driver.variables[$1]);
-		    }else {
-		      for(int i = 0; i < driver.tmpfunction->nodes.size(); i++){
-			if(driver.tmpfunction->nodes[i]->label == "Ident: " + $1)
-			  $$ = new node(driver.tmpfunction->nodes[i]);
-		      }
-		      $$ = new node();
-
 		    }
-		    $$->label = "Ident: " + $1;
+        else if(driver.tmpfunction->variables.find($1) != driver.tmpfunction->variables.end()){
+              $$ = new node(driver.tmpfunction->variables[$1]);
+        }
+        else{
+            $$ = new node();
+            $$->label = "Ident: " + $1;
+        }
 		    //$$->label = driver.variables[$1]->type + "Identifier: " + $1 + " = " + driver.variables[$1]->label;
                 }
 | "number"      { //swap ($$, $1);
@@ -342,7 +366,8 @@ exp:
 		  label.insert(label.end(), c);
 		  $$->label = label;
 		}
-| "funccall"	{  $$ = driver.filterFunc($1);
+| "funccall"	{
+    $$ = driver.filterFunc($1);
 		   if($$ == NULL){
 			   std::cout << "Funktion \"" << $1 << "\" entweder nicht gefunden oder falsche Parameter!" << std::endl;
 			   exit(0);

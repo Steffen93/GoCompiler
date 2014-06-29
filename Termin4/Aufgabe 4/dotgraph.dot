@@ -1,0 +1,86 @@
+digraph gograph{
+node39528032[label="30"];
+node39527040[label="36"];
+node39510128[label="Number: 2"];
+node39510128 -> node39527040
+node39526864[label="Number: 18"];
+node39526864 -> node39527040
+node39527040 -> node39528032
+node39527904[label="Number: 6"];
+node39527904 -> node39528032
+node39530064[label="96"];
+node39529760[label="32"];
+node39529408[label="16"];
+node39529056[label="8"];
+node39528704[label="4"];
+node39528576[label="Number: 2"];
+node39528576 -> node39528704
+node39528112[label="Number: 2"];
+node39528112 -> node39528704
+node39528704 -> node39529056
+node39528928[label="Number: 2"];
+node39528928 -> node39529056
+node39529056 -> node39529408
+node39529280[label="Number: 2"];
+node39529280 -> node39529408
+node39529408 -> node39529760
+node39529632[label="Number: 2"];
+node39529632 -> node39529760
+node39529760 -> node39530064
+node39529984[label="30"];
+node39527040 -> node39529984
+node39527904 -> node39529984
+node39529984 -> node39530064
+node39530592[label="60"];
+node39530432[label="30"];
+node39527040 -> node39530432
+node39527904 -> node39530432
+node39530432 -> node39530592
+node39530512[label="Number: 2"];
+node39530512 -> node39530592
+node39545472[label="-3.25"];
+node39546528[label="0.75"];
+node39546272[label="72"];
+node39546144[label="Number: 12"];
+node39546144 -> node39546272
+node39546880[label="60"];
+node39530432 -> node39546880
+node39530512 -> node39546880
+node39546880 -> node39546272
+node39546272 -> node39546528
+node39546448[label="96"];
+node39529760 -> node39546448
+node39529984 -> node39546448
+node39546448 -> node39546528
+node39546528 -> node39545472
+node39546704[label="Number: 4"];
+node39546704 -> node39545472
+node39545136[label="Value: Das ist ein test"];
+node39545744[label="Text: Das ist "];
+node39545744 -> node39545136
+node39544912[label="Text: ein test"];
+node39544912 -> node39545136
+node39547696[label="60.56"];
+node39547392[label="10.56"];
+node39547232[label="-3.25"];
+node39546528 -> node39547232
+node39546704 -> node39547232
+node39547232 -> node39547392
+node39547312[label="-3.25"];
+node39546528 -> node39547312
+node39546704 -> node39547312
+node39547312 -> node39547392
+node39547392 -> node39547696
+node39547520[label="test"];
+node39547520 -> node39547696
+node39548240[label="Zahl: "];
+node39548080 -> node39548240
+node39548160 -> node39548240
+node39548736[label="œ"];
+node39548480[label="Sign: g"];
+node39548480 -> node39548736
+node39548560[label="Sign: 5"];
+node39548560 -> node39548736
+node39549136[label="Sign: c"];
+
+}

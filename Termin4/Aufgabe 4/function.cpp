@@ -4,29 +4,6 @@ function::function():name(""), returnType("void"), nodes(vector<node*>()), retur
 
 function::function(string _name, string _returnType):name(_name), returnExp(NULL), returnType(_returnType){
   nodes = vector<node*>();
-  /*node* curr;
-  int pos = paramList.find(",");
-  string type = "void";
-  string currPair = "";
-  while(pos != string::npos){
-    currPair = paramList.substr(0, pos);
-    splitTypeFromName(currPair, type);
-    curr = new node();
-    cout << "Label: " << currPair << endl;
-    curr->label = currPair;
-    cout << "Type: " << type << endl;
-    curr->type = type;
-    nodes.push_back(curr);
-    parameters[paramList.substr(0, pos)] = type;
-    paramList = paramList.substr(pos+1);
-    pos = paramList.find(",");
-  }
-  splitTypeFromName(paramList, type);
-  curr = new node();
-  curr->label = paramList;
-  curr->type = type;
-  nodes.push_back(curr);
-  parameters[paramList] = type;*/
 }
 
 void function::splitTypeFromName(string &name, string &type){
@@ -50,17 +27,36 @@ void function::Codegen(Module *TheModule, IRBuilder<> *Builder, std::map<std::st
   BasicBlock *BB = BasicBlock::Create(getGlobalContext(), "entry", F);
   Builder->SetInsertPoint(BB);
 
-  for(int i = 0; i < nodes.size(); i++){
-    Builder->CreateRet(nodes.at(i)->Codegen(TheModule, Builder, Values));	//übergabe der kopierten Map
+  //for(int i = 0; i < nodes.size(); i++){
+  //  Builder->CreateRet(nodes.at(i)->Codegen(TheModule, Builder, Values));	//übergabe der kopierten Map
+  //}
+  for(map<string, node*>::iterator it = variables.begin(); it != variables.end(); ++it){
+    Builder->CreateRet(it->second->Codegen(TheModule, Builder, Values));	//übergabe der kopierten Map
   }
   F->dump();
 }
 
 node* function::getNode(string label){
-  for(int i = 0; i < nodes.size(); i++){
-      if(nodes.at(i)->label == label){
-        return nodes.at(i);
-      }
+  string prefix = "Ident: ";
+  label = label.substr(label.find(prefix)+prefix.length());
+  //vom Label das Ident: abschneiden!
+  if(variables.find(label) != variables.end()){
+    return variables[label];
   }
-  return NULL;
+  else{
+    cout << "function::getNode(): Node '" << label <<"' not found!" << endl;
+    printVariables();
+    return NULL;
+  }
+}
+
+void function::printVariables(){
+  cout << "Variables dump:" << endl;
+  int count = 0;
+  for(map<string, node*>::iterator it = variables.begin(); it != variables.end(); ++it){
+    count++;
+    cout << "variables [" << it->first << "] = " << it->second->fval << endl;
+  }
+  cout << "Count: " << count << endl;
+  cout << endl;
 }

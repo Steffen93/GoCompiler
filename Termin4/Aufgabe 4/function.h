@@ -43,6 +43,8 @@ public:
   string returnType;
   node* returnExp;
   map<string, string> parameters;
+  map<string, node*> variables;
+  void printVariables();
   vector<node*> nodes;
   node* getNode(string);
   static Type* getTypeFor(string typeName){

@@ -119,11 +119,6 @@ std::vector<Value*> node::split(string arr){
   }
   //ret.push_back(getValueFor(arr));
   cout << "ARR: " << arr << endl;
-	/*
-	* TO DO: erzeuge eine vector<Value*> aus den übergabeparametern beim funktionscall
-	* entweder kann man diese direkt in den NamedValues suchen
-	* oder muss die konstanten werte in Value* erzeugen
-	*/
 	return ret;
 }
 

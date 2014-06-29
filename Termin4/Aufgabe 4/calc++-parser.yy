@@ -98,8 +98,8 @@ function:
   driver.functions[$2] = new function($2, $6);
   driver.functions[$2]->variables = driver.tmpfunction->variables;
   driver.functions[$2]->parameters = driver.tmpfunction->parameters;
-  driver.functions[$2]->Codegen(driver.TheModule, driver.Builder, driver.NamedValues);
   driver.functions[$2]->returnExp = driver.tmpfunction->returnExp;
+  driver.functions[$2]->Codegen(driver.TheModule, driver.Builder, driver.NamedValues);
   driver.tmpfunction = NULL;
   driver.tmpfunction = new function();
 }

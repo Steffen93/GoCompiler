@@ -30,9 +30,14 @@ void function::Codegen(Module *TheModule, IRBuilder<> *Builder, std::map<std::st
   //for(int i = 0; i < nodes.size(); i++){
   //  Builder->CreateRet(nodes.at(i)->Codegen(TheModule, Builder, Values));	//übergabe der kopierten Map
   //}
-  for(map<string, node*>::iterator it = variables.begin(); it != variables.end(); ++it){
-    Builder->CreateRet(it->second->Codegen(TheModule, Builder, Values));	//übergabe der kopierten Map
+
+  //übergabe der parameter
+  Function::arg_iterator AI = F->arg_begin();
+  for(std::map<std::string, std::string>::iterator it = parameters.begin(); it != parameters.end(); it++, AI++){	
+	AI->setName(it->first);
+	Values[it->first] = AI;
   }
+  Builder->CreateRet(returnExp->Codegen(TheModule, Builder, Values));	//übergabe der kopierten Map
   F->dump();
 }
 

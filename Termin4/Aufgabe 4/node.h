@@ -45,6 +45,8 @@ public:
   //Value *Codegen();
   void makeGraph(std::ofstream &o);
   Value* getValueFor(string);
+  Value* llvmValue;
+  bool compareTo(string, node*);
 
   //static Module* TheModule;
   //static IRBuilder<> Builder;

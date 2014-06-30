@@ -42,6 +42,8 @@ number 		{zahl}+\.{zahl}*
 text 		"\""[a-zA-Z0-9 !$%&/()=?;:-_]*"\""
 blank 		[ \t]
 funccall	{id}"("(({id}|{text}|{sign}|{zahl}|{number})+[","{id}|{text}|{sign}|{zahl}|{number}]*|^a)")"
+logop     ["&&"|"||"]
+compareto "=="|"<"|">"|"!="
 block     "{"[^\}]*"}"
 
 %{
@@ -71,6 +73,17 @@ block     "{"[^\}]*"}"
 ":="     return yy::calcxx_parser::make_ASSIGN(loc);
 "func"   return yy::calcxx_parser::make_FUNCTION(loc);
 "return" return yy::calcxx_parser::make_RETURN(loc);
+"if"     return yy::calcxx_parser::make_IF(loc);
+"else"   return yy::calcxx_parser::make_ELSE(loc);
+"!"      return yy::calcxx_parser::make_NOT(loc);
+
+{compareto} {
+  return yy::calcxx_parser::make_COMPARETO(yytext,loc);
+}
+
+{logop} {
+  return yy::calcxx_parser::make_LOGOP(yytext,loc);
+}
 
 {number}	{
   errno = 0;

@@ -27,6 +27,7 @@ node::node(node* copy){
   this->ival = copy->ival;
   this->cval = copy->cval;
   this->type = copy->type;
+  this->llvmValue = copy->llvmValue;
   inserted = false;
 }
 
@@ -70,40 +71,64 @@ Value *node::Codegen(Module *TheModule, IRBuilder<> *Builder, std::map<std::stri
   }
   size_t found = label.find("Ident: ");
   if(found != string::npos){
-	tmp = label.replace(0,((string)("Ident: ")).length(), "");
-	if(NamedValues[tmp] != NULL)
-	  return NamedValues[tmp];
-	else
-	  exists = true;
+  	tmp = label.substr(string("Ident: ").length()+1);
+  	if(NamedValues[tmp] != NULL)
+  	  return NamedValues[tmp];
+  	else
+  	  exists = true;
   }
 
     //std::cout << "Beginne mit den Funktionen" << std::endl;
-    if(type == "+") return Builder->CreateFAdd(L, R, "add");
-    else if(type == "-") return Builder->CreateFSub(L, R, "sub");
-    else if(type == "*") return Builder->CreateFMul(L, R, "mul");
-    else if(type == "/") return Builder->CreateFDiv(L, R, "div");
-
-    else if(type == "float" ^ type == "double"){ if(exists)
-					NamedValues[tmp] = ConstantFP::get(getGlobalContext(), APFloat(fval));
+    if(left != NULL && right != NULL){
+      if(type == "+") {
+        cout << "Operator plus found!" << endl;
+        llvmValue = Builder->CreateBinOp(Instruction::Add, L, R, "addResult");
+        return llvmValue;
+        //return Builder->CreateFAdd(L, R, "add");
+      }
+      else if(type == "-") {
+        cout << "Operator minus found!" << endl;
+        llvmValue = Builder->CreateBinOp(Instruction::Sub, L, R, "subResult");
+        return llvmValue;
+        //return Builder->CreateFSub(L, R, "sub");
+      }
+      else if(type == "*") {
+        cout << "Operator mult found!" << endl;
+        llvmValue = Builder->CreateBinOp(Instruction::Mul, L, R, "mulResult");
+        return llvmValue;
+        //return Builder->CreateFMul(L, R, "mul");
+      }
+      else if(type == "/") {
+        cout << "Operator div found!" << endl;
+        //llvmValue = Builder->CreateBinOp(Instruction::fDiv, left->llvmValue, right->llvmValue, "divResult");
+        return Builder->CreateFDiv(L, R, "div");
+      }
+    }
+    if(type == "float"){ if(exists)
+				 NamedValues[tmp] = ConstantFP::get(getGlobalContext(), APFloat(fval));
+         llvmValue = ConstantFP::get(getGlobalContext(), APFloat(fval));
 				 return ConstantFP::get(getGlobalContext(), APFloat(fval));
     }else if(type == "int"){	if(exists)
 					NamedValues[tmp] = ConstantInt::get(getGlobalContext(), APInt(32, ival));
+         llvmValue = ConstantInt::get(getGlobalContext(), APInt(32, ival));
 				 return ConstantInt::get(getGlobalContext(), APInt(32, ival));
     }else if(type == "char"){ if(exists)
 					NamedValues[tmp] = ConstantInt::get(getGlobalContext(), APInt(8, (int)(cval)));
-				 return ConstantInt::get(getGlobalContext(), APInt(8, (int)(cval)));
+         llvmValue = ConstantInt::get(getGlobalContext(), APInt(8, (int)(cval)));
+        return ConstantInt::get(getGlobalContext(), APInt(8, (int)(cval)));
     }else if(type == "string") { if(exists)
 		      NamedValues[tmp] = ConstantDataArray::getString(getGlobalContext(), StringRef(sval), true);
+          llvmValue = ConstantDataArray::getString(getGlobalContext(), StringRef(sval), true);
 		     return ConstantDataArray::getString(getGlobalContext(), StringRef(sval), true);
 	//std::cout << "String" << std::endl;
     }else if(type == "function"){
-		    	std::vector<Value*> param = split(sval);			
+          cout << "Function call found!" << endl;
+		    	std::vector<Value*> param = split(sval);
 			if(param.size() != 0)
 				return Builder->CreateCall(TheModule->getFunction(label), param, label);
 		  return Builder->CreateCall(TheModule->getFunction(label), label);
     }
       return NULL;
-
 }
 
 std::vector<Value*> node::split(string arr){
@@ -139,4 +164,40 @@ Value* node::getValueFor(string val){
     return ConstantInt::get(getGlobalContext(), APInt(32, ival));
   }
   return NULL;
+}
+
+bool node::compareTo(string token, node* other){
+  if(token == "<"){
+    if(type=="int" && other->type == "int"){
+      return ival < other->ival;
+    }
+    if(type=="float" && other->type == "float"){
+      return fval < other->fval;
+    }
+  }
+  if(token == ">"){
+    if(type=="int" && other->type == "int"){
+      return ival > other->ival;
+    }
+    if(type=="float" && other->type == "float"){
+      return fval > other->fval;
+    }
+  }
+  if(token == "=="){
+    if(type=="int" && other->type == "int"){
+      return ival == other->ival;
+    }
+    if(type=="float" && other->type == "float"){
+      return fval == other->fval;
+    }
+  }
+  if(token == "!="){
+    if(type=="int" && other->type == "int"){
+      return ival != other->ival;
+    }
+    if(type=="float" && other->type == "float"){
+      return fval != other->fval;
+    }
+  }
+  return false;
 }

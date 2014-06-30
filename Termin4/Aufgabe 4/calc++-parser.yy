@@ -64,6 +64,9 @@ using namespace std;
   COMMA   ","
   FUNCTION "func"
   RETURN  "return"
+  IF      "if"
+  ELSE    "else"
+  NOT     "not"
 ;
 
 %token <string> IDENTIFIER "identifier"
@@ -73,14 +76,17 @@ using namespace std;
 %token <char> SIGN "sign"
 %token <string> BLOCK "block"
 %token <string> FUNCCALL "funccall"
+%token <string> LOGOP "logop"
+%token <string> COMPARETO "compareto"
 
-%type  <string> assignments
-%type  <string> assignment
+%type  <node*> assignments
+%type  <node*> assignment
 %type  <string> funcBody
 %type  <string> type
 %type  <string> parameter
 %type  <string> paramList
 %type  <node*> exp
+%type  <node*> condition
 
 %printer { yyoutput << $$; } <*>;
 
@@ -98,6 +104,7 @@ function:
   driver.functions[$2] = new function($2, $6);
   driver.functions[$2]->variables = driver.tmpfunction->variables;
   driver.functions[$2]->parameters = driver.tmpfunction->parameters;
+  driver.functions[$2]->nodes = driver.tmpfunction->nodes;
   driver.functions[$2]->returnExp = driver.tmpfunction->returnExp;
   driver.functions[$2]->Codegen(driver.TheModule, driver.Builder, driver.NamedValues);
   driver.tmpfunction = NULL;
@@ -141,6 +148,7 @@ funcBody:
       var->sval = $3->fval;
       var->ival = $3->ival;
       var->cval = $3->ival;
+      var->llvmValue = $3->llvmValue;
       if(driver.tmpfunction->variables[$1]->label == driver.tmpfunction->returnExp->label){
         driver.tmpfunction->returnExp = var;
       }
@@ -167,16 +175,45 @@ funcBody:
 
 assignments:
   %empty                 {}
+| assignments ifelse{
+  $$ = $1;
+  driver.tmpifelse = NULL;
+  driver.tmpifelse = new ifelse();
+}
 | assignments function {
-
+  $$ = $1;
 }
 | assignments assignment
 {
-//				driver.result.push_back();
+  $$ = $2;
 };
+
+ifelse:
+"if" condition "{" assignments "}" ifelse{
+  ifelse* curr = new ifelse($2);
+  curr->THEN = $4;
+  curr->ELSE = driver.tmpifelse->ELSE;
+  driver.ifelses.push_back(curr);
+}
+| "else" "{" assignments "}"  {
+  driver.tmpifelse->ELSE = $3;
+}
+| %empty {driver.tmpifelse->ELSE = new node();}
+;
+
+condition:
+exp "compareto" exp {
+  $$ = new node($1, $3);
+  $$->label = "Vergleich: " + $2;
+  $$->type = $2;
+  cout << "Bedingung: " << $1->compareTo($2, $3) << endl;
+}
+| %empty {}
+;
 
 assignment:
   "identifier" ":=" exp {
+        $$ = new node($3);
 			  driver.variables[$1] = $3;
 			  if($3->sval != ""){
 			    driver.printLine($1 + " := " + $3->sval);
@@ -194,14 +231,17 @@ exp:
 			node*tmp = new node($1, $3);
 			tmp->label = "Operator: +";
 			tmp->type = "+";
-			$$ = tmp;
+			$$ = new node(tmp);
+      bool inFunction = (driver.tmpfunction == NULL) ? false : true;
+      if (inFunction){
+        driver.tmpfunction->variables[$1->label + " + " + $3->label] = tmp;
+      }
 			  //$$ = new node(tmp, (node*)NULL);
       if($1->type == "function"){
         $1 = driver.functions[$1->label]->returnExp;
       }
       if($3->type == "function"){
         $3 = driver.functions[$3->label]->returnExp;
-        cout << "Teilerfolg! " << $3 << endl;
       }
 			if($1->type == "string" && $3->type == "string"){
 				$$->sval = $1->sval;

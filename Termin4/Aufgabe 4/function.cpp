@@ -26,16 +26,17 @@ void function::Codegen(Module *TheModule, IRBuilder<> *Builder, std::map<std::st
   Function* F = Function::Create(FT, Function::ExternalLinkage, name, TheModule);
   //übergabe der parameter
   Function::arg_iterator AI = F->arg_begin();
-  for(std::map<std::string, std::string>::iterator it = parameters.begin(); it != parameters.end();  ++AI, ++it){	
-	AI->setName(it->first);
-	Values[it->first] = AI;
+  for(std::map<std::string, std::string>::iterator it = parameters.begin(); it != parameters.end();  ++AI, ++it){
+	   AI->setName(it->first);
+	   Values[it->first] = AI;
   }
 
   BasicBlock *BB = BasicBlock::Create(getGlobalContext(), "entry", F);
   Builder->SetInsertPoint(BB);
-  
+  for(map<string, node*>::iterator it = variables.begin(); it != variables.end(); ++it){
+    it->second->Codegen(TheModule, Builder, Values);
+  }
   Builder->CreateRet(returnExp->Codegen(TheModule, Builder, Values));	//übergabe der kopierten Map
-  //F->dump();
 }
 
 node* function::getNode(string label){
@@ -46,8 +47,8 @@ node* function::getNode(string label){
     return variables[label];
   }
   else{
-    cout << "function::getNode(): Node '" << label <<"' not found!" << endl;
-    printVariables();
+    //cout << "function::getNode(): Node '" << label <<"' not found!" << endl;
+    //printVariables();
     return NULL;
   }
 }

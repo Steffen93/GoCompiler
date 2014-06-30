@@ -33,9 +33,9 @@ YFLAGS=-v -d
 #         calc++-parser.output erzeugt wird, die zwar informativ aber nicht
 #         unbedingt notwendig (sie wird nicht weiterverwendet).
 
-HEADERS=calc++-parser.hh calc++-scanner.hh node.h function.h
+HEADERS=calc++-parser.hh calc++-scanner.hh node.h function.h ifelse.h
 
-calc++ : calc++.o calc++-scanner.o calc++-parser.o calc++-driver.o node.o function.o
+calc++ : calc++.o calc++-scanner.o calc++-parser.o calc++-driver.o node.o function.o ifelse.o
 	$(CC) -o $@ $^ $(LINKFLAGS)
 
 

@@ -31,7 +31,8 @@
 #include <vector>
 #include <iostream>
 #include "node.h"
-# include "calc++-parser.hh"
+#include "calc++-parser.hh"
+#include "ifelse.h"
 
 // Tell Flex the lexer's prototype ...
 # define YY_DECL \
@@ -39,28 +40,34 @@
 // ... and declare it for the parser's sake.
 YY_DECL;
 
+using namespace std;
+using namespace llvm;
+
 // Conducting the whole scanning and parsing of Calc++.
 class calcxx_driver
 {
 public:
   calcxx_driver ();
   virtual ~calcxx_driver ();
-  std::map<std::string, node*> svar;
-  std::map<std::string, node*> variables;
-  std::map<std::string, std::string> nodes;
-  std::map<std::string, function*> functions;
-  std::string node1, node2;
+  map<string, node*> svar;
+  map<string, node*> variables;
+  map<string, string> nodes;
+  map<string, function*> functions;
+  string node1, node2;
   node* val1, *val2;
 
-  std::vector <node*> result;
+  vector <node*> result;
   function* tmpfunction;
 
-  node* filterFunc(std::string name);
+  vector<ifelse*> ifelses;
+  ifelse* tmpifelse;
+
+  node* filterFunc(string name);
 //llvm Zeug
 
   static Module *TheModule;
   static IRBuilder<> *Builder;
-  static std::map<std::string, Value*> NamedValues;
+  static map<string, Value*> NamedValues;
 
   void makeCode();
 
@@ -71,41 +78,41 @@ public:
 
   // Run the parser on file F.
   // Return 0 on success.
-  float parse (const std::string& f);
+  float parse (const string& f);
   // The name of the file being parsed.
   // Used later to pass the file name to the location tracker.
-  std::string file;
+  string file;
   // Whether parser traces should be generated.
   bool trace_parsing;
-  std::string lastID;
+  string lastID;
 
   //Graph erstellen
-  std::string getNewID();
-  void setTmpID (std::string id);
-  std::string getTmpID();
-  void connect(std::string n1, std::string n2);
-  std::string addGraph(std::string label);
-  //std::string addGraph(float label);
+  string getNewID();
+  void setTmpID (string id);
+  string getTmpID();
+  void connect(string n1, string n2);
+  string addGraph(string label);
+  //string addGraph(float label);
 
-  void addGraph(std::string name, float value);
+  void addGraph(string name, float value);
 
-  //float getVariable(std::string);
-  std::string to_string(float);
-  void print(std::string);
-  void printLine(std::string);
+  //float getVariable(string);
+  string to_string(float);
+  void print(string);
+  void printLine(string);
   void setTestMode(bool);
   bool getTestMode();
 
   // Error handling.
-  void error (const yy::location& l, const std::string& m);
-  void error (const std::string& m);
+  void error (const yy::location& l, const string& m);
+  void error (const string& m);
 
-  std::ofstream o; //not for long!
+  ofstream o; //not for long!
 private:
   bool testMode;
   static int nodeCount;
 
-  std::ofstream tS;
-  std::string tmpID;
+  ofstream tS;
+  string tmpID;
 };
 #endif // ! CALCXX_DRIVER_HH
